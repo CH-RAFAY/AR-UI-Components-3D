@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abdul Rafay Ather - Software Engineer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&family=Orbitron:wght@400;500;700;900&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: radial-gradient(ellipse at center, #0a0a0a 0%, #000000 100%);
+            overflow-x: hidden;
+            font-family: 'Inter', sans-serif;
+            perspective: 1000px;
+        }
+        
+        /* Original Glass Box Styling */
+        .glass-side-box {
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.04) 0%,
+                rgba(255, 255, 255, 0.015) 50%,
+                rgba(255, 255, 255, 0.04) 100%
+            );
+            backdrop-filter: blur(25px) saturate(180%);
+            border: 1.5px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 
+                0 20px 50px rgba(0, 0, 0, 0.5),
+                0 8px 20px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.25),
+                inset 0 -1px 0 rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+            border-radius: 16px;
+            transform: translateZ(15px) rotateX(1deg);
+            transition: all 0.4s ease;
+        transform-style: preserve-3d;
+            width: 350px;
+            max-width: 350px;
+            min-height: 500px;
+            cursor: pointer;
+        }
+        
+        .glass-side-box::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(125, 211, 252, 0.08), transparent);
+            transition: left 0.8s ease;
+        }
+        
+        .glass-side-box:hover::before { left: 100%; }
+        
+        .glass-side-box:hover {
+            transform: translateZ(25px) rotateX(3deg) scale(1.02);
+            border-color: rgba(125, 211, 252, 0.3);
+            box-shadow: 
+                0 30px 80px rgba(0, 0, 0, 0.6),
+                0 12px 30px rgba(0, 0, 0, 0.4),
+                0 0 15px rgba(125, 211, 252, 0.15),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3),
+                inset 0 -1px 0 rgba(255, 255, 255, 0.15);
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.06) 0%,
+                rgba(255, 255, 255, 0.02) 50%,
+                rgba(255, 255, 255, 0.06) 100%
+            );
+        }
+        
+        /* Original Desktop Layout */
+        .main-layout {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            min-height: 100vh;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            position: relative;
+        }
+        
+        .side-box-container {
+            flex: 0 0 350px;
+            max-width: 350px;
+            z-index: 10;
+        }
+        
+        .left-side { margin-right: 2rem; }
+        .right-side { margin-left: 2rem; }
+        
+        .center-space {
+            flex: 1;
+            min-height: 100vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Original Text Styles */
+        .profile-name { font-size: 2.6rem; font-weight: 700; color: #f1f5f9; line-height: 1.1; margin-bottom: 0.5rem; font-family: 'Poppins', sans-serif; }
+        .profile-title { font-size: 1.25rem; font-weight: 800; color: #94a3b8; margin-bottom: 1.5rem; font-family: 'Inter', sans-serif; }
+        .profile-description { font-size: 1.1rem; font-weight: 400; color: #64748b; line-height: 1.6; font-family: 'Inter', sans-serif; }
+        .about-title { font-size: 1.2rem; font-weight: 600; color: #f1f5f9; margin-bottom: 1rem; font-family: 'Poppins', sans-serif; }
+        .about-description { font-size: 1.1rem; font-weight: 400; color: #cbd5e1; line-height: 1.7; font-family: 'Inter', sans-serif; }
+        
+        /* Original Globe Container Style */
+        .tech-globe-container {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 800px;
+            height: 800px;
+            z-index: 1;
+        }
+        
+        /* Original Background Animation Styles */
+        .tech-lines, .floating-particles { position: fixed; width: 100%; height: 100%; top: 0; left: 0; pointer-events: none; }
+        .tech-lines { z-index: -2; }
+        .floating-particles { z-index: -1; }
+        .floating-particle { position: absolute; background: rgba(125,211,252,0.3); border: 1px solid rgba(125,211,252,0.5); backdrop-filter: blur(5px); animation: float-enhanced 8s ease-in-out infinite; }
+        @keyframes float-enhanced { 0%,100%{transform:translateY(0) rotate(0) scale(1);opacity:.6} 25%{transform:translateY(-30px) rotate(90deg) scale(1.2);opacity:1} 50%{transform:translateY(-60px) rotate(180deg) scale(.8);opacity:.8} 75%{transform:translateY(-30px) rotate(270deg) scale(1.1);opacity:1} }
+        .light-line-enhanced { position: absolute; background: linear-gradient(90deg,transparent,rgba(125,211,252,.6),transparent); height: 2px; animation: pulse-enhanced 3s ease-in-out infinite; box-shadow: 0 0 10px rgba(125,211,252,.4); }
+        .light-line-enhanced.vertical { background: linear-gradient(0deg,transparent,rgba(125,211,252,.6),transparent); width: 2px; height: 100vh; animation: pulse-enhanced-vertical 4s ease-in-out infinite; }
+        @keyframes pulse-enhanced { 0%,100%{opacity:.4;transform:scaleX(.5)} 50%{opacity:1;transform:scaleX(1)} }
+        @keyframes pulse-enhanced-vertical { 0%,100%{opacity:.4;transform:scaleY(.5)} 50%{opacity:1;transform:scaleY(1)} }
+        .data-dot-enhanced { position: absolute; width: 10px; height: 10px; border-radius: 50%; background: radial-gradient(circle,#7dd3fc,#0ea5e9); box-shadow: 0 0 20px rgba(125,211,252,.8); animation: move-dot-enhanced 6s linear infinite; }
+        @keyframes move-dot-enhanced { 0%{transform:translateY(-100vh) scale(0);opacity:0} 10%{opacity:1;transform:scale(1)} 90%{opacity:1;transform:scale(1)} 100%{transform:translateY(100vh) scale(0);opacity:0} }
+        
+        /* Original Button Styles */
+        .button-container {
+            position: absolute;
+            bottom: 4rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 1.5rem;
+            z-index: 20;
+        }
+        .tech-button-professional { background: linear-gradient(135deg,rgba(255,255,255,.04),rgba(255,255,255,.015)); backdrop-filter:blur(25px) saturate(180%); border: 1.5px solid rgba(255,255,255,.12); box-shadow: 0 15px 40px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.25); transition: all .3s ease; overflow: hidden; border-radius: 16px; color: #cbd5e1; font-weight: 600; cursor: pointer; position: relative; }
+        .tech-button-professional::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(125,211,252,.2),transparent);transition:left .5s ease}
+        .tech-button-professional:hover::before{left:100%}
+        .tech-button-professional:hover{border-color:rgba(125,211,252,.5);box-shadow:0 0 20px rgba(125,211,252,.2);color:#f1f5f9;background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,.02))}
+
+        /* --- Responsive Design --- */
+        @media (max-width: 1200px) {
+            body { perspective: none; }
+            .main-layout {
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                padding: 2rem 1rem;
+                gap: 2rem;
+                min-height: 100vh;
+            }
+            .center-space { display: none; }
+            .tech-globe-container { position: fixed; z-index: 0; pointer-events: none; }
+            .side-box-container { flex: 0 1 auto; width: 90%; max-width: 680px; margin: 0; }
+            .glass-side-box { width: 100%; max-width: none; min-height: auto; transform: none; padding: 2rem; }
+            .button-container {
+                position: relative;
+                order: 3;
+                bottom: auto; left: auto;
+                transform: none;
+                width: 90%;
+                max-width: 680px;
+                margin-top: 1rem;
+                justify-content: center;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .main-layout { padding: 3rem 1rem; gap: 1.5rem; }
+            .glass-side-box { padding: 1.5rem; }
+            .profile-name { font-size: 2.2rem; }
+            .profile-title { font-size: 1.1rem; }
+            .profile-description, .about-description { font-size: 1rem; }
+            .button-container { flex-direction: row; gap: 1rem; margin-top: 2rem; }
+            .tech-button-professional { flex: 1; text-align: center; padding-left: 1rem; padding-right: 1rem; }
+        }
+
+        @media (max-width: 582px) {
+            .button-container {
+                flex-direction: column; /* Stack buttons vertically */
+            }
+            .tech-button-professional {
+                flex: none; /* Reset flex behavior */
+                width: 100%; /* Make buttons full width */
+            }
+        }
+    </style>
+</head>
+<body class="text-white">
+
+    <!-- =========== HERO SECTION START =========== -->
+    <section id="hero-section">
+        <!-- Background Animations (Untouched) -->
+        <div class="tech-lines">
+            <div class="light-line-enhanced" style="top: 15%; width: 45%; left: 10%; animation-delay: 0s;"></div>
+            <div class="light-line-enhanced" style="top: 35%; width: 55%; left: 30%; animation-delay: 1.5s;"></div>
+            <div class="light-line-enhanced" style="top: 55%; width: 40%; left: 45%; animation-delay: 3s;"></div>
+            <div class="light-line-enhanced" style="top: 75%; width: 50%; left: 15%; animation-delay: 4.5s;"></div>
+            <div class="light-line-enhanced vertical" style="left: 15%; animation-delay: 1s;"></div>
+            <div class="light-line-enhanced vertical" style="left: 45%; animation-delay: 3.5s;"></div>
+            <div class="light-line-enhanced vertical" style="left: 75%; animation-delay: 2s;"></div>
+            <div class="data-dot-enhanced" style="left: 15%; animation-delay: 0s;"></div>
+            <div class="data-dot-enhanced" style="left: 45%; animation-delay: 2s;"></div>
+            <div class="data-dot-enhanced" style="left: 75%; animation-delay: 4s;"></div>
+            <div class="data-dot-enhanced" style="left: 25%; animation-delay: 1s;"></div>
+            <div class="data-dot-enhanced" style="left: 65%; animation-delay: 3s;"></div>
+        </div>
+        <div class="floating-particles">
+            <div class="floating-particle" style="width: 80px; height: 80px; top: 10%; left: 5%; animation-delay: 0s; border-radius: 10px;"></div>
+            <div class="floating-particle" style="width: 60px; height: 60px; top: 25%; left: 85%; animation-delay: 2s; border-radius: 50%;"></div>
+            <div class="floating-particle" style="width: 70px; height: 70px; top: 60%; left: 8%; animation-delay: 4s; clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);"></div>
+            <div class="floating-particle" style="width: 50px; height: 50px; top: 75%; left: 80%; animation-delay: 6s; border-radius: 10px;"></div>
+        </div>
+        
+        <!-- The Globe, a separate element for responsive positioning -->
+        <div class="tech-globe-container" id="globeContainer"></div>
+
+        <!-- Main Content -->
+        <main class="relative z-10">
+            <div class="main-layout">
+                <div class="side-box-container left-side" id="leftSideBox">
+                    <div class="glass-side-box p-8 flex flex-col justify-center">
+                        <h1 class="profile-name">Abdul Rafay Ather</h1>
+                        <h2 class="profile-title">Software Engineer</h2>
+                        <p class="profile-description">
+                            I build accessible, pixel-perfect digital experiences for the web.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="center-space">
+                    <!-- This div is used to position the globe on desktop -->
+                </div>
+
+                <div class="side-box-container right-side" id="rightSideBox">
+                    <div class="glass-side-box p-8 flex flex-col justify-center">
+                        <h3 class="about-title">About Me</h3>
+                        <p class="about-description">
+                            I'm a passionate Software Engineer with expertise in modern web technologies. 
+                            I specialize in creating innovative solutions that drive business growth and 
+                            user engagement through clean, efficient code.
+                            <br><br>
+                            With experience in full-stack development, UI/UX design, and emerging technologies 
+                            like AI/ML, I deliver comprehensive solutions that are scalable, maintainable, 
+                            and impactful.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="button-container">
+                    <button class="tech-button-professional px-8 py-4 rounded-lg font-semibold">
+                        <span class="relative z-10">EXPLORE PROJECTS</span>
+                    </button>
+                    <button class="tech-button-professional px-8 py-4 rounded-lg font-semibold">
+                        <span class="relative z-10">DOWNLOAD RESUME</span>
+                    </button>
+                </div>
+            </div>
+        </main>
+    </section>
+    <!-- =========== HERO SECTION END =========== -->
+
+    <!-- =========== YOUR NEXT SECTION CAN GO HERE =========== -->
+    <!-- 
+    <section id="next-section">
+        ... content for the next section ...
+    </section> 
+    -->
+    
+    <script>
+        gsap.registerPlugin(ScrollTrigger);
+        
+        // Original Three.js Globe Setup (Untouched)
+        let scene, camera, renderer, globeGroup, infoLights = [];
+        
+        function init3DGlobe() {
+            const container = document.getElementById('globeContainer');
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+            renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+            renderer.setSize(container.clientWidth, container.clientHeight);
+            renderer.setClearColor(0x000000, 0);
+            container.appendChild(renderer.domElement);
+            
+            globeGroup = new THREE.Group();
+            scene.add(globeGroup);
+            
+            const geometry = new THREE.SphereGeometry(180, 32, 32);
+            const edges = new THREE.EdgesGeometry(geometry);
+            const fiberMaterial = new THREE.LineBasicMaterial({ color: 0x7dd3fc, transparent: true, opacity: 0.4, linewidth: 3 });
+            const wireframe = new THREE.LineSegments(edges, fiberMaterial);
+            globeGroup.add(wireframe);
+            
+            const glowEdges = new THREE.EdgesGeometry(new THREE.SphereGeometry(182, 32, 32));
+            const glowMaterial = new THREE.LineBasicMaterial({ color: 0x0ea5e9, transparent: true, opacity: 0.15, linewidth: 2 });
+            const glowWireframe = new THREE.LineSegments(glowEdges, glowMaterial);
+            globeGroup.add(glowWireframe);
+            
+            const blueColors = [0x7dd3fc, 0x0ea5e9, 0x0284c7, 0x0369a1];
+            const vertices = geometry.attributes.position.array;
+            const infoLightGeometry = new THREE.SphereGeometry(2.5, 8, 8);
+            
+            for (let i = 0; i < vertices.length; i += 3) {
+                const colorIndex = Math.floor(Math.random() * blueColors.length);
+                const infoLightMaterial = new THREE.MeshBasicMaterial({ color: blueColors[colorIndex], transparent: true, opacity: 0.8 });
+                const infoLight = new THREE.Mesh(infoLightGeometry, infoLightMaterial);
+                infoLight.position.set(vertices[i], vertices[i + 1], vertices[i + 2]);
+                const glowSphere = new THREE.Mesh(new THREE.SphereGeometry(4, 8, 8), new THREE.MeshBasicMaterial({ color: blueColors[colorIndex], transparent: true, opacity: 0.3 }));
+                glowSphere.position.copy(infoLight.position);
+                globeGroup.add(infoLight);
+                globeGroup.add(glowSphere);
+                infoLights.push({ light: infoLight, glow: glowSphere, originalOpacity: 0.8, pulseSpeed: Math.random() * 0.02 + 0.01 });
+            }
+            
+            const innerGlow = new THREE.Mesh(new THREE.SphereGeometry(178, 32, 32), new THREE.MeshBasicMaterial({ color: 0x0ea5e9, transparent: true, opacity: 0.08 }));
+            globeGroup.add(innerGlow);
+            
+            camera.position.z = 400;
+            animate();
+        }
+        
+        // Original Animation Loop (Untouched)
+        function animate() {
+            requestAnimationFrame(animate);
+            if (globeGroup) {
+                globeGroup.rotation.y += 0.005;
+                globeGroup.rotation.x += 0.002;
+                infoLights.forEach((lightObj, index) => {
+                    const pulse = Math.sin(Date.now() * lightObj.pulseSpeed + index) * 0.3 + 0.7;
+                    lightObj.light.material.opacity = lightObj.originalOpacity * pulse;
+                    lightObj.glow.material.opacity = 0.3 * pulse;
+                    if (Math.random() > 0.998) {
+                        lightObj.light.material.opacity = 1;
+                        lightObj.glow.material.opacity = 0.6;
+                    }
+                });
+            }
+            if(renderer) renderer.render(scene, camera);
+        }
+        
+        // Original Scroll Animations (Untouched)
+        function setupScrollAnimations() {
+            if (globeGroup) {
+                gsap.to(globeGroup.scale, { scrollTrigger: { trigger: "body", start: "top top", end: "bottom bottom", scrub: 1 }, x: 1.2, y: 1.2, z: 1.2 });
+            }
+            gsap.fromTo("#leftSideBox", { x: -150, opacity: 0 }, { x: 0, opacity: 1, duration: 1.2, delay: 0.3, ease: "power3.out" });
+            gsap.fromTo("#rightSideBox", { x: 150, opacity: 0 }, { x: 0, opacity: 1, duration: 1.2, delay: 0.5, ease: "power3.out" });
+            gsap.to(".data-dot-enhanced", { scrollTrigger: { trigger: "body", start: "top top", end: "bottom bottom", scrub: 1 }, y: "200vh", rotation: 360, scale: 2, stagger: 0.1 });
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            init3DGlobe();
+            setupScrollAnimations();
+        });
+        
+        // Dynamic resize handler for a truly responsive globe
+        window.addEventListener('resize', () => {
+            if (camera && renderer) {
+                const container = document.getElementById('globeContainer');
+                if (!container) return;
+                
+                const width = container.clientWidth;
+                const height = container.clientHeight;
+
+                camera.aspect = width / height;
+                camera.updateProjectionMatrix();
+                renderer.setSize(width, height);
+            }
+        });
+    </script>
+</body>
+</html>
