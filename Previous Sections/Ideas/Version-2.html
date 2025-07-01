@@ -9,8 +9,6 @@
         :root {
             --bg-dark: #000000;
             --primary-accent: #7dd3fc;
-            --primary-accent-dark: #0ea5e9;
-            --primary-accent-glass: rgba(125, 211, 252, 0.15);
             --text-light: #f1f5f9;
             --text-medium: #a3b6c7;
             --glass-bg: rgba(15, 15, 15, 0.3);
@@ -18,25 +16,48 @@
             --font-inter: 'Inter', sans-serif;
             --font-orbitron: 'Orbitron', sans-serif;
             --font-poppins: 'Poppins', sans-serif;
-            --timeline-width: 4px;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
         body {
-            background: radial-gradient(ellipse at center, #0a0a0a 0%, #000000 100%);
+            background-color: var(--bg-dark);
             color: var(--text-light);
             font-family: var(--font-inter);
             cursor: default;
         }
+        
+        /* --- Dynamic Background --- */
+        .background-animated-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                linear-gradient(to right, rgba(125, 211, 252, 0.05) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(125, 211, 252, 0.05) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: pan-grid 80s linear infinite;
+            z-index: 1;
+        }
+        @keyframes pan-grid {
+            from { background-position: 0 0; }
+            to { background-position: -1200px -1200px; }
+        }
 
+        /* --- Timeline Section --- */
         .timeline-section {
             width: 100%;
             padding: 100px 5%;
             position: relative;
             z-index: 10;
         }
-
+        
         .timeline-header {
             text-align: center;
             margin-bottom: 150px;
@@ -58,30 +79,29 @@
             max-width: 1200px;
             margin: 0 auto;
         }
-
-        /* --- TIMELINE SVG PATH --- */
-        .timeline-svg {
+        
+        /* The central time-bar */
+        .timeline-container::after {
+            content: '';
             position: absolute;
+            width: 4px;
+            background: linear-gradient(to bottom, transparent, var(--primary-accent), transparent);
+            top: 0;
+            bottom: 0;
             left: 50%;
-            transform: translateX(-50%);
-            width: var(--timeline-width);
-            pointer-events: none;
-            z-index: 12;
-        }
-        .timeline-path {
-            stroke: var(--primary-accent);
-            stroke-width: var(--timeline-width);
-            opacity: 0.15;
-            stroke-linecap: round;
+            margin-left: -2px;
+            z-index: 15;
+            opacity: 0.3;
         }
 
-        /* --- PROJECT ENTRIES & NODES --- */
+        /* Individual project entry container */
         .project-entry {
-            padding: 80px 0;
+            padding: 50px 0;
             position: relative;
             width: 50%;
-            z-index: 20;
         }
+
+        /* Positioning for left and right alignment */
         .project-entry.align-left {
             left: 0;
             padding-right: 50px;
@@ -90,93 +110,43 @@
             left: 50%;
             padding-left: 50px;
         }
-
+        
+        /* The node on the timeline */
         .project-node {
             position: absolute;
             top: 50%;
             width: 20px;
             height: 20px;
             border-radius: 50%;
-            background: var(--bg-dark);
+            background-color: var(--glass-border);
             border: 3px solid var(--primary-accent);
-            z-index: 30;
-            box-shadow: 0 0 6px 1px var(--primary-accent); /* Reduced glow */
-            transition: box-shadow 0.3s, transform 0.4s cubic-bezier(.4,2,.6,1);
-            transform: translateY(-50%) scale(1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: visible;
+            z-index: 20;
+            transform: translateY(-50%);
+            transition: all 0.5s ease;
         }
         .align-left .project-node { right: -10px; }
         .align-right .project-node { left: -10px; }
-
-        /* --- Light-based animated fill --- */
-        .project-fill {
-            position: absolute;
-            top: 50%; left: 50%;
-            width: 14px; height: 14px;
-            pointer-events: none;
-            border-radius: 50%;
-            background: radial-gradient(circle at 60% 35%,
-                rgba(125,211,252,0.65) 0%,    /* reduced from 0.85 */
-                rgba(14,165,233,0.45) 55%,    /* reduced from 0.7 */
-                rgba(14,165,233,0.25) 80%,    /* reduced from 0.45 */
-                rgba(0,0,0,0.10) 100%         /* reduced from 0.15 */
-            );
-            box-shadow:
-                0 0 7px 1px var(--primary-accent-glass),
-                0 0 14px 2px var(--primary-accent-dark);
-            opacity: 0;
-            transform: translate(-50%, -50%) scale(0.7);
-            transition:
-                opacity 0.7s cubic-bezier(.4,1,.6,1),
-                transform 0.7s cubic-bezier(.4,1,.6,1),
-                box-shadow 0.7s cubic-bezier(.4,1,.6,1);
-        }
-        .project-entry.is-active .project-fill {
-            opacity: 1;
-            transform: translate(-50%, -50%) scale(1);
-            box-shadow:
-                0 0 10px 2px var(--primary-accent-glass),
-                0 0 18px 4px var(--primary-accent-dark);
-        }
-        .project-fill::after {
-            content: "";
-            position: absolute;
-            left: 18%;
-            top: 18%;
-            width: 32%;
-            height: 32%;
-            background: radial-gradient(circle, rgba(255,255,255,0.38) 0%, rgba(255,255,255,0.05) 100%);
-            border-radius: 50%;
-            filter: blur(0.5px);
-            opacity: 0.7;
-        }
-
+        
+        /* Active state for the node */
         .project-entry.is-active .project-node {
-            box-shadow: 0 0 10px 2px var(--primary-accent); /* Reduced glow */
-            transform: translateY(-50%) scale(1.13); /* Slightly less scale */
-            animation: pulse 1.2s infinite alternate;
-        }
-        @keyframes pulse {
-            0% { box-shadow: 0 0 10px 2px var(--primary-accent); }
-            100% { box-shadow: 0 0 16px 4px var(--primary-accent); }
+            transform: translateY(-50%) scale(1.5);
+            box-shadow: 0 0 20px var(--primary-accent);
         }
 
+        /* The main glass panel for project info */
         .project-panel {
             padding: 30px;
-            background: rgba(15, 20, 30, 0.42);
-            border: 1px solid rgba(125,211,252,0.09);
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
             border-radius: 15px;
-            backdrop-filter: blur(18px) saturate(160%);
-            -webkit-backdrop-filter: blur(18px) saturate(160%);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             position: relative;
-            opacity: 0.2;
+            opacity: 0.2; /* Inactive state */
             transform: translateY(50px);
-            transition: opacity 1s cubic-bezier(.4,1,.6,1), transform 1s cubic-bezier(.4,1,.6,1); /* smoother */
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transition: opacity 0.6s ease, transform 0.6s ease;
         }
+        
         .project-entry.is-active .project-panel {
             opacity: 1;
             transform: translateY(0);
@@ -188,20 +158,13 @@
             gap: 25px;
             align-items: center;
         }
-        .panel-image {
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-        }
+        
         .panel-image img {
             width: 100%;
-            height: 100%;
+            border-radius: 10px;
             object-fit: cover;
-            transition: transform 0.5s ease;
         }
-        .project-entry.is-active .panel-image img {
-            transform: scale(1.03);
-        }
+
         .panel-title {
             font-family: var(--font-poppins);
             font-weight: 600;
@@ -209,38 +172,40 @@
             color: var(--text-light);
             margin-bottom: 10px;
         }
+        
         .panel-description {
             font-size: 1rem;
             line-height: 1.6;
             color: var(--text-medium);
         }
-
+        
         @media (max-width: 992px) {
-            .timeline-svg { left: 32px; }
+            .timeline-container::after { left: 20px; }
             .project-entry { width: 100%; padding-left: 70px; padding-right: 0; }
             .project-entry.align-right { left: 0; padding-left: 70px; }
-            .project-node { left: 10px; right: auto; }
+            .project-node { left: 10px; }
         }
         @media (max-width: 768px) {
             .panel-content { grid-template-columns: 1fr; }
-            .panel-image { max-width: 300px; margin: 0 auto; }
+            .panel-image { display: none; } /* Hide image on smallest screens for clarity */
         }
+
     </style>
 </head>
 <body>
+    <div class="background-animated-grid"></div>
+
     <section class="timeline-section">
         <header class="timeline-header">
             <h2>Project Chronology</h2>
             <p>An interactive journey through my key projects, showcasing the evolution of my skills and problem-solving abilities over time.</p>
         </header>
+
         <div class="timeline-container">
-            <!-- SVG Timeline Path -->
-            <svg class="timeline-svg">
-                <line class="timeline-path" x1="2" y1="0" x2="2" y2="100"/>
-            </svg>
             <!-- Projects will be injected here by JS -->
         </div>
     </section>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <script>
@@ -255,18 +220,15 @@
         ];
 
         const timelineContainer = document.querySelector('.timeline-container');
-        const svg = document.querySelector('.timeline-svg');
-        const svgLine = svg.querySelector('.timeline-path');
 
         // Populate the timeline
         projects.forEach((project, index) => {
             const alignment = index % 2 === 0 ? 'align-left' : 'align-right';
+            
             const entry = document.createElement('div');
             entry.className = `project-entry ${alignment}`;
             entry.innerHTML = `
-                <div class="project-node">
-                    <span class="project-fill"></span>
-                </div>
+                <div class="project-node"></div>
                 <div class="project-panel">
                     <div class="panel-content">
                         <div class="panel-image">
@@ -282,33 +244,9 @@
             timelineContainer.appendChild(entry);
         });
 
-        // Animate timeline line to start/end at centers of first/last node
-        function updateTimelineSVG() {
-            const nodes = document.querySelectorAll('.project-node');
-            if (nodes.length < 2) return;
-            const containerRect = timelineContainer.getBoundingClientRect();
-            const firstNodeRect = nodes[0].getBoundingClientRect();
-            const lastNodeRect = nodes[nodes.length-1].getBoundingClientRect();
-
-            // Calculate y positions relative to the timeline container
-            const y1 = firstNodeRect.top + firstNodeRect.height/2 - containerRect.top;
-            const y2 = lastNodeRect.top + lastNodeRect.height/2 - containerRect.top;
-
-            // Set SVG height and line coordinates
-            svg.setAttribute('height', y2 - y1);
-            svg.style.top = y1 + 'px';
-            svgLine.setAttribute('x1', 2);
-            svgLine.setAttribute('y1', 0);
-            svgLine.setAttribute('x2', 2);
-            svgLine.setAttribute('y2', y2 - y1);
-        }
-
-        setTimeout(updateTimelineSVG, 100);
-        window.addEventListener('resize', updateTimelineSVG);
-        window.addEventListener('scroll', updateTimelineSVG);
-
         // GSAP ScrollTrigger Animation
         const projectEntries = document.querySelectorAll('.project-entry');
+        
         projectEntries.forEach(entry => {
             ScrollTrigger.create({
                 trigger: entry,
