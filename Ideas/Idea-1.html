@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Showcase - Your Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Orbitron:wght@800&family=Poppins:wght@600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #000000;
+            --primary-accent: #7dd3fc;
+            --text-light: #f1f5f9;
+            --text-medium: #a3b6c7;
+            --font-inter: 'Inter', sans-serif;
+            --font-orbitron: 'Orbitron', sans-serif;
+            --font-poppins: 'Poppins', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            font-family: var(--font-inter);
+            overflow: hidden;
+            cursor: none; /* Hide default cursor */
+        }
+
+        /* --- Custom Cursor --- */
+        .cursor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 30px;
+            height: 30px;
+            border: 2px solid var(--text-light);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            mix-blend-mode: difference;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s, height 0.3s, border-radius 0.3s, background-color 0.3s;
+            transition-timing-function: cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        .cursor.hover-link {
+            width: 60px;
+            height: 60px;
+            background-color: rgba(255,255,255,0.8);
+        }
+        
+        .cursor.hover-image {
+            width: 100px;
+            height: 100px;
+            border-radius: 20px;
+            background-color: rgba(255,255,255,0.1);
+            border: none;
+        }
+        .cursor.hover-image::before {
+            content: 'VIEW';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: var(--font-poppins);
+            font-weight: 600;
+            font-size: 1rem;
+            color: white;
+        }
+        
+        /* --- Main Showcase Container --- */
+        #project-showcase {
+            height: 100vh;
+            width: 100vw;
+            position: relative;
+            display: grid;
+            grid-template-columns: 45% 55%;
+            align-items: center;
+            padding: 0 6%;
+        }
+
+        /* --- Left Side: Content --- */
+        .project-content {
+            position: relative;
+            z-index: 10;
+        }
+
+        .project-info {
+            position: relative;
+        }
+        
+        /* Masked animation for text */
+        .text-mask {
+            overflow: hidden;
+            margin-bottom: 25px;
+        }
+
+        .project-title {
+            font-family: var(--font-orbitron);
+            font-weight: 800;
+            font-size: 4rem;
+            line-height: 1.1;
+            text-transform: uppercase;
+            transform: translateY(100%); /* Initial state for animation */
+        }
+
+        .project-description {
+            font-family: var(--font-inter);
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: var(--text-medium);
+            max-width: 450px;
+            transform: translateY(100%); /* Initial state for animation */
+        }
+        
+        /* --- Right Side: WebGL Canvas --- */
+        .project-visuals {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+        
+        #webgl-canvas {
+            position: absolute;
+            top: 50%;
+            left: 72%; /* Positioned on the right */
+            transform: translate(-50%, -50%);
+            width: 35vw; /* Responsive width */
+            height: 45vw; /* Responsive height */
+            max-width: 600px;
+            max-height: 770px;
+        }
+
+        /* --- Navigation --- */
+        .showcase-navigation {
+            position: absolute;
+            bottom: 6%;
+            left: 6%;
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            z-index: 10;
+        }
+
+        .nav-button {
+            font-family: var(--font-poppins);
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-light);
+            cursor: none;
+            position: relative;
+            padding: 10px 0;
+        }
+        
+        .nav-button::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--text-medium);
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        .nav-button:hover::after {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+
+        .project-counter {
+            font-family: var(--font-poppins);
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-medium);
+        }
+        .project-counter span {
+            color: var(--text-light);
+        }
+        
+        @media (max-width: 992px) {
+            #project-showcase {
+                grid-template-columns: 1fr;
+                padding: 15% 6% 25%;
+            }
+            .project-content {
+                text-align: center;
+                grid-row: 2;
+            }
+            .project-description { margin: 0 auto 25px auto; }
+            #webgl-canvas {
+                position: relative;
+                left: 50%;
+                top: 0;
+                width: 80vw;
+                height: 90vw;
+                grid-row: 1;
+            }
+            .showcase-navigation {
+                width: calc(100% - 12%);
+                justify-content: space-between;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .project-title { font-size: 2.5rem; }
+            .project-description { font-size: 1rem; }
+        }
+
+    </style>
+</head>
+<body>
+    <div class="cursor"></div>
+
+    <main id="project-showcase">
+        <div class="project-content">
+            <div class="project-info">
+                <div class="text-mask">
+                    <h2 class="project-title"></h2>
+                </div>
+                <div class="text-mask">
+                    <p class="project-description"></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="project-visuals">
+            <canvas id="webgl-canvas"></canvas>
+        </div>
+
+        <div class="showcase-navigation">
+            <div class="nav-button" id="prev-btn" data-cursor-link>Previous</div>
+            <div class="project-counter"><span id="current-index">01</span> / <span id="total-index">04</span></div>
+            <div class="nav-button" id="next-btn" data-cursor-link>Next</div>
+        </div>
+    </main>
+
+    <!-- Required Libraries: GSAP for animations, Three.js for WebGL -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+        const projects = [
+            {
+                title: "QuantumCart",
+                description: "A full-stack e-commerce platform built with the MERN stack, featuring secure payments via Stripe and a comprehensive admin dashboard.",
+                image: "https://images.unsplash.com/photo-1522199755839-a2bacb67c546?q=80&w=800&auto=format&fit=crop",
+            },
+            {
+                title: "SynapseAI",
+                description: "An intelligent, context-aware conversational AI for customer support, built with Python and TensorFlow to understand user intent.",
+                image: "https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?q=80&w=800&auto=format&fit=crop",
+            },
+            {
+                title: "AetherFlow",
+                description: "A sleek, cross-platform mobile task management application developed with React Native, providing real-time data synchronization.",
+                image: "https://images.unsplash.com/photo-1607706189992-5a5ee42c5aa8?q=80&w=800&auto=format&fit=crop",
+            },
+            {
+                title: "Axiom Data",
+                description: "An interactive data visualization dashboard that transforms complex datasets into insightful graphs and charts, using D3.js.",
+                image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=800&auto=format&fit=crop",
+            }
+        ];
+
+        let currentIndex = 0;
+        let isAnimating = false;
+
+        // --- Custom Cursor Logic ---
+        const cursor = document.querySelector('.cursor');
+        window.addEventListener('mousemove', e => {
+            gsap.to(cursor, {
+                duration: 0.5,
+                x: e.clientX,
+                y: e.clientY,
+                ease: 'power3.out'
+            });
+        });
+        
+        document.querySelectorAll('[data-cursor-link]').forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('hover-link'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('hover-link'));
+        });
+        document.getElementById('webgl-canvas').addEventListener('mouseenter', () => cursor.classList.add('hover-image'));
+        document.getElementById('webgl-canvas').addEventListener('mouseleave', () => cursor.classList.remove('hover-image'));
+
+
+        // --- WebGL Image Plane Setup ---
+        const canvas = document.getElementById('webgl-canvas');
+        const renderer = new THREE.WebGLRenderer({ canvas, alpha: true });
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(45, canvas.clientWidth / canvas.clientHeight, 0.1, 100);
+        camera.position.z = 2;
+
+        const loader = new THREE.TextureLoader();
+        const textures = projects.map(p => loader.load(p.image));
+
+        const geometry = new THREE.PlaneBufferGeometry(1.6, 2, 32, 32);
+        
+        // --- Shader Material ---
+        const vertexShader = `
+            varying vec2 vUv;
+            void main() {
+                vUv = uv;
+                gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+            }
+        `;
+
+        const fragmentShader = `
+            varying vec2 vUv;
+            uniform sampler2D uTexture1;
+            uniform sampler2D uTexture2;
+            uniform sampler2D uDisp;
+            uniform float uDispFactor;
+
+            void main() {
+                vec2 uv = vUv;
+                vec4 disp = texture2D(uDisp, uv);
+                vec2 distortedPosition1 = vec2(uv.x, uv.y + uDispFactor * (disp.r * 0.1));
+                vec2 distortedPosition2 = vec2(uv.x, uv.y - (1.0 - uDispFactor) * (disp.r * 0.1));
+                
+                vec4 color1 = texture2D(uTexture1, distortedPosition1);
+                vec4 color2 = texture2D(uTexture2, distortedPosition2);
+                
+                vec4 finalColor = mix(color1, color2, uDispFactor);
+                gl_FragColor = finalColor;
+            }
+        `;
+        
+        const dispTexture = loader.load('https://images.unsplash.com/photo-1543362906-acfc16c67564?w=500&q=80'); // A cloud/smoke texture works well for displacement
+        dispTexture.wrapS = dispTexture.wrapT = THREE.RepeatWrapping;
+        
+        const material = new THREE.ShaderMaterial({
+            uniforms: {
+                uTexture1: { value: textures[0] },
+                uTexture2: { value: textures[1] },
+                uDisp: { value: dispTexture },
+                uDispFactor: { value: 0.0 }
+            },
+            vertexShader,
+            fragmentShader,
+            transparent: true,
+        });
+
+        const mesh = new THREE.Mesh(geometry, material);
+        scene.add(mesh);
+
+        function resizeRendererToDisplaySize(renderer) {
+            const canvas = renderer.domElement;
+            const width = canvas.clientWidth;
+            const height = canvas.clientHeight;
+            const needResize = canvas.width !== width || canvas.height !== height;
+            if (needResize) {
+                renderer.setSize(width, height, false);
+                camera.aspect = width / height;
+                camera.updateProjectionMatrix();
+            }
+        }
+
+        function animate() {
+            resizeRendererToDisplaySize(renderer);
+            renderer.render(scene, camera);
+            requestAnimationFrame(animate);
+        }
+        animate();
+
+        // --- Content & Navigation Logic ---
+        const titleEl = document.querySelector('.project-title');
+        const descEl = document.querySelector('.project-description');
+        const currentIndexEl = document.getElementById('current-index');
+        const totalIndexEl = document.getElementById('total-index');
+        const nextBtn = document.getElementById('next-btn');
+        const prevBtn = document.getElementById('prev-btn');
+
+        function updateContent(index) {
+            titleEl.textContent = projects[index].title;
+            descEl.textContent = projects[index].description;
+            currentIndexEl.textContent = String(index + 1).padStart(2, '0');
+        }
+
+        function changeProject(nextIndex) {
+            if (isAnimating) return;
+            isAnimating = true;
+
+            const tl = gsap.timeline({
+                onComplete: () => {
+                    currentIndex = nextIndex;
+                    updateContent(nextIndex);
+                    isAnimating = false;
+                }
+            });
+
+            // Animate out current text
+            tl.to([titleEl, descEl], {
+                duration: 0.5,
+                y: '-100%',
+                ease: 'power3.in'
+            });
+            
+            // Animate shader displacement
+            material.uniforms.uTexture2.value = textures[nextIndex];
+            tl.to(material.uniforms.uDispFactor, {
+                duration: 1.2,
+                value: 1,
+                ease: 'power3.inOut'
+            }, "-=0.5");
+            
+            // Animate in new text
+            tl.call(() => {
+                updateContent(nextIndex);
+                gsap.set([titleEl, descEl], { y: '100%' });
+                material.uniforms.uTexture1.value = textures[nextIndex];
+                material.uniforms.uDispFactor.value = 0.0;
+            });
+            
+            tl.to([titleEl, descEl], {
+                duration: 0.8,
+                y: '0%',
+                ease: 'power3.out'
+            });
+        }
+
+        nextBtn.addEventListener('click', () => {
+            const nextIndex = (currentIndex + 1) % projects.length;
+            changeProject(nextIndex);
+        });
+
+        prevBtn.addEventListener('click', () => {
+            const nextIndex = (currentIndex - 1 + projects.length) % projects.length;
+            changeProject(nextIndex);
+        });
+
+        // Initial setup
+        totalIndexEl.textContent = String(projects.length).padStart(2, '0');
+        updateContent(0);
+        gsap.set([titleEl, descEl], { y: '0%' }); // Initial position
+
+    });
+    </script>
+</body>
+</html>

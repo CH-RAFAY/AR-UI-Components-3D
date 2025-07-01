@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Timeline - Your Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Orbitron:wght@700&family=Poppins:wght@500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #000000;
+            --primary-accent: #7dd3fc;
+            --text-light: #ffffff;
+            --text-medium: #e0e0e0;
+            --glass-bg: rgba(20, 20, 20, 0.4);
+            --glass-border: rgba(255, 255, 255, 0.15);
+            --font-inter: 'Inter', sans-serif;
+            --font-orbitron: 'Orbitron', sans-serif;
+            --font-poppins: 'Poppins', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            font-family: var(--font-inter);
+            cursor: default;
+        }
+        
+        /* Removed background as per request */
+
+        /* --- Timeline Section --- */
+        .timeline-section {
+            width: 100%;
+            padding: 100px 5%;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .timeline-header {
+            text-align: center;
+            margin-bottom: 150px;
+        }
+        .timeline-header h2 {
+            font-family: var(--font-orbitron);
+            font-size: 3.5rem;
+            color: var(--text-light);
+        }
+        .timeline-header p {
+            font-size: 1.2rem;
+            color: var(--text-medium);
+            max-width: 600px;
+            margin: 15px auto 0;
+        }
+
+        .timeline-container {
+            position: relative;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        /* Luminous Node that moves with scroll */
+        .luminous-node {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--primary-accent) 0%, transparent 70%);
+            box-shadow: 0 0 25px var(--primary-accent), 0 0 40px var(--primary-accent);
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 25;
+            pointer-events: none;
+        }
+        
+        /* Ripple effect container */
+        .ripple-container {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none;
+            z-index: 22;
+        }
+
+        .ripple {
+            position: absolute;
+            border: 2px solid rgba(125, 211, 252, 0.6);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            animation: ripple-wave 1.2s ease-out forwards;
+            opacity: 0;
+        }
+
+        @keyframes ripple-wave {
+            0% { width: 0; height: 0; opacity: 1; }
+            100% { width: 80px; height: 80px; opacity: 0; }
+        }
+
+        /* Individual project entry container */
+        .project-entry {
+            padding: 50px 0;
+            position: relative;
+            width: 50%;
+        }
+        .project-entry.align-left { left: 0; padding-right: 50px; }
+        .project-entry.align-right { left: 50%; padding-left: 50px; }
+        
+        .project-node {
+            position: absolute;
+            top: 50%;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background-color: var(--bg-dark);
+            border: 2px solid rgba(125, 211, 252, 0.6);
+            z-index: 20;
+            transform: translateY(-50%);
+            transition: all 0.5s ease;
+        }
+        .align-left .project-node { right: -8px; }
+        .align-right .project-node { left: -8px; }
+        .project-entry.is-active .project-node {
+            border-color: var(--primary-accent);
+            transform: translateY(-50%) scale(1.5);
+        }
+
+        /* Professional Animated Glass Panel */
+        .project-panel {
+            padding: 30px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            position: relative;
+            opacity: 0.3; /* Inactive state */
+            transform: scale(0.95) translateY(50px);
+            filter: blur(5px);
+            transition: opacity 0.6s ease, transform 0.6s ease, filter 0.6s ease;
+            overflow: hidden; /* For shimmer effect */
+        }
+        .project-panel::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -150%;
+            width: 100%; height: 100%;
+            background: linear-gradient(to right, transparent 0%, rgba(255,255,255,0.05) 50%, transparent 100%);
+            transform: skewX(-25deg);
+            transition: left 0.8s ease;
+        }
+        .project-panel:hover::before {
+            left: 150%;
+        }
+        
+        .project-entry.is-active .project-panel {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+            filter: blur(0);
+        }
+
+        .panel-content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 25px;
+            align-items: center;
+        }
+        .panel-image img { width: 100%; border-radius: 10px; object-fit: cover; }
+        .panel-title {
+            font-family: var(--font-poppins);
+            font-weight: 600;
+            font-size: 1.8rem;
+            color: var(--text-light); /* Changed to white */
+            margin-bottom: 10px;
+        }
+        .panel-description {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: var(--text-medium);
+        }
+        
+        @media (max-width: 992px) {
+            .luminous-node { left: 20px; }
+            .project-entry { width: 100%; padding-left: 70px; padding-right: 0; }
+            .project-entry.align-right { left: 0; padding-left: 70px; }
+            .project-node { left: 12px; }
+        }
+        @media (max-width: 768px) {
+            .panel-content { grid-template-columns: 1fr; }
+            .panel-image { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <section class="timeline-section">
+        <header class="timeline-header">
+            <h2>Project Chronology</h2>
+            <p>An interactive journey through my key projects, showcasing the evolution of my skills and problem-solving abilities over time.</p>
+        </header>
+
+        <div class="timeline-container">
+            <div class="luminous-node"></div>
+            <div class="ripple-container"></div>
+            <!-- Projects will be injected here by JS -->
+        </div>
+    </section>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        gsap.registerPlugin(ScrollTrigger);
+
+        const projects = [
+            { title: "QuantumCart", description: "A full-stack e-commerce platform with a focus on user experience and secure payment processing.", year: "2021", image: "https://images.unsplash.com/photo-1522199755839-a2bacb67c546?q=80&w=800&auto=format&fit=crop" },
+            { title: "AetherFlow", description: "A sleek, cross-platform mobile application for intuitive task management and real-time productivity tracking.", year: "2022", image: "https://images.unsplash.com/photo-1607706189992-5a5ee42c5aa8?q=80&w=800&auto=format&fit=crop" },
+            { title: "SynapseAI", description: "An intelligent conversational AI built to understand user intent and provide contextually relevant responses.", year: "2023", image: "https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?q=80&w=800&auto=format&fit=crop" },
+            { title: "Axiom Data", description: "An interactive data visualization dashboard designed to make complex datasets accessible and engaging.", year: "2024", image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=800&auto=format&fit=crop" }
+        ];
+
+        const timelineContainer = document.querySelector('.timeline-container');
+
+        projects.forEach((project, index) => {
+            const alignment = index % 2 === 0 ? 'align-left' : 'align-right';
+            const entry = document.createElement('div');
+            entry.className = `project-entry ${alignment}`;
+            entry.innerHTML = `
+                <div class="project-node"></div>
+                <div class="project-panel">
+                    <div class="panel-content">
+                        <div class="panel-image"> <img src="${project.image}" alt="${project.title}"> </div>
+                        <div class="panel-text">
+                            <h3 class="panel-title">${project.title} (${project.year})</h3>
+                            <p class="panel-description">${project.description}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+            timelineContainer.appendChild(entry);
+        });
+
+        // --- Panel Activation on Scroll ---
+        const projectEntries = document.querySelectorAll('.project-entry');
+        projectEntries.forEach(entry => {
+            ScrollTrigger.create({
+                trigger: entry,
+                start: "top center+=100",
+                end: "bottom center-=100",
+                onToggle: self => self.isActive ? entry.classList.add('is-active') : entry.classList.remove('is-active'),
+            });
+        });
+
+        // --- Luminous Node Configuration ---
+        const luminousNode = document.querySelector('.luminous-node');
+        const projectNodes = document.querySelectorAll('.project-node');
+        const rippleContainer = document.querySelector('.ripple-container');
+        
+        // State variables for the smooth scroll
+        let targetY = 0;
+        let currentY = 0;
+        const easing = 0.08;
+        const speedFactor = 1.2;
+
+        const timelineRect = timelineContainer.getBoundingClientRect();
+        const pathStart = timelineRect.top + window.scrollY;
+        const pathHeight = timelineContainer.offsetHeight;
+        const nodeHeight = luminousNode.offsetHeight;
+        
+        let projectNodePositions = [];
+        let triggeredRipples = [];
+        let minScrollY = 0;
+        let maxScrollY = 0;
+
+        function calculateNodePositions() {
+            projectNodePositions = [];
+            triggeredRipples = [];
+            projectNodes.forEach(node => {
+                const nodeRect = node.getBoundingClientRect();
+                const containerRect = timelineContainer.getBoundingClientRect();
+                projectNodePositions.push(nodeRect.top - containerRect.top + (nodeRect.height / 2));
+                triggeredRipples.push(false);
+            });
+            
+            // Calculate min/max scroll positions for luminous node
+            if (projectNodePositions.length > 0) {
+                minScrollY = projectNodePositions[0] - nodeHeight/2;
+                maxScrollY = projectNodePositions[projectNodePositions.length-1] - nodeHeight/2;
+            }
+            
+            // Set initial position to first project node
+            targetY = minScrollY;
+            currentY = minScrollY;
+            gsap.set(luminousNode, { y: currentY });
+        }
+        
+        // --- Timeline Path Configuration ---
+        function updateTimelinePath() {
+            if (projectNodePositions.length < 2) return;
+
+            const first = projectNodePositions[0] - 8; // Adjust to top of first circle
+            const last = projectNodePositions[projectNodePositions.length-1] + 8; // Adjust to bottom of last circle
+            const height = last - first;
+
+            // Remove old dynamic style if exists
+            let oldStyle = document.getElementById('dynamic-timeline-path');
+            if (oldStyle) oldStyle.remove();
+
+            // Inject new style
+            const style = document.createElement('style');
+            style.id = 'dynamic-timeline-path';
+            style.innerHTML = `
+                .timeline-container::after {
+                    content: '';
+                    position: absolute;
+                    width: 2px;
+                    background-color: rgba(125, 211, 252, 0.2);
+                    top: ${first}px;
+                    height: ${height}px;
+                    left: 50%;
+                    margin-left: -1px;
+                    z-index: 15;
+                }
+            `;
+            document.head.appendChild(style);
+        }
+
+        // Initialize positions and timeline path
+        calculateNodePositions();
+        updateTimelinePath();
+        window.addEventListener('resize', () => {
+            calculateNodePositions();
+            updateTimelinePath();
+        });
+
+        // --- Scroll Handling ---
+        window.addEventListener('wheel', (event) => {
+            targetY += event.deltaY * speedFactor;
+            // Clamp to project node range
+            targetY = Math.max(minScrollY, Math.min(targetY, maxScrollY));
+        });
+
+        function smoothScrollLoop() {
+            // Linear interpolation for smooth movement
+            const dy = targetY - currentY;
+            currentY += dy * easing;
+
+            // Apply position to luminous node
+            gsap.set(luminousNode, { y: currentY });
+
+            // Check for ripple triggers
+            projectNodePositions.forEach((pos, index) => {
+                const triggerThreshold = 10;
+                const nodeCenter = currentY + (nodeHeight/2);
+                
+                if (Math.abs(nodeCenter - pos) < triggerThreshold && !triggeredRipples[index]) {
+                    createRipple(projectNodes[index]);
+                    triggeredRipples[index] = true;
+                } else if (Math.abs(nodeCenter - pos) >= triggerThreshold) {
+                    triggeredRipples[index] = false;
+                }
+            });
+
+            requestAnimationFrame(smoothScrollLoop);
+        }
+        
+        // Start animation loop
+        smoothScrollLoop();
+        
+        function createRipple(node) {
+            const nodeRect = node.getBoundingClientRect();
+            const containerRect = timelineContainer.getBoundingClientRect();
+            for (let i = 0; i < 3; i++) {
+                const ripple = document.createElement('div');
+                ripple.className = 'ripple';
+                ripple.style.left = `${nodeRect.left - containerRect.left + (nodeRect.width / 2)}px`;
+                ripple.style.top = `${nodeRect.top - containerRect.top + (nodeRect.height / 2)}px`;
+                ripple.style.animationDelay = `${i * 0.25}s`;
+                rippleContainer.appendChild(ripple);
+                ripple.addEventListener('animationend', () => ripple.remove());
+            }
+        }
+    });
+    </script>
+</body>
+</html>
