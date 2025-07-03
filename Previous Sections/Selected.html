@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Project Timeline - Your Portfolio</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Orbitron:wght@700&family=Poppins:wght@500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Orbitron:wght@700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-dark: #000000;
@@ -19,6 +19,12 @@
             --font-orbitron: 'Orbitron', sans-serif;
             --font-poppins: 'Poppins', sans-serif;
             --timeline-width: 4px;
+
+            /* --- Variables for the heading effects --- */
+            --dim-text-color: #3a3a3a;
+            --heading-glow-color: rgba(125, 211, 252, 0.6);
+            --glow-size: 150px;
+            --reveal-size: 120px;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -41,11 +47,82 @@
             text-align: center;
             margin-bottom: 150px;
         }
-        .timeline-header h2 {
-            font-family: var(--font-orbitron);
-            font-size: 3.5rem;
-            color: var(--primary-accent);
+
+        /* --- Animation for the background scanning glow --- */
+        @keyframes glow-scan {
+            0% { background-position: -200% center; }
+            100% { background-position: 200% center; }
         }
+
+        /* --- MODIFIED H2 STYLING --- */
+        .timeline-header h2 {
+            position: relative;
+            font-family: var(--font-poppins);
+            font-weight: 700;
+            font-size: 3.5rem;
+            color: var(--dim-text-color);
+            user-select: none;
+            z-index: 10;
+        }
+        
+        /* UPDATED: On hover, the ::after pseudo-element (scanning light) will become transparent */
+        .timeline-header h2:hover::after {
+            opacity: 0;
+        }
+
+        /* --- ::after IS THE BACKGROUND SCANNING LIGHT --- */
+        .timeline-header h2::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 4; /* Below the hover effect */
+
+            background: linear-gradient(
+                90deg, 
+                var(--dim-text-color), 
+                var(--text-light),
+                var(--dim-text-color)
+            );
+            background-size: 200% 100%;
+
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+
+            animation: glow-scan 10s linear infinite alternate;
+            
+            /* NEW: Added a transition for a smooth fade-out/fade-in on hover */
+            transition: opacity 0.3s ease-out;
+        }
+
+        /* --- ::before IS THE RESTORED BLUE HOVER GLOW --- */
+        .timeline-header h2::before {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 5; /* On top of the scanning light */
+
+            background: radial-gradient(
+                circle var(--glow-size) at var(--x, 50%) var(--y, 50%),
+                var(--heading-glow-color),
+                transparent 70%
+            );
+
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+
+            -webkit-clip-path: circle(var(--reveal-size) at var(--x, 50%) var(--y, 50%));
+            clip-path: circle(var(--reveal-size) at var(--x, 50%) var(--y, 50%));
+        }
+
+
         .timeline-header p {
             font-size: 1.2rem;
             color: var(--text-medium);
@@ -119,10 +196,10 @@
             pointer-events: none;
             border-radius: 50%;
             background: radial-gradient(circle at 60% 35%,
-                rgba(125,211,252,0.65) 0%,    /* reduced from 0.85 */
-                rgba(14,165,233,0.45) 55%,    /* reduced from 0.7 */
-                rgba(14,165,233,0.25) 80%,    /* reduced from 0.45 */
-                rgba(0,0,0,0.10) 100%         /* reduced from 0.15 */
+                rgba(125,211,252,0.65) 0%,
+                rgba(14,165,233,0.45) 55%,
+                rgba(14,165,233,0.25) 80%,
+                rgba(0,0,0,0.10) 100%
             );
             box-shadow:
                 0 0 7px 1px var(--primary-accent-glass),
@@ -155,8 +232,8 @@
         }
 
         .project-entry.is-active .project-node {
-            box-shadow: 0 0 10px 2px var(--primary-accent); /* Reduced glow */
-            transform: translateY(-50%) scale(1.13); /* Slightly less scale */
+            box-shadow: 0 0 10px 2px var(--primary-accent);
+            transform: translateY(-50%) scale(1.13);
             animation: pulse 1.2s infinite alternate;
         }
         @keyframes pulse {
@@ -174,7 +251,7 @@
             position: relative;
             opacity: 0.2;
             transform: translateY(50px);
-            transition: opacity 1s cubic-bezier(.4,1,.6,1), transform 1s cubic-bezier(.4,1,.6,1); /* smoother */
+            transition: opacity 1s cubic-bezier(.4,1,.6,1), transform 1s cubic-bezier(.4,1,.6,1);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
         }
         .project-entry.is-active .project-panel {
@@ -230,7 +307,8 @@
 <body>
     <section class="timeline-section">
         <header class="timeline-header">
-            <h2>Project Chronology</h2>
+            <!-- H2 tag now uses both CSS animations -->
+            <h2 data-text="Project Chronology">Project Chronology</h2>
             <p>An interactive journey through my key projects, showcasing the evolution of my skills and problem-solving abilities over time.</p>
         </header>
         <div class="timeline-container">
@@ -245,6 +323,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <script>
     document.addEventListener('DOMContentLoaded', () => {
+        // --- TIMELINE SCRIPT (UNCHANGED) ---
         gsap.registerPlugin(ScrollTrigger);
 
         const projects = [
@@ -258,7 +337,6 @@
         const svg = document.querySelector('.timeline-svg');
         const svgLine = svg.querySelector('.timeline-path');
 
-        // Populate the timeline
         projects.forEach((project, index) => {
             const alignment = index % 2 === 0 ? 'align-left' : 'align-right';
             const entry = document.createElement('div');
@@ -282,7 +360,6 @@
             timelineContainer.appendChild(entry);
         });
 
-        // Animate timeline line to start/end at centers of first/last node
         function updateTimelineSVG() {
             const nodes = document.querySelectorAll('.project-node');
             if (nodes.length < 2) return;
@@ -290,11 +367,9 @@
             const firstNodeRect = nodes[0].getBoundingClientRect();
             const lastNodeRect = nodes[nodes.length-1].getBoundingClientRect();
 
-            // Calculate y positions relative to the timeline container
             const y1 = firstNodeRect.top + firstNodeRect.height/2 - containerRect.top;
             const y2 = lastNodeRect.top + lastNodeRect.height/2 - containerRect.top;
 
-            // Set SVG height and line coordinates
             svg.setAttribute('height', y2 - y1);
             svg.style.top = y1 + 'px';
             svgLine.setAttribute('x1', 2);
@@ -307,7 +382,6 @@
         window.addEventListener('resize', updateTimelineSVG);
         window.addEventListener('scroll', updateTimelineSVG);
 
-        // GSAP ScrollTrigger Animation
         const projectEntries = document.querySelectorAll('.project-entry');
         projectEntries.forEach(entry => {
             ScrollTrigger.create({
@@ -320,6 +394,20 @@
                 onLeaveBack: () => entry.classList.remove('is-active'),
             });
         });
+
+        // --- SCRIPT FOR HEADING HOVER GLOW RESTORED ---
+        const headingGlow = document.querySelector('.timeline-header h2');
+        if (headingGlow) {
+            document.body.addEventListener('mousemove', (e) => {
+                const rect = headingGlow.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+
+                headingGlow.style.setProperty('--x', `${x}px`);
+                headingGlow.style.setProperty('--y', `${y}px`);
+            });
+        }
+
     });
     </script>
 </body>

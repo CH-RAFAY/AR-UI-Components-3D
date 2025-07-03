@@ -20,10 +20,11 @@
             --font-poppins: 'Poppins', sans-serif;
             --timeline-width: 4px;
 
-            /* --- UPDATED VARIABLES FOR HEADING --- */
-            /* The base color for the heading text */
+            /* --- NEW VARIABLES FOR HEADING GLOW --- */
             --dim-text-color: #3a3a3a;
-            /* The old mouse-hover variables have been removed as they are no longer needed. */
+            --heading-glow-color: rgba(125, 211, 252, 0.6); /* Blue glow from your theme */
+            --glow-size: 150px;
+            --reveal-size: 120px;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -47,24 +48,18 @@
             margin-bottom: 150px;
         }
 
-        /* --- NEW ANIMATION FOR THE HEADING GLOW --- */
-        @keyframes glow-scan {
-            0% { background-position: -200% center; }
-            100% { background-position: 200% center; }
-        }
-
         /* --- MODIFIED H2 STYLING --- */
         .timeline-header h2 {
             position: relative; /* Required for the ::before pseudo-element */
-            font-family: var(--font-poppins);
-            font-weight: 700;
-            font-size: 3.5rem;
-            color: var(--dim-text-color); /* Sets the base color of the text */
+            font-family: var(--font-poppins); /* Changed from Orbitron */
+            font-weight: 700; /* Added for boldness */
+            font-size: 3.5rem; /* Kept original size */
+            color: var(--dim-text-color); /* Dim base color */
             user-select: none;
             z-index: 10;
         }
 
-        /* --- MODIFIED ::BEFORE PSEUDO-ELEMENT FOR THE NEW GLOW EFFECT --- */
+        /* --- NEW ::BEFORE PSEUDO-ELEMENT FOR THE GLOW EFFECT --- */
         .timeline-header h2::before {
             content: attr(data-text);
             position: absolute;
@@ -74,22 +69,21 @@
             height: 100%;
             z-index: 5;
 
-            /* Creates a gradient that will be the "shine" */
-            background: linear-gradient(
-                90deg, 
-                var(--dim-text-color), 
-                var(--text-light), /* The bright, white glow color */
-                var(--dim-text-color)
+            /* Creates the glowing radial gradient using your theme's blue */
+            background: radial-gradient(
+                circle var(--glow-size) at var(--x, 50%) var(--y, 50%),
+                var(--heading-glow-color),
+                transparent 70%
             );
-            background-size: 200% 100%; /* Makes the gradient larger than the text */
 
-            /* Clips the gradient to the shape of the text */
+            /* Clips the glow to the text shape */
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
 
-            /* Applies the slow, back-and-forth scanning animation */
-            animation: glow-scan 10s linear infinite alternate;
+            /* Creates the circular reveal "spotlight" */
+            -webkit-clip-path: circle(var(--reveal-size) at var(--x, 50%) var(--y, 50%));
+            clip-path: circle(var(--reveal-size) at var(--x, 50%) var(--y, 50%));
         }
 
         .timeline-header p {
@@ -276,7 +270,7 @@
 <body>
     <section class="timeline-section">
         <header class="timeline-header">
-            <!-- H2 tag now uses the CSS animation -->
+            <!-- UPDATED H2 TAG WITH DATA-TEXT ATTRIBUTE -->
             <h2 data-text="Project Chronology">Project Chronology</h2>
             <p>An interactive journey through my key projects, showcasing the evolution of my skills and problem-solving abilities over time.</p>
         </header>
@@ -364,9 +358,18 @@
             });
         });
 
-        // --- SCRIPT FOR HEADING GLOW HAS BEEN REMOVED ---
-        // The new animation is handled entirely by CSS.
+        // --- NEW SCRIPT FOR HEADING GLOW ---
+        const headingGlow = document.querySelector('.timeline-header h2');
+        if (headingGlow) {
+            document.body.addEventListener('mousemove', (e) => {
+                const rect = headingGlow.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
 
+                headingGlow.style.setProperty('--x', `${x}px`);
+                headingGlow.style.setProperty('--y', `${y}px`);
+            });
+        }
     });
     </script>
 </body>
