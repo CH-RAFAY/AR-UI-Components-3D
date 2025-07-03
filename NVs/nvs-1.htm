@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>V-5 Final Polish - Updated</title>
+    <title>V-5</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Orbitron:wght@700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -11,8 +11,8 @@
             --primary-accent: #7dd3fc;
             --primary-accent-dark: #0ea5e9;
             --primary-accent-glass: rgba(125, 211, 252, 0.15);
-            --primary-accent-dim: rgba(125, 211, 252, 0.4);
             --text-light: #f1f5f9;
+            /* MODIFICATION: Subheading color changed to a pure, neutral gray for better contrast */
             --text-medium: #aeaeae;
             --glass-bg: rgba(15, 15, 15, 0.3);
             --glass-border: rgba(255, 255, 255, 0.1);
@@ -20,32 +20,49 @@
             --font-orbitron: 'Orbitron', sans-serif;
             --font-poppins: 'Poppins', sans-serif;
             --timeline-width: 4px;
+
+
+            /* --- Variables for the heading effects --- */
             --dim-text-color: #3a3a3a;
             --heading-glow-color: rgba(14, 165, 233, 0.6);
             --glow-size: 175px;
             --reveal-size: 120px;
-       }
+         }
+
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
+
+
         body {
             background: radial-gradient(ellipse at center, #0a0a0a 0%, #000000 100%);
             color: var(--text-light);
             font-family: var(--font-inter);
             cursor: default;
         }
+
+
         .timeline-section {
             width: 100%;
             padding: 100px 5%;
             position: relative;
             z-index: 10;
         }
+
+
         .timeline-header {
             text-align: center;
             margin-bottom: 150px;
         }
+
+
+        /* --- Animation for the background scanning glow --- */
         @keyframes glow-scan {
             0% { background-position: -200% center; }
             100% { background-position: 200% center; }
         }
+
+
+        /* --- MODIFIED H2 STYLING --- */
         .timeline-header h2 {
             position: relative;
             font-family: var(--font-poppins);
@@ -56,9 +73,14 @@
             z-index: 10;
             display: inline-block;
         }
+        
+        /* UPDATED: On hover, the ::after pseudo-element (scanning light) will become transparent */
         .timeline-header h2:hover::after {
             opacity: 0;
         }
+
+
+        /* --- ::after IS THE BACKGROUND SCANNING LIGHT --- */
         .timeline-header h2::after {
             content: attr(data-text);
             position: absolute;
@@ -66,7 +88,9 @@
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: 4;
+            z-index: 4; /* Below the hover effect */
+
+
             background: linear-gradient(
                 90deg, 
                 var(--dim-text-color), 
@@ -74,12 +98,20 @@
                 var(--dim-text-color)
             );
             background-size: 200% 100%;
+
+
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
+
+
             animation: glow-scan 10s linear infinite alternate;
+            
             transition: opacity 0.3s ease-out;
         }
+
+
+        /* --- ::before IS THE RESTORED BLUE HOVER GLOW --- */
         .timeline-header h2::before {
             content: attr(data-text);
             position: absolute;
@@ -87,32 +119,44 @@
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: 5;
+            z-index: 5; /* On top of the scanning light */
+
             background: radial-gradient(
                 circle var(--glow-size) at var(--x, 50%) var(--y, 50%),
                 var(--heading-glow-color),
                 transparent 65%
             );
+
+
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
+
+
             -webkit-clip-path: circle(var(--reveal-size) at var(--x, 50%) var(--y, 50%));
             clip-path: circle(var(--reveal-size) at var(--x, 50%) var(--y, 50%));
         }
+
+
+
         .timeline-header p {
             font-size: 1.2rem;
             color: var(--text-medium);
             max-width: 600px;
             margin: 15px auto 0;
         }
+
+
         .timeline-container {
             position: relative;
             max-width: 1200px;
             margin: 0 auto;
         }
+
+
+        /* --- TIMELINE SVG PATH --- */
         .timeline-svg {
             position: absolute;
-            top: 0;
             left: 50%;
             transform: translateX(-50%);
             width: var(--timeline-width);
@@ -125,6 +169,9 @@
             opacity: 0.15;
             stroke-linecap: round;
         }
+
+
+        /* --- PROJECT ENTRIES & NODES --- */
         .project-entry {
             padding: 80px 0;
             position: relative;
@@ -139,6 +186,8 @@
             left: 50%;
             padding-left: 50px;
         }
+
+
         .project-node {
             position: absolute;
             top: 50%;
@@ -146,11 +195,11 @@
             height: 20px;
             border-radius: 50%;
             background: var(--bg-dark);
-            border: 3px solid var(--primary-accent-dim);
-            box-shadow: 0 0 6px 1px var(--primary-accent-dim);
-            transition: box-shadow 0.5s ease, border-color 0.5s ease, transform 0.4s cubic-bezier(.4,2,.6,1);
-            transform: translateY(-50%) scale(1);
+            border: 3px solid var(--primary-accent);
             z-index: 30;
+            box-shadow: 0 0 6px 1px var(--primary-accent); /* Reduced glow */
+            transition: box-shadow 0.3s, transform 0.4s cubic-bezier(.4,2,.6,1);
+            transform: translateY(-50%) scale(1);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -158,33 +207,9 @@
         }
         .align-left .project-node { right: -10px; }
         .align-right .project-node { left: -10px; }
-        
-        @keyframes ripple-wave {
-            from {
-                transform: scale(1);
-                opacity: 0.6;
-            }
-            to {
-                transform: scale(4.5);
-                opacity: 0;
-            }
-        }
-        .ripple {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            border: 1.5px solid var(--primary-accent);
-            border-radius: 50%;
-            transform: scale(1);
-            opacity: 0;
-            pointer-events: none;
-        }
-        .project-entry.is-active .project-node .ripple {
-            animation: ripple-wave 1.5s ease-out;
-        }
-        .project-entry.is-active .project-node .ripple:nth-of-type(2) {
-            animation-delay: 1.0s;
-        }
+
+
+        /* --- Light-based animated fill --- */
         .project-fill {
             position: absolute;
             top: 50%; left: 50%;
@@ -226,28 +251,19 @@
             filter: blur(0.5px);
             opacity: 0.7;
         }
-        @keyframes scale-up-node {
-            to {
-                transform: translateY(-50%) scale(1.13);
-            }
+
+
+        .project-entry.is-active .project-node {
+            box-shadow: 0 0 10px 2px var(--primary-accent);
+            transform: translateY(-50%) scale(1.13);
+            animation: pulse 1.2s infinite alternate;
         }
         @keyframes pulse {
             0% { box-shadow: 0 0 10px 2px var(--primary-accent); }
             100% { box-shadow: 0 0 16px 4px var(--primary-accent); }
         }
-        .project-entry.is-active .project-node {
-            border-color: var(--primary-accent);
-            box-shadow: 0 0 10px 2px var(--primary-accent);
-            animation: 
-                scale-up-node 0.5s 2.5s forwards ease-out,
-                pulse 1.2s 2.5s infinite alternate;
-        }
-        @keyframes connect-signal {
-            50% { box-shadow: 0 0 20px 6px var(--primary-accent); }
-        }
-        .project-node.connecting-signal {
-            animation: connect-signal 0.4s ease-in-out 3;
-        }
+
+
         .project-panel {
             padding: 30px;
             background: rgba(15, 20, 30, 0.42);
@@ -265,6 +281,8 @@
             opacity: 1;
             transform: translateY(0);
         }
+
+
         .panel-content {
             display: grid;
             grid-template-columns: 1fr 2fr;
@@ -297,6 +315,8 @@
             line-height: 1.6;
             color: var(--text-medium);
         }
+
+
         @media (max-width: 992px) {
             .timeline-svg { left: 32px; }
             .project-entry { width: 100%; padding-left: 70px; padding-right: 0; }
@@ -312,20 +332,25 @@
 <body>
     <section class="timeline-section">
         <header class="timeline-header">
+            <!-- H2 tag now uses both CSS animations -->
             <h2 data-text="Project Chronology">Project Chronology</h2>
             <p>An interactive journey through my key projects, showcasing the evolution of my skills and problem-solving abilities over time.</p>
         </header>
         <div class="timeline-container">
+            <!-- SVG Timeline Path -->
             <svg class="timeline-svg">
-                <line class="timeline-path" x1="2" y1="0" x2="2" y2="100%"/>
+                <line class="timeline-path" x1="2" y1="0" x2="2" y2="100"/>
             </svg>
+            <!-- Projects will be injected here by JS -->
         </div>
     </section>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <script>
     document.addEventListener('DOMContentLoaded', () => {
+        // --- TIMELINE SCRIPT (UNCHANGED) ---
         gsap.registerPlugin(ScrollTrigger);
+
 
         const projects = [
             { title: "QuantumCart", description: "A full-stack e-commerce platform with a focus on user experience and secure payment processing.", year: "2021", image: "https://images.unsplash.com/photo-1522199755839-a2bacb67c546?q=80&w=800&auto=format&fit=crop" },
@@ -334,10 +359,12 @@
             { title: "Axiom Data", description: "An interactive data visualization dashboard designed to make complex datasets accessible and engaging.", year: "2024", image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=800&auto=format&fit=crop" }
         ];
 
+
         const timelineContainer = document.querySelector('.timeline-container');
         const svg = document.querySelector('.timeline-svg');
-        const path = document.querySelector('.timeline-path');
-        
+        const svgLine = svg.querySelector('.timeline-path');
+
+
         projects.forEach((project, index) => {
             const alignment = index % 2 === 0 ? 'align-left' : 'align-right';
             const entry = document.createElement('div');
@@ -345,8 +372,6 @@
             entry.innerHTML = `
                 <div class="project-node">
                     <span class="project-fill"></span>
-                    <div class="ripple"></div>
-                    <div class="ripple"></div>
                 </div>
                 <div class="project-panel">
                     <div class="panel-content">
@@ -363,72 +388,32 @@
             timelineContainer.appendChild(entry);
         });
 
-        function setupAdvancedTimeline() {
-            const projectNodes = document.querySelectorAll('.project-node');
-            if (projectNodes.length < 2) return;
 
+        function updateTimelineSVG() {
+            const nodes = document.querySelectorAll('.project-node');
+            if (nodes.length < 2) return;
             const containerRect = timelineContainer.getBoundingClientRect();
-            // MODIFICATION: Correctly get the bounding rectangle of the *first* node, not the whole collection.
-            const firstNodeRect = projectNodes[0].getBoundingClientRect();
-            const lastNodeRect = projectNodes[projectNodes.length - 1].getBoundingClientRect();
-            const y1 = firstNodeRect.top + firstNodeRect.height / 2 - containerRect.top;
-            const height = (lastNodeRect.top + lastNodeRect.height / 2) - (firstNodeRect.top + firstNodeRect.height / 2);
+            const firstNodeRect = nodes[0].getBoundingClientRect();
+            const lastNodeRect = nodes[nodes.length-1].getBoundingClientRect();
 
-            svg.setAttribute('height', height);
+
+            const y1 = firstNodeRect.top + firstNodeRect.height/2 - containerRect.top;
+            const y2 = lastNodeRect.top + lastNodeRect.height/2 - containerRect.top;
+
+
+            svg.setAttribute('height', y2 - y1);
             svg.style.top = y1 + 'px';
-            path.setAttribute('y2', height);
-
-            const pathTotalLength = path.getTotalLength();
-            path.style.strokeDasharray = pathTotalLength;
-            path.style.strokeDashoffset = pathTotalLength;
-
-            const masterTl = gsap.timeline({ paused: true });
-            let lastOffset = pathTotalLength;
-            
-            projectNodes.forEach((node, index) => {
-                const nodeRect = node.getBoundingClientRect();
-                const nodeCenterY = (nodeRect.top + nodeRect.height / 2) - (firstNodeRect.top + firstNodeRect.height / 2);
-                
-                const progress = nodeCenterY / height;
-                const currentOffset = pathTotalLength * (1 - progress);
-                const duration = Math.abs(currentOffset - lastOffset) / pathTotalLength;
-
-                masterTl.to(path, {
-                    strokeDashoffset: currentOffset,
-                    duration: duration * 10,
-                    ease: "none"
-                });
-                
-                masterTl.call(() => {
-                    if (!node.classList.contains('connecting-signal')) {
-                        node.classList.add('connecting-signal');
-                        setTimeout(() => node.classList.remove('connecting-signal'), 1200);
-                    }
-                }, [], ">");
-                
-                if (index < projectNodes.length - 1) {
-                    masterTl.to({}, { duration: 2 });
-                }
-
-                lastOffset = currentOffset;
-            });
-            
-            ScrollTrigger.create({
-                trigger: ".timeline-container",
-                start: "top center",
-                end: "bottom bottom",
-                scrub: 1.5,
-                animation: masterTl
-            });
+            svgLine.setAttribute('x1', 2);
+            svgLine.setAttribute('y1', 0);
+            svgLine.setAttribute('x2', 2);
+            svgLine.setAttribute('y2', y2 - y1);
         }
 
-        setTimeout(() => {
-            setupAdvancedTimeline();
-        }, 100);
 
-        window.addEventListener('resize', () => {
-            location.reload();
-        });
+        setTimeout(updateTimelineSVG, 100);
+        window.addEventListener('resize', updateTimelineSVG);
+        window.addEventListener('scroll', updateTimelineSVG);
+
 
         const projectEntries = document.querySelectorAll('.project-entry');
         projectEntries.forEach(entry => {
@@ -436,41 +421,29 @@
                 trigger: entry,
                 start: "top center",
                 end: "bottom center",
-                toggleClass: "is-active",
+                onEnter: () => entry.classList.add('is-active'),
+                onLeave: () => entry.classList.remove('is-active'),
+                onEnterBack: () => entry.classList.add('is-active'),
+                onLeaveBack: () => entry.classList.remove('is-active'),
             });
         });
 
-        // MODIFICATION: Add a dedicated ScrollTrigger for the last node's disconnect animation on scroll up.
-        const lastProjectEntry = document.querySelector('.project-entry:last-of-type');
-        if (lastProjectEntry) {
-            const lastNode = lastProjectEntry.querySelector('.project-node');
-            if (lastNode) {
-                 ScrollTrigger.create({
-                    trigger: lastProjectEntry,
-                    start: "top center",
-                    onLeaveBack: () => {
-                        // Fire the blinking animation when scrolling up past this point
-                        if (!lastNode.classList.contains('connecting-signal')) {
-                           lastNode.classList.add('connecting-signal');
-                           setTimeout(() => {
-                               lastNode.classList.remove('connecting-signal');
-                           }, 1200);
-                        }
-                    }
-                });
-            }
-        }
 
+        // --- SCRIPT FOR HEADING HOVER GLOW RESTORED ---
         const headingGlow = document.querySelector('.timeline-header h2');
         if (headingGlow) {
             document.body.addEventListener('mousemove', (e) => {
                 const rect = headingGlow.getBoundingClientRect();
                 const x = e.clientX - rect.left;
                 const y = e.clientY - rect.top;
+
+
                 headingGlow.style.setProperty('--x', `${x}px`);
                 headingGlow.style.setProperty('--y', `${y}px`);
             });
         }
+
+
     });
     </script>
 </body>

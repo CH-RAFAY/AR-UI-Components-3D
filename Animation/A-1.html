@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Project Timeline - Your Portfolio</title>
+    <title>A-1</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Orbitron:wght@700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -12,7 +12,7 @@
             --primary-accent-dark: #0ea5e9;
             --primary-accent-glass: rgba(125, 211, 252, 0.15);
             --text-light: #f1f5f9;
-            --text-medium: #a3b6c7;
+            --text-medium: #aeaeae;
             --glass-bg: rgba(15, 15, 15, 0.3);
             --glass-border: rgba(255, 255, 255, 0.1);
             --font-inter: 'Inter', sans-serif;
@@ -23,8 +23,8 @@
 
             /* --- Variables for the heading effects --- */
             --dim-text-color: #3a3a3a;
-            --heading-glow-color: rgba(125, 211, 252, 0.6);
-            --glow-size: 150px;
+            --heading-glow-color: rgba(14, 165, 233, 0.6);
+            --glow-size: 175px;
             --reveal-size: 120px;
          }
 
@@ -70,9 +70,9 @@
             color: var(--dim-text-color);
             user-select: none;
             z-index: 10;
+            display: inline-block;
         }
         
-        /* UPDATED: On hover, the ::after pseudo-element (scanning light) will become transparent */
         .timeline-header h2:hover::after {
             opacity: 0;
         }
@@ -92,8 +92,7 @@
             background: linear-gradient(
                 90deg, 
                 var(--dim-text-color), 
-                /* MODIFICATION: Reduced max brightness from var(--text-light) to a softer gray */
-                #d1d5db,
+                #b0b8c4,
                 var(--dim-text-color)
             );
             background-size: 200% 100%;
@@ -106,7 +105,6 @@
 
             animation: glow-scan 10s linear infinite alternate;
             
-            /* NEW: Added a transition for a smooth fade-out/fade-in on hover */
             transition: opacity 0.3s ease-out;
         }
 
@@ -121,11 +119,10 @@
             height: 100%;
             z-index: 5; /* On top of the scanning light */
 
-
             background: radial-gradient(
                 circle var(--glow-size) at var(--x, 50%) var(--y, 50%),
                 var(--heading-glow-color),
-                transparent 70%
+                transparent 65%
             );
 
 
@@ -158,12 +155,14 @@
         /* --- TIMELINE SVG PATH --- */
         .timeline-svg {
             position: absolute;
+            top: 0;
             left: 50%;
             transform: translateX(-50%);
             width: var(--timeline-width);
             pointer-events: none;
             z-index: 12;
         }
+        /* MODIFICATION: The single timeline path is now styled with the subtle opacity for the animation */
         .timeline-path {
             stroke: var(--primary-accent);
             stroke-width: var(--timeline-width);
@@ -333,14 +332,13 @@
 <body>
     <section class="timeline-section">
         <header class="timeline-header">
-            <!-- H2 tag now uses both CSS animations -->
             <h2 data-text="Project Chronology">Project Chronology</h2>
             <p>An interactive journey through my key projects, showcasing the evolution of my skills and problem-solving abilities over time.</p>
         </header>
         <div class="timeline-container">
-            <!-- SVG Timeline Path -->
+            <!-- MODIFICATION: SVG now only contains a single path for animation -->
             <svg class="timeline-svg">
-                <line class="timeline-path" x1="2" y1="0" x2="2" y2="100"/>
+                <line class="timeline-path" x1="2" y1="0" x2="2" y2="100%"/>
             </svg>
             <!-- Projects will be injected here by JS -->
         </div>
@@ -349,9 +347,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <script>
     document.addEventListener('DOMContentLoaded', () => {
-        // --- TIMELINE SCRIPT (UNCHANGED) ---
         gsap.registerPlugin(ScrollTrigger);
-
 
         const projects = [
             { title: "QuantumCart", description: "A full-stack e-commerce platform with a focus on user experience and secure payment processing.", year: "2021", image: "https://images.unsplash.com/photo-1522199755839-a2bacb67c546?q=80&w=800&auto=format&fit=crop" },
@@ -360,12 +356,11 @@
             { title: "Axiom Data", description: "An interactive data visualization dashboard designed to make complex datasets accessible and engaging.", year: "2024", image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=800&auto=format&fit=crop" }
         ];
 
-
         const timelineContainer = document.querySelector('.timeline-container');
         const svg = document.querySelector('.timeline-svg');
-        const svgLine = svg.querySelector('.timeline-path');
-
-
+        const path = document.querySelector('.timeline-path');
+        // MODIFICATION: The 'track' variable is no longer needed
+        
         projects.forEach((project, index) => {
             const alignment = index % 2 === 0 ? 'align-left' : 'align-right';
             const entry = document.createElement('div');
@@ -389,32 +384,44 @@
             timelineContainer.appendChild(entry);
         });
 
-
-        function updateTimelineSVG() {
+        function setupTimeline() {
             const nodes = document.querySelectorAll('.project-node');
             if (nodes.length < 2) return;
             const containerRect = timelineContainer.getBoundingClientRect();
             const firstNodeRect = nodes[0].getBoundingClientRect();
-            const lastNodeRect = nodes[nodes.length-1].getBoundingClientRect();
-
-
-            const y1 = firstNodeRect.top + firstNodeRect.height/2 - containerRect.top;
-            const y2 = lastNodeRect.top + lastNodeRect.height/2 - containerRect.top;
-
-
-            svg.setAttribute('height', y2 - y1);
+            const lastNodeRect = nodes[nodes.length - 1].getBoundingClientRect();
+            
+            const y1 = firstNodeRect.top + firstNodeRect.height / 2 - containerRect.top;
+            const y2 = lastNodeRect.top + lastNodeRect.height / 2 - containerRect.top;
+            const height = y2 - y1;
+            
+            svg.setAttribute('height', height);
             svg.style.top = y1 + 'px';
-            svgLine.setAttribute('x1', 2);
-            svgLine.setAttribute('y1', 0);
-            svgLine.setAttribute('x2', 2);
-            svgLine.setAttribute('y2', y2 - y1);
+            
+            // MODIFICATION: No longer need to set the 'track' attribute
+            path.setAttribute('y2', height);
+            
+            const pathLength = path.getTotalLength();
+            path.style.strokeDasharray = pathLength;
+            path.style.strokeDashoffset = pathLength;
         }
 
+        setTimeout(() => {
+            setupTimeline();
+            
+            gsap.to(path, {
+                strokeDashoffset: 0,
+                ease: "none",
+                scrollTrigger: {
+                    trigger: ".timeline-container",
+                    start: "top center",
+                    end: "bottom bottom",
+                    scrub: true,
+                }
+            });
+        }, 100);
 
-        setTimeout(updateTimelineSVG, 100);
-        window.addEventListener('resize', updateTimelineSVG);
-        window.addEventListener('scroll', updateTimelineSVG);
-
+        window.addEventListener('resize', setupTimeline);
 
         const projectEntries = document.querySelectorAll('.project-entry');
         projectEntries.forEach(entry => {
@@ -422,29 +429,20 @@
                 trigger: entry,
                 start: "top center",
                 end: "bottom center",
-                onEnter: () => entry.classList.add('is-active'),
-                onLeave: () => entry.classList.remove('is-active'),
-                onEnterBack: () => entry.classList.add('is-active'),
-                onLeaveBack: () => entry.classList.remove('is-active'),
+                toggleClass: "is-active",
             });
         });
 
-
-        // --- SCRIPT FOR HEADING HOVER GLOW RESTORED ---
         const headingGlow = document.querySelector('.timeline-header h2');
         if (headingGlow) {
             document.body.addEventListener('mousemove', (e) => {
                 const rect = headingGlow.getBoundingClientRect();
                 const x = e.clientX - rect.left;
                 const y = e.clientY - rect.top;
-
-
                 headingGlow.style.setProperty('--x', `${x}px`);
                 headingGlow.style.setProperty('--y', `${y}px`);
             });
         }
-
-
     });
     </script>
 </body>
