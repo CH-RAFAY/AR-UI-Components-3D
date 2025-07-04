@@ -90,7 +90,7 @@
             margin: 15px auto 0;
         }
         
-        /* --- UPDATED: 3D Tumbler/Revolving Coin Styles --- */
+        /* --- 3D Tumbler/Revolving Coin Styles --- */
         .category-selector {
             margin: 60px auto 80px;
             width: 300px; /* Smaller width */
@@ -136,8 +136,7 @@
             border-color: var(--primary-accent);
             box-shadow: 0 0 15px rgba(125, 211, 252, 0.3), inset 0 0 10px rgba(125, 211, 252, 0.1);
         }
-        /* --- END: Updated Styles --- */
-
+        /* --- END: Styles --- */
 
         .timeline-container {
             position: relative;
@@ -260,7 +259,7 @@
             <h2 data-text="Project Chronology">Project Chronology</h2>
             <p>An interactive journey through my key projects, showcasing the evolution of my skills and problem-solving abilities over time.</p>
             
-            <!-- UPDATED: 3D Tumbler/Revolving Coin HTML -->
+            <!-- 3D Tumbler/Revolving Coin HTML -->
             <div class="category-selector">
                 <div class="tumbler">
                     <!-- Category labels will be populated by JS -->
@@ -362,9 +361,12 @@
             if (!selector || !tumbler) return;
 
             const angleStep = 360 / categories.length;
-            // Calculate the Z translation to arrange labels in a cylinder
-            // The formula is: radius = (width / 2) / tan(PI / num_sides)
+            // Calculate the Z translation (radius) to arrange labels in a cylinder
             const radius = (selector.offsetWidth / 2) / Math.tan(Math.PI / categories.length);
+
+            // Move the entire tumbler object back so its center of rotation is at the Z=0 plane.
+            // This ensures it rotates around its true center, not its front face.
+            gsap.set(tumbler, { translateZ: -radius });
 
             tumbler.innerHTML = ''; // Clear any existing content
             categories.forEach((cat, i) => {
@@ -374,10 +376,11 @@
                 label.dataset.index = i;
                 tumbler.appendChild(label);
 
-                // Position each label in a 3D circle
+                // Position each label in the 3D circle.
+                // GSAP combines these individual transform properties into a single matrix.
                 gsap.set(label, {
                     rotationY: i * angleStep,
-                    transformOrigin: `center center -${radius}px`
+                    translateZ: radius
                 });
             });
 
@@ -418,6 +421,7 @@
             window.addEventListener('mousemove', (e) => {
                 if (!isDragging) return;
                 rotationY = (e.pageX - startX) / 2.5;
+                // GSAP preserves the existing translateZ when we only set rotationY
                 gsap.set(tumbler, { rotationY: rotationY });
             });
 
@@ -510,7 +514,7 @@
         window.addEventListener('resize', () => { location.reload(); });
 
         // --- INITIALIZATION ---
-        setupTumblerSelector(); // Changed to the new function
+        setupTumblerSelector();
         renderTimeline(currentCategoryIndex);
     });
     </script>
