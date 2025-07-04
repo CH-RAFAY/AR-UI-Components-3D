@@ -24,7 +24,7 @@
             --heading-glow-color: rgba(14, 165, 233, 0.6);
             --glow-size: 175px;
             --reveal-size: 120px;
-        }
+       }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             background: radial-gradient(ellipse at center, #0a0a0a 0%, #000000 100%);
@@ -137,8 +137,6 @@
         .project-entry.align-left { left: 0; padding-right: 50px; }
         .project-entry.align-right { left: 50%; padding-left: 50px; }
 
-
-
         /* Timeline Node Styles (Unchanged) */
         .project-node {
             position: absolute; top: 50%; width: 20px; height: 20px; border-radius: 50%;
@@ -154,6 +152,7 @@
             border-color: var(--primary-accent);
             box-shadow: 0 0 10px 2px var(--primary-accent);
         }
+        /* ... other node styles ... */
         @keyframes ripple-wave { from { transform: scale(1); opacity: 0.6; } to { transform: scale(4.5); opacity: 0; } }
         .ripple { position: absolute; width: 100%; height: 100%; border: 1.5px solid var(--primary-accent); border-radius: 50%; transform: scale(1); opacity: 0; pointer-events: none; }
         .project-entry.is-active .project-node .ripple { animation: ripple-wave 1.5s ease-out; }
@@ -165,50 +164,55 @@
         /* --- MODIFIED PROJECT PANEL STYLES --- */
         .project-panel {
             padding: 30px;
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.03) 50%, rgba(255, 255, 255, 0.06) 100%);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.015) 50%, rgba(255, 255, 255, 0.04) 100%);
+            border: 1.5px solid transparent; /* MODIFIED: Border is now transparent */
             backdrop-filter: blur(25px) saturate(180%);
             -webkit-backdrop-filter: blur(25px) saturate(180%);
             position: relative;
-            box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.05), 0 20px 50px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
             transition: box-shadow 0.5s ease;
-            visibility: hidden;
+            visibility: hidden; /* Controlled by GSAP */
         }
-
-
         .project-entry.is-active .project-panel {
-            box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.05), 0 30px 80px rgba(0, 0, 0, 0.6), 0 0 25px rgba(125, 211, 252, 0.15);
-        }
-        .project-entry.is-active .project-panel:hover {
-            box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.05), 0 35px 90px rgba(0, 0, 0, 0.7), 0 0 50px rgba(125, 211, 252, 0.3);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6), 0 0 25px rgba(125, 211, 252, 0.15);
         }
         
-        /* --- MODIFIED CORNER ACCENT STYLES --- */
+        /* NEW: Corner accents are now thicker and brighter on hover */
         .corner-accent {
             position: absolute;
-            /* MODIFIED: Increased size for prominence */
-            width: 25.5px; 
-            height: 25.5px;
-            border: 3.5px solid var(--primary-accent-dim);
+            width: 20px;
+            height: 20px;
+            border: 3px solid var(--primary-accent-dim);
             opacity: 0;
-            transition: all 0.4s ease, transform 0.4s ease;
+            transition: all 0.4s ease 0.2s;
             transform: scale(1.2);
             z-index: 5;
         }
-        .project-entry.is-active .corner-accent {
-            opacity: 0.5;
-            transform: scale(1);
-        }
-        .project-panel:hover .corner-accent {
-            border-color: var(--primary-accent);
-            transform: scale(1.15);
-            opacity: 0.8;
-        }
-        .corner-accent.top-left { top: -3.5px; left: -3.5px; border-right: none; border-bottom: none; border-top-left-radius: 5px; /* ADDED */ }
-        .corner-accent.top-right { top: -3.5px; right: -3.5px; border-left: none; border-bottom: none; border-top-right-radius: 5px; /* ADDED */ }
-        .corner-accent.bottom-left { bottom: -3.5px; left: -3.5px; border-right: none; border-top: none; border-bottom-left-radius: 5px; /* ADDED */ }
-        .corner-accent.bottom-right { bottom: -3.5px; right: -3.5px; border-left: none; border-top: none; border-bottom-right-radius: 5px; /* ADDED */ }
+        .project-entry.is-active .corner-accent { opacity: 0.7; transform: scale(1); }
+        .project-panel:hover .corner-accent { border-color: var(--primary-accent); }
+        .corner-accent.top-left { top: -2px; left: -2px; border-right: none; border-bottom: none; }
+        .corner-accent.top-right { top: -2px; right: -2px; border-left: none; border-bottom: none; }
+        .corner-accent.bottom-left { bottom: -2px; left: -2px; border-right: none; border-top: none; }
+        .corner-accent.bottom-right { bottom: -2px; right: -2px; border-left: none; border-top: none; }
 
+        /* NEW: Animated border lines on hover */
+        .border-line {
+            position: absolute;
+            background: var(--primary-accent);
+            transition: transform 0.4s cubic-bezier(0.7, 0, 0.3, 1);
+            z-index: 4;
+        }
+        .border-line-h { width: 100%; height: 1.5px; transform: scaleX(0); }
+        .border-line-v { width: 1.5px; height: 100%; transform: scaleY(0); }
+        .border-line.top { top: 0; left: 0; transform-origin: left; }
+        .border-line.bottom { bottom: 0; left: 0; transform-origin: right; }
+        .border-line.left { left: 0; top: 0; transform-origin: bottom; }
+        .border-line.right { right: 0; top: 0; transform-origin: top; }
+        .project-panel:hover .border-line { transform: scaleX(1) scaleY(1); }
+        .project-panel:hover .border-line.top { transition-delay: 0s; }
+        .project-panel:hover .border-line.right { transition-delay: 0.1s; }
+        .project-panel:hover .border-line.bottom { transition-delay: 0.2s; }
+        .project-panel:hover .border-line.left { transition-delay: 0.3s; }
 
         /* Panel Content Styles (Unchanged) */
         .panel-content { display: flex; flex-direction: column; gap: 20px; }
@@ -230,7 +234,6 @@
         .panel-button::before{ content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(125,211,252,.15),transparent);transition:left .5s ease }
         .panel-button:hover::before{left:100%}
         .panel-button:hover{border-color:rgba(125,211,252,.4);box-shadow:0 0 15px rgba(125,211,252,.15);color:#f1f5f9;}
-
 
         /* Responsive Styles (Unchanged) */
         @media (max-width: 992px) {
@@ -271,12 +274,17 @@
         ];
 
         const timelineContainer = document.querySelector('.timeline-container');
+        const svg = document.querySelector('.timeline-svg');
+        const path = document.querySelector('.timeline-path');
         
         projects.forEach((project, index) => {
             const alignment = index % 2 === 0 ? 'align-left' : 'align-right';
             const entry = document.createElement('div');
             entry.className = `project-entry ${alignment}`;
+
             const tagsHTML = project.tags.map(tag => `<span>${tag}</span>`).join('');
+
+            // MODIFIED: Added spans for the animated border
             entry.innerHTML = `
                 <div class="project-node">
                     <span class="project-fill"></span>
@@ -288,6 +296,12 @@
                     <div class="corner-accent top-right"></div>
                     <div class="corner-accent bottom-left"></div>
                     <div class="corner-accent bottom-right"></div>
+
+                    <span class="border-line border-line-h top"></span>
+                    <span class="border-line border-line-v right"></span>
+                    <span class="border-line border-line-h bottom"></span>
+                    <span class="border-line border-line-v left"></span>
+
                     <div class="panel-content">
                         <div class="panel-main">
                             <div class="panel-image">
@@ -314,8 +328,6 @@
         // GSAP and other JS logic remains unchanged
         function setupAdvancedTimeline() {
             const projectNodes = document.querySelectorAll('.project-node');
-            const svg = document.querySelector('.timeline-svg');
-            const path = document.querySelector('.timeline-path');
             if (projectNodes.length < 2) return;
             const containerRect = timelineContainer.getBoundingClientRect();
             const firstNodeRect = projectNodes[0].getBoundingClientRect();

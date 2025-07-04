@@ -173,6 +173,22 @@
             box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.05), 0 20px 50px rgba(0, 0, 0, 0.5);
             transition: box-shadow 0.5s ease;
             visibility: hidden;
+            border-radius: 24px; /* MODIFIED: Increased rounding */
+            overflow: hidden; /* ADDED: To contain the reflection effect */
+        }
+
+        /* ADDED: Reflection animation on hover */
+        .project-panel::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(125, 211, 252, 0.1), transparent);
+            transition: left 0.8s ease;
+            z-index: 2; 
+        }
+
+        .project-panel:hover::before {
+            left: 100%;
         }
 
 
@@ -186,9 +202,8 @@
         /* --- MODIFIED CORNER ACCENT STYLES --- */
         .corner-accent {
             position: absolute;
-            /* MODIFIED: Increased size for prominence */
-            width: 25.5px; 
-            height: 25.5px;
+            width: 32px; /* MODIFIED: Increased length */
+            height: 32px; /* MODIFIED: Increased length */
             border: 3.5px solid var(--primary-accent-dim);
             opacity: 0;
             transition: all 0.4s ease, transform 0.4s ease;
@@ -204,14 +219,20 @@
             transform: scale(1.15);
             opacity: 0.8;
         }
-        .corner-accent.top-left { top: -3.5px; left: -3.5px; border-right: none; border-bottom: none; border-top-left-radius: 5px; /* ADDED */ }
-        .corner-accent.top-right { top: -3.5px; right: -3.5px; border-left: none; border-bottom: none; border-top-right-radius: 5px; /* ADDED */ }
-        .corner-accent.bottom-left { bottom: -3.5px; left: -3.5px; border-right: none; border-top: none; border-bottom-left-radius: 5px; /* ADDED */ }
-        .corner-accent.bottom-right { bottom: -3.5px; right: -3.5px; border-left: none; border-top: none; border-bottom-right-radius: 5px; /* ADDED */ }
+        .corner-accent.top-left { top: -3.5px; left: -3.5px; border-right: none; border-bottom: none; border-top-left-radius: 24px; /* MODIFIED */ }
+        .corner-accent.top-right { top: -3.5px; right: -3.5px; border-left: none; border-bottom: none; border-top-right-radius: 24px; /* MODIFIED */ }
+        .corner-accent.bottom-left { bottom: -3.5px; left: -3.5px; border-right: none; border-top: none; border-bottom-left-radius: 24px; /* MODIFIED */ }
+        .corner-accent.bottom-right { bottom: -3.5px; right: -3.5px; border-left: none; border-top: none; border-bottom-right-radius: 24px; /* MODIFIED */ }
 
 
-        /* Panel Content Styles (Unchanged) */
-        .panel-content { display: flex; flex-direction: column; gap: 20px; }
+        /* Panel Content Styles (Modified for stacking context) */
+        .panel-content { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 20px;
+            position: relative; /* ADDED: To establish stacking context */
+            z-index: 3; /* ADDED: To ensure content is above the reflection */
+        }
         .panel-main { display: grid; grid-template-columns: 1fr 2fr; gap: 25px; align-items: center; }
         .panel-image { border-radius: 10px; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.1); position: relative; }
         .panel-image::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 10px; box-shadow: inset 0 0 15px 5px rgba(125, 211, 252, 0.4); opacity: 0; transition: opacity 0.5s ease; }

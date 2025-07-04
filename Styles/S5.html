@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>S-2</title>
+    <title>S-5</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Orbitron:wght@700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -138,7 +138,6 @@
         .project-entry.align-right { left: 50%; padding-left: 50px; }
 
 
-
         /* Timeline Node Styles (Unchanged) */
         .project-node {
             position: absolute; top: 50%; width: 20px; height: 20px; border-radius: 50%;
@@ -165,30 +164,29 @@
         /* --- MODIFIED PROJECT PANEL STYLES --- */
         .project-panel {
             padding: 30px;
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.03) 50%, rgba(255, 255, 255, 0.06) 100%);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.015) 50%, rgba(255, 255, 255, 0.04) 100%);
+            border: 1px solid transparent;
             backdrop-filter: blur(25px) saturate(180%);
             -webkit-backdrop-filter: blur(25px) saturate(180%);
             position: relative;
-            box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.05), 0 20px 50px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
             transition: box-shadow 0.5s ease;
             visibility: hidden;
         }
-
-
         .project-entry.is-active .project-panel {
-            box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.05), 0 30px 80px rgba(0, 0, 0, 0.6), 0 0 25px rgba(125, 211, 252, 0.15);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6), 0 0 25px rgba(125, 211, 252, 0.15);
         }
         .project-entry.is-active .project-panel:hover {
-            box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.05), 0 35px 90px rgba(0, 0, 0, 0.7), 0 0 50px rgba(125, 211, 252, 0.3);
+            box-shadow: 0 35px 90px rgba(0, 0, 0, 0.7), 0 0 50px rgba(125, 211, 252, 0.3);
         }
         
-        /* --- MODIFIED CORNER ACCENT STYLES --- */
+        /* MODIFIED: Corner accents and new hover effect */
         .corner-accent {
             position: absolute;
-            /* MODIFIED: Increased size for prominence */
-            width: 25.5px; 
-            height: 25.5px;
+            /* MODIFIED: Increased length */
+            width: 25px;
+            height: 25px;
+            /* MODIFIED: Border thickness changed to 3.5px */
             border: 3.5px solid var(--primary-accent-dim);
             opacity: 0;
             transition: all 0.4s ease, transform 0.4s ease;
@@ -204,11 +202,11 @@
             transform: scale(1.15);
             opacity: 0.8;
         }
-        .corner-accent.top-left { top: -3.5px; left: -3.5px; border-right: none; border-bottom: none; border-top-left-radius: 5px; /* ADDED */ }
-        .corner-accent.top-right { top: -3.5px; right: -3.5px; border-left: none; border-bottom: none; border-top-right-radius: 5px; /* ADDED */ }
-        .corner-accent.bottom-left { bottom: -3.5px; left: -3.5px; border-right: none; border-top: none; border-bottom-left-radius: 5px; /* ADDED */ }
-        .corner-accent.bottom-right { bottom: -3.5px; right: -3.5px; border-left: none; border-top: none; border-bottom-right-radius: 5px; /* ADDED */ }
-
+        /* MODIFIED: Position adjusted for 3.5px border */
+        .corner-accent.top-left { top: -3.5px; left: -3.5px; border-right: none; border-bottom: none; }
+        .corner-accent.top-right { top: -3.5px; right: -3.5px; border-left: none; border-bottom: none; }
+        .corner-accent.bottom-left { bottom: -3.5px; left: -3.5px; border-right: none; border-top: none; }
+        .corner-accent.bottom-right { bottom: -3.5px; right: -3.5px; border-left: none; border-top: none; }
 
         /* Panel Content Styles (Unchanged) */
         .panel-content { display: flex; flex-direction: column; gap: 20px; }
@@ -230,7 +228,6 @@
         .panel-button::before{ content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(125,211,252,.15),transparent);transition:left .5s ease }
         .panel-button:hover::before{left:100%}
         .panel-button:hover{border-color:rgba(125,211,252,.4);box-shadow:0 0 15px rgba(125,211,252,.15);color:#f1f5f9;}
-
 
         /* Responsive Styles (Unchanged) */
         @media (max-width: 992px) {
