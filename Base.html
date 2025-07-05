@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Selected Version Y-3</title>
+    <title>Selected A-1</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Orbitron:wght@700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -174,6 +174,7 @@
             transform: rotateY(90deg) translateZ(150px);
         }
 
+
         .timeline-container {
             position: relative;
             max-width: 1200px;
@@ -209,7 +210,6 @@
         .project-entry.is-active .project-node .ripple { animation: ripple-wave 1.5s ease-out; }
         .project-entry.is-active .project-node .ripple:nth-of-type(2) { animation-delay: 1.0s; }
 
-        /* MODIFIED: Decoupled fill animation from CSS transitions */
         .project-fill {
             position: absolute; top: 50%; left: 50%; width: 14px; height: 14px;
             pointer-events: none; border-radius: 50%;
@@ -217,10 +217,8 @@
             box-shadow: 0 0 7px 1px var(--primary-accent-glass), 0 0 14px 2px var(--primary-accent-dark);
             opacity: 0;
             transform: translate(-50%, -50%) scale(0.7);
-            /* Animation now handled by GSAP, not transitions */
             transition: box-shadow 0.7s cubic-bezier(.4,1,.6,1);
         }
-        /* MODIFIED: This rule no longer controls the fill's visibility, only its active box-shadow */
         .project-entry.is-active .project-fill {
             box-shadow: 0 0 10px 2px var(--primary-accent-glass), 0 0 18px 4px var(--primary-accent-dark);
         }
@@ -365,16 +363,99 @@
         const categories = Object.keys(projectData);
         let currentCategoryIndex = 0;
         let activeScrollTriggers = [];
+        let isAnimating = false;
 
         const timelineContainer = document.querySelector('.timeline-container');
         
         function renderTimeline(categoryIndex) {
-            timelineContainer.innerHTML = `<svg class="timeline-svg"><line class="timeline-path" x1="2" y1="0" x2="2" y2="100%"/></svg>`;
-            if (activeScrollTriggers.length) {
-                activeScrollTriggers.forEach(st => st.kill());
-                activeScrollTriggers = [];
+            if (isAnimating) return;
+            isAnimating = true;
+
+            const oldEntries = timelineContainer.querySelectorAll('.project-entry');
+
+            const tl = gsap.timeline({
+                onComplete: () => {
+                    if (activeScrollTriggers.length) {
+                        activeScrollTriggers.forEach(st => st.kill());
+                        activeScrollTriggers = [];
+                    }
+                    timelineContainer.innerHTML = `<svg class="timeline-svg"><line class="timeline-path" x1="2" y1="0" x2="2" y2="100%"/></svg>`;
+                    
+                    const categoryName = categories[categoryIndex];
+                    const projects = projectData[categoryName];
+                    if (!projects || projects.length === 0) {
+                        isAnimating = false;
+                        return;
+                    }
+
+                    projects.forEach((project, index) => {
+                        const alignment = index % 2 === 0 ? 'align-left' : 'align-right';
+                        const entry = document.createElement('div');
+                        entry.className = `project-entry ${alignment}`;
+                        const tagsHTML = project.tags.map(tag => `<span>${tag}</span>`).join('');
+                        entry.innerHTML = `
+                            <div class="project-node"><span class="project-fill"></span><div class="ripple"></div><div class="ripple"></div></div>
+                            <div class="project-panel">
+                                <div class="corner-accent top-left"></div><div class="corner-accent top-right"></div>
+                                <div class="corner-accent bottom-left"></div><div class="corner-accent bottom-right"></div>
+                                <div class="panel-content">
+                                    <div class="panel-main">
+                                        <div class="panel-image"><img src="${project.image}" alt="${project.title}"></div>
+                                        <div class="panel-text">
+                                            <h3 class="panel-title">${project.title} (${project.year})</h3>
+                                            <p class="panel-description">${project.description}</p>
+                                        </div>
+                                    </div>
+                                    <div class="panel-tags">${tagsHTML}</div>
+                                    <div class="panel-actions">
+                                        <a href="${project.liveUrl}" target="_blank" rel="noopener noreferrer" class="panel-button">Live Demo</a>
+                                        <a href="${project.repoUrl}" target="_blank" rel="noopener noreferrer" class="panel-button">View Code</a>
+                                    </div>
+                                </div>
+                            </div>`;
+                        timelineContainer.appendChild(entry);
+                    });
+                    
+                    // FIXED: This new logic ensures a smooth, single-step animation.
+                    const newEntries = timelineContainer.querySelectorAll('.project-entry');
+                    const newPanels = timelineContainer.querySelectorAll('.project-panel');
+
+                    // 1. Temporarily override the panel's CSS to its "active" state for the animation.
+                    gsap.set(newPanels, { opacity: 1, y: 0 });
+
+                    // 2. Animate the parent entries from a hidden state. They will animate *to* the active state we just set.
+                    gsap.from(newEntries, {
+                        opacity: 0,
+                        y: 30,
+                        duration: 0.5,
+                        stagger: 0.1,
+                        ease: 'power3.out',
+                        onComplete: () => {
+                            // 3. Hand control back to the stylesheet by clearing the temporary override.
+                            // ScrollTrigger will now correctly manage the active state based on the CSS classes.
+                            gsap.set(newPanels, { clearProps: "opacity,transform" });
+                            
+                            setupAdvancedTimeline();
+                            setupProjectActivation();
+                            isAnimating = false;
+                        }
+                    });
+                }
+            });
+
+            if (oldEntries.length > 0) {
+                tl.to(oldEntries, {
+                    opacity: 0,
+                    y: -30,
+                    duration: 0.4,
+                    stagger: 0.08,
+                    ease: 'power3.in'
+                });
             }
-            
+        }
+        
+        function initialRender(categoryIndex) {
+            timelineContainer.innerHTML = `<svg class="timeline-svg"><line class="timeline-path" x1="2" y1="0" x2="2" y2="100%"/></svg>`;
             const categoryName = categories[categoryIndex];
             const projects = projectData[categoryName];
             if (!projects || projects.length === 0) return;
@@ -385,10 +466,7 @@
                 entry.className = `project-entry ${alignment}`;
                 const tagsHTML = project.tags.map(tag => `<span>${tag}</span>`).join('');
                 entry.innerHTML = `
-                    <div class="project-node">
-                        <span class="project-fill"></span>
-                        <div class="ripple"></div><div class="ripple"></div>
-                    </div>
+                    <div class="project-node"><span class="project-fill"></span><div class="ripple"></div><div class="ripple"></div></div>
                     <div class="project-panel">
                         <div class="corner-accent top-left"></div><div class="corner-accent top-right"></div>
                         <div class="corner-accent bottom-left"></div><div class="corner-accent bottom-right"></div>
@@ -525,7 +603,7 @@
 
                 if (newIndex !== currentCategoryIndex) {
                     currentCategoryIndex = newIndex;
-                    setTimeout(() => renderTimeline(currentCategoryIndex), 250); 
+                    renderTimeline(currentCategoryIndex); 
                 }
                 updateActiveCategory(newIndex);
             };
@@ -564,7 +642,6 @@
             });
         }
         
-        // MODIFIED: This function now also controls the node's inner fill animation.
         function setupAdvancedTimeline() {
             const svg = document.querySelector('.timeline-svg');
             const path = document.querySelector('.timeline-path');
@@ -601,17 +678,14 @@
                 const currentOffset = pathTotalLength * (1 - progress);
                 const duration = Math.abs(currentOffset - lastOffset) / pathTotalLength;
 
-                // Animate the timeline path to the node
                 masterTl.to(path, {
                     strokeDashoffset: currentOffset,
                     duration: duration * 10,
                     ease: "none"
                 });
                 
-                // Get the node's inner fill element
                 const fill = node.querySelector('.project-fill');
 
-                // Trigger the connection signal animation via CSS
                 masterTl.call(() => {
                     if (!node.classList.contains('connecting-signal')) {
                         node.classList.add('connecting-signal');
@@ -619,7 +693,6 @@
                     }
                 }, [], ">");
                 
-                // Animate the inner fill into view at the same time as the signal
                 masterTl.to(fill, {
                     opacity: 1,
                     scale: 1,
@@ -627,7 +700,6 @@
                     ease: 'power2.out'
                 }, "<");
 
-                // Add a pause/dwell time at the node
                 if (index < projectNodes.length - 1) {
                     masterTl.to({}, { duration: 2 }); 
                 }
@@ -674,7 +746,7 @@
         window.addEventListener('resize', () => { location.reload(); });
 
         setupTumblerSelector();
-        renderTimeline(currentCategoryIndex);
+        initialRender(currentCategoryIndex);
     });
     </script>
 </body>
