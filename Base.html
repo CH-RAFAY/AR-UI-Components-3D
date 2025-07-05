@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>T-3</title>
+    <title>Selected Version Y-3</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Orbitron:wght@700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -100,10 +100,14 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            border-radius: 12px;
+            transition: box-shadow 0.4s ease;
+            box-shadow: 0 0 25px rgba(125, 211, 252, 0.1);
+        }
+        .category-selector:hover {
+            box-shadow: 0 0 40px rgba(125, 211, 252, 0.25);
         }
         .category-selector:active { cursor: grabbing; }
-
-
         .tumbler {
             width: 100%;
             height: 100%;
@@ -126,21 +130,24 @@
             font-weight: 600;
             color: var(--text-light);
             background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             border: 1px solid var(--glass-border);
             border-radius: 12px;
             backface-visibility: hidden;
-            transition: box-shadow 0.4s ease, border-color 0.4s ease;
+            transition: box-shadow 0.4s ease, border-color 0.4s ease, opacity 0.3s ease;
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
         }
-
         .category-label.active {
             border-color: var(--primary-accent);
             box-shadow: 0 0 15px rgba(125, 211, 252, 0.3), inset 0 0 10px rgba(125, 211, 252, 0.1);
         }
-
         .category-label.active.hint-suppressed {
             box-shadow: none;
         }
-
+        
         .tumbler-side {
             position: absolute;
             top: 0;
@@ -151,21 +158,18 @@
             align-items: center;
             justify-content: center;
             font-family: var(--font-orbitron);
-            font-size: 1rem;
+            font-size: 1.1rem;
             letter-spacing: 2px;
-            color: var(--primary-accent-dim);
-            background: rgba(15, 15, 15, 0.4);
-            border: 1px solid var(--primary-accent-dim);
-            border-radius: 12px;
+            font-weight: 700;
+            color: var(--primary-accent);
+            text-shadow: 0 0 10px var(--primary-accent-dark);
             backface-visibility: hidden;
             opacity: 0;
             pointer-events: none;
         }
-
         .side-prev {
             transform: rotateY(-90deg) translateZ(150px);
         }
-
         .side-next {
             transform: rotateY(90deg) translateZ(150px);
         }
@@ -185,7 +189,6 @@
         }
         .project-entry {
             padding: 80px 0; position: relative; width: 50%; z-index: 20;
-            perspective: 1500px;
         }
         .project-entry.align-left { left: 0; padding-right: 50px; }
         .project-entry.align-right { left: 50%; padding-left: 50px; }
@@ -200,17 +203,42 @@
         }
         .align-left .project-node { right: -10px; }
         .align-right .project-node { left: -10px; }
-        .project-entry.is-active .project-node {
-            border-color: var(--primary-accent);
-            box-shadow: 0 0 10px 2px var(--primary-accent);
-        }
+        
         @keyframes ripple-wave { from { transform: scale(1); opacity: 0.6; } to { transform: scale(4.5); opacity: 0; } }
         .ripple { position: absolute; width: 100%; height: 100%; border: 1.5px solid var(--primary-accent); border-radius: 50%; transform: scale(1); opacity: 0; pointer-events: none; }
         .project-entry.is-active .project-node .ripple { animation: ripple-wave 1.5s ease-out; }
         .project-entry.is-active .project-node .ripple:nth-of-type(2) { animation-delay: 1.0s; }
-        .project-fill { position: absolute; top: 50%; left: 50%; width: 14px; height: 14px; pointer-events: none; border-radius: 50%; background: radial-gradient(circle at 60% 35%, rgba(125,211,252,0.65) 0%, rgba(14,165,233,0.45) 55%, rgba(14,165,233,0.25) 80%, rgba(0,0,0,0.10) 100%); box-shadow: 0 0 7px 1px var(--primary-accent-glass), 0 0 14px 2px var(--primary-accent-dark); opacity: 0; transform: translate(-50%, -50%) scale(0.7); transition: opacity 0.7s cubic-bezier(.4,1,.6,1), transform 0.7s cubic-bezier(.4,1,.6,1), box-shadow 0.7s cubic-bezier(.4,1,.6,1); }
-        .project-entry.is-active .project-fill { opacity: 1; transform: translate(-50%, -50%) scale(1); box-shadow: 0 0 10px 2px var(--primary-accent-glass), 0 0 18px 4px var(--primary-accent-dark); }
+
+        /* MODIFIED: Decoupled fill animation from CSS transitions */
+        .project-fill {
+            position: absolute; top: 50%; left: 50%; width: 14px; height: 14px;
+            pointer-events: none; border-radius: 50%;
+            background: radial-gradient(circle at 60% 35%, rgba(125,211,252,0.65) 0%, rgba(14,165,233,0.45) 55%, rgba(14,165,233,0.25) 80%, rgba(0,0,0,0.10) 100%);
+            box-shadow: 0 0 7px 1px var(--primary-accent-glass), 0 0 14px 2px var(--primary-accent-dark);
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0.7);
+            /* Animation now handled by GSAP, not transitions */
+            transition: box-shadow 0.7s cubic-bezier(.4,1,.6,1);
+        }
+        /* MODIFIED: This rule no longer controls the fill's visibility, only its active box-shadow */
+        .project-entry.is-active .project-fill {
+            box-shadow: 0 0 10px 2px var(--primary-accent-glass), 0 0 18px 4px var(--primary-accent-dark);
+        }
         .project-fill::after { content: ""; position: absolute; left: 18%; top: 18%; width: 32%; height: 32%; background: radial-gradient(circle, rgba(255,255,255,0.38) 0%, rgba(255,255,255,0.05) 100%); border-radius: 50%; filter: blur(0.5px); opacity: 0.7; }
+        
+        @keyframes scale-up-node { to { transform: translateY(-50%) scale(1.13); } }
+        @keyframes pulse { 0% { box-shadow: 0 0 10px 2px var(--primary-accent); } 100% { box-shadow: 0 0 16px 4px var(--primary-accent); } }
+        
+        .project-entry.is-active .project-node {
+            border-color: var(--primary-accent);
+            box-shadow: 0 0 10px 2px var(--primary-accent);
+            animation: 
+                scale-up-node 0.5s 2.5s forwards ease-out,
+                pulse 1.2s 2.5s infinite alternate;
+        }
+
+        @keyframes connect-signal { 50% { box-shadow: 0 0 20px 6px var(--primary-accent); } }
+        .project-node.connecting-signal { animation: connect-signal 0.4s ease-in-out 3; }
         
         .project-panel {
             padding: 30px;
@@ -220,11 +248,19 @@
             -webkit-backdrop-filter: blur(25px) saturate(180%);
             position: relative;
             box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.05), 0 20px 50px rgba(0, 0, 0, 0.5);
-            transition: box-shadow 0.5s ease;
-            visibility: hidden;
+            transition: box-shadow 0.5s ease, opacity 1s cubic-bezier(.4,1,.6,1), transform 1s cubic-bezier(.4,1,.6,1);
             border-radius: 24px;
             overflow: hidden;
+            opacity: 0.2;
+            transform: translateY(50px);
         }
+
+        .project-entry.is-active .project-panel {
+            opacity: 1;
+            transform: translateY(0);
+            box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.05), 0 30px 80px rgba(0, 0, 0, 0.6), 0 0 20px rgba(14, 165, 233, 0.2);
+        }
+
         .project-panel::before {
             content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
             background: linear-gradient(90deg, transparent, rgba(125, 211, 252, 0.1), transparent);
@@ -233,9 +269,6 @@
         }
         .project-panel:hover::before { left: 100%; }
         
-        .project-entry.is-active .project-panel {
-            box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.05), 0 30px 80px rgba(0, 0, 0, 0.6), 0 0 20px rgba(14, 165, 233, 0.2);
-        }
         .project-entry.is-active .project-panel:hover {
             box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.05), 0 35px 90px rgba(0, 0, 0, 0.7), 0 0 35px rgba(14, 165, 233, 0.45);
         }
@@ -252,7 +285,6 @@
         .corner-accent.top-right { top: -3.5px; right: -3.5px; border-left: none; border-bottom: none; border-top-right-radius: 24px; }
         .corner-accent.bottom-left { bottom: -3.5px; left: -3.5px; border-right: none; border-top: none; border-bottom-left-radius: 24px; }
         .corner-accent.bottom-right { bottom: -3.5px; right: -3.5px; border-left: none; border-top: none; border-bottom-right-radius: 24px; }
-
 
         .panel-content { display: flex; flex-direction: column; gap: 20px; position: relative; z-index: 3; }
         .panel-main { display: grid; grid-template-columns: 1fr 2fr; gap: 25px; align-items: center; }
@@ -273,7 +305,6 @@
         .panel-button::before{ content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(125,211,252,.15),transparent);transition:left .5s ease }
         .panel-button:hover::before{left:100%}
         .panel-button:hover{border-color:rgba(125,211,252,.4);box-shadow:0 0 15px rgba(125,211,252,.15);color:#f1f5f9;}
-
 
         @media (max-width: 992px) {
             .timeline-svg { left: 32px; }
@@ -381,7 +412,7 @@
 
             setTimeout(() => {
                 setupAdvancedTimeline();
-                setupProjectPanelAnimations();
+                setupProjectActivation(); 
             }, 100);
         }
 
@@ -406,9 +437,6 @@
                 label.dataset.index = i;
                 tumbler.appendChild(label);
                 
-                // --- MODIFIED: Added a tiny translateZ to prevent z-fighting ---
-                // This pushes the main labels back by 1px so the side panels
-                // always render cleanly on top during the hint animation.
                 gsap.set(label, {
                     transform: `rotateY(${i * angleStep}deg) translateZ(${radius}px) translateZ(-1px)`
                 });
@@ -424,26 +452,47 @@
                     });
                     
                     const activeLabel = tumbler.querySelector('.category-label.active');
+                    const allLabels = tumbler.querySelectorAll('.category-label');
 
+                    const manageLabelVisibility = (show) => {
+                        allLabels.forEach(label => {
+                            if (!label.classList.contains('active')) {
+                                gsap.to(label, { opacity: show ? 1 : 0, duration: 0.2 });
+                            }
+                        });
+                    };
+                    
                     hintAnimation.to(tumbler, {
-                        rotationY: -25,
-                        onStart: () => activeLabel.classList.add('hint-suppressed')
-                    }, "+=3")
+                        rotationY: -35,
+                        onStart: () => {
+                            activeLabel.classList.add('hint-suppressed');
+                            manageLabelVisibility(false);
+                        }
+                    }, "+=2")
                     .to(sideNext, { opacity: 1 }, "<")
                     .to(tumbler, {
                         rotationY: 0,
-                        onComplete: () => activeLabel.classList.remove('hint-suppressed')
+                        onComplete: () => {
+                            activeLabel.classList.remove('hint-suppressed');
+                            manageLabelVisibility(true);
+                        }
                     }, ">0.6")
                     .to(sideNext, { opacity: 0 }, "<");
 
                     hintAnimation.to(tumbler, {
-                        rotationY: 25,
-                        onStart: () => activeLabel.classList.add('hint-suppressed')
-                    }, "+=3")
+                        rotationY: 35,
+                        onStart: () => {
+                            activeLabel.classList.add('hint-suppressed');
+                            manageLabelVisibility(false);
+                        }
+                    }, "+=2")
                     .to(sidePrev, { opacity: 1 }, "<")
                     .to(tumbler, {
                         rotationY: 0,
-                        onComplete: () => activeLabel.classList.remove('hint-suppressed')
+                        onComplete: () => {
+                            activeLabel.classList.remove('hint-suppressed');
+                            manageLabelVisibility(true);
+                        }
                     }, ">0.6")
                     .to(sidePrev, { opacity: 0 }, "<");
 
@@ -485,8 +534,10 @@
                 if (selector.introAnimation) selector.introAnimation.kill();
                 if (selector.hintAnimation) selector.hintAnimation.kill();
                 gsap.to([sidePrev, sideNext], { opacity: 0, duration: 0.1 });
-                const activeLabel = tumbler.querySelector('.category-label.active');
-                if (activeLabel) activeLabel.classList.remove('hint-suppressed');
+                document.querySelectorAll('.category-label').forEach(l => {
+                    l.classList.remove('hint-suppressed');
+                    gsap.to(l, { opacity: 1, duration: 0.2 });
+                });
                 
                 isDragging = true;
                 startX = e.pageX - gsap.getProperty(tumbler, "rotationY") * 2.5; 
@@ -512,44 +563,24 @@
                 label.classList.toggle('active', isActive);
             });
         }
-
-        function setupProjectPanelAnimations() {
-            document.querySelectorAll('.project-entry').forEach(entry => {
-                const panel = entry.querySelector('.project-panel');
-                const alignment = entry.classList.contains('align-right') ? -1 : 1;
-                const tl = gsap.timeline({ paused: true });
-                tl.fromTo(panel, 
-                    { autoAlpha: 0, y: 60, rotationY: -15 * alignment, scale: 0.95, transformOrigin: alignment === 1 ? "right center" : "left center" },
-                    { autoAlpha: 1, y: 0, rotationY: 0, scale: 1, duration: 0.8, ease: "power3.out" }
-                );
-                tl.from(entry.querySelectorAll('.panel-image, .panel-title, .panel-description, .panel-tags span, .panel-button'), 
-                    { opacity: 0, y: 20, stagger: 0.08, ease: "power2.out" }, "-=0.5"
-                );
-                
-                const st = ScrollTrigger.create({
-                    trigger: entry, start: "top 65%", end: "bottom center",
-                    animation: tl, toggleClass: "is-active",
-                    toggleActions: "play reverse play reverse"
-                });
-                activeScrollTriggers.push(st);
-            });
-        }
-
+        
+        // MODIFIED: This function now also controls the node's inner fill animation.
         function setupAdvancedTimeline() {
-            const projectNodes = document.querySelectorAll('.project-node');
             const svg = document.querySelector('.timeline-svg');
             const path = document.querySelector('.timeline-path');
+            const projectNodes = document.querySelectorAll('.project-node');
+            
             if (!svg || !path || projectNodes.length < 2) {
                 if(svg) gsap.set(svg, {opacity: 0});
+                if (projectNodes.length > 0) gsap.to(svg, { opacity: 1, duration: 0.3 });
                 return;
-            };
+            }
 
             const containerRect = timelineContainer.getBoundingClientRect();
             const firstNodeRect = projectNodes[0].getBoundingClientRect();
             const lastNodeRect = projectNodes[projectNodes.length - 1].getBoundingClientRect();
-            
             const y1 = firstNodeRect.top + firstNodeRect.height / 2 - containerRect.top;
-            const height = (lastNodeRect.top + lastNodeRect.height / 2) - y1;
+            const height = (lastNodeRect.top + lastNodeRect.height / 2) - (firstNodeRect.top + firstNodeRect.height / 2);
 
             svg.setAttribute('height', height);
             svg.style.top = y1 + 'px';
@@ -559,18 +590,74 @@
             path.style.strokeDasharray = pathTotalLength;
             path.style.strokeDashoffset = pathTotalLength;
 
-            const masterTl = gsap.timeline({
-                scrollTrigger: {
-                    trigger: ".timeline-container", start: "top center", end: "bottom bottom",
-                    scrub: 1.5,
-                }
-            });
-            masterTl.to(path, { strokeDashoffset: 0, ease: "none" });
+            const masterTl = gsap.timeline({ paused: true });
+            let lastOffset = pathTotalLength;
+            
+            projectNodes.forEach((node, index) => {
+                const nodeRect = node.getBoundingClientRect();
+                const nodeCenterY = (nodeRect.top + nodeRect.height / 2) - (firstNodeRect.top + firstNodeRect.height / 2);
+                
+                const progress = height > 0 ? nodeCenterY / height : 0;
+                const currentOffset = pathTotalLength * (1 - progress);
+                const duration = Math.abs(currentOffset - lastOffset) / pathTotalLength;
 
-            const st = ScrollTrigger.getAll().find(st => st.animation === masterTl);
-            if(st) activeScrollTriggers.push(st);
+                // Animate the timeline path to the node
+                masterTl.to(path, {
+                    strokeDashoffset: currentOffset,
+                    duration: duration * 10,
+                    ease: "none"
+                });
+                
+                // Get the node's inner fill element
+                const fill = node.querySelector('.project-fill');
+
+                // Trigger the connection signal animation via CSS
+                masterTl.call(() => {
+                    if (!node.classList.contains('connecting-signal')) {
+                        node.classList.add('connecting-signal');
+                        setTimeout(() => node.classList.remove('connecting-signal'), 1200);
+                    }
+                }, [], ">");
+                
+                // Animate the inner fill into view at the same time as the signal
+                masterTl.to(fill, {
+                    opacity: 1,
+                    scale: 1,
+                    duration: 0.7,
+                    ease: 'power2.out'
+                }, "<");
+
+                // Add a pause/dwell time at the node
+                if (index < projectNodes.length - 1) {
+                    masterTl.to({}, { duration: 2 }); 
+                }
+
+                lastOffset = currentOffset;
+            });
+            
+            const st = ScrollTrigger.create({
+                trigger: ".timeline-container",
+                start: "top center",
+                end: "bottom bottom",
+                scrub: 1.5,
+                animation: masterTl
+            });
+            activeScrollTriggers.push(st);
             
             gsap.to(svg, { opacity: 1, duration: 0.3 });
+        }
+        
+        function setupProjectActivation() {
+            const projectEntries = document.querySelectorAll('.project-entry');
+            projectEntries.forEach(entry => {
+                const st = ScrollTrigger.create({
+                    trigger: entry,
+                    start: "top center",
+                    end: "bottom center",
+                    toggleClass: "is-active",
+                });
+                activeScrollTriggers.push(st);
+            });
         }
         
         const headingGlow = document.querySelector('.timeline-header h2');
