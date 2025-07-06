@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Selected A-1</title>
+    <title>Enhanced Blue</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Orbitron:wght@700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -21,7 +21,7 @@
             --font-poppins: 'Poppins', sans-serif;
             --timeline-width: 4px;
             --dim-text-color: #3a3a3a;
-            --heading-glow-color: rgba(14, 165, 233, 0.6);
+            --heading-glow-color: rgba(14, 165, 233, 0.75);
             --glow-size: 175px;
             --reveal-size: 120px;
             --hint-accent-color: #38bdf8;
@@ -48,20 +48,27 @@
             0% { background-position: -200% center; }
             100% { background-position: 200% center; }
         }
-        .timeline-header h2 {
+        
+        .timeline-header h2, .panel-title {
             position: relative;
             font-family: var(--font-poppins);
             font-weight: 700;
-            font-size: 3.5rem;
             color: var(--dim-text-color);
             user-select: none;
             z-index: 10;
             display: inline-block;
         }
-        .timeline-header h2:hover::after {
+        .timeline-header h2 {
+             font-size: 3.5rem;
+        }
+        .panel-title {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+        }
+        .timeline-header h2:hover::after, .panel-title:hover::after {
             opacity: 0;
         }
-        .timeline-header h2::after {
+        .timeline-header h2::after, .panel-title::after {
             content: attr(data-text);
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             z-index: 4;
@@ -73,7 +80,8 @@
             animation: glow-scan 10s linear infinite alternate;
             transition: opacity 0.3s ease-out;
         }
-        .timeline-header h2::before {
+        
+        .timeline-header h2::before, .panel-title::before {
             content: attr(data-text);
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             z-index: 5;
@@ -81,9 +89,15 @@
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            -webkit-clip-path: circle(var(--reveal-size) at var(--x, 50%) var(--y, 50%));
+            -webkit-clip-path: circle(0px at var(--x, 50%) var(--y, 50%));
+            clip-path: circle(0px at var(--x, 50%) var(--y, 50%));
+            transition: clip-path 0.4s ease-out;
+        }
+        .timeline-header h2:hover::before, .panel-title:hover::before {
+             -webkit-clip-path: circle(var(--reveal-size) at var(--x, 50%) var(--y, 50%));
             clip-path: circle(var(--reveal-size) at var(--x, 50%) var(--y, 50%));
         }
+
         .timeline-header p {
             font-size: 1.2rem;
             color: var(--text-medium);
@@ -148,7 +162,6 @@
         .category-label.hint-suppressed {
             box-shadow: none;
         }
-        /* Added class for hint styling */
         .category-label.hint-visible {
             color: var(--hint-accent-color);
         }
@@ -262,7 +275,6 @@
         .project-entry.is-active .project-panel {
             opacity: 1;
             transform: translateY(0);
-            box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.05), 0 30px 80px rgba(0, 0, 0, 0.6), 0 0 20px rgba(14, 165, 233, 0.2);
         }
 
         .project-panel::before {
@@ -291,53 +303,12 @@
         .corner-accent.bottom-right { bottom: -3.5px; right: -3.5px; border-left: none; border-top: none; border-bottom-right-radius: 24px; }
 
         .panel-content { display: flex; flex-direction: column; gap: 20px; position: relative; z-index: 3; }
-        .panel-main { 
-            display: grid; 
-            grid-template-columns: 1fr 2fr; 
-            gap: 25px; 
-            align-items: stretch;
-        }
-        .panel-image { 
-            border-radius: 10px; 
-            overflow: hidden; 
-            border: 1px solid rgba(255, 255, 255, 0.1); 
-            position: relative; 
-            height: 100%;
-        }
-        /* Added min-height to the text panel to enforce consistent image height */
-        .panel-text {
-            min-height: 160px;
-        }
+        .panel-main { display: grid; grid-template-columns: 1fr 2fr; gap: 25px; align-items: center; }
+        .panel-image { border-radius: 10px; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.1); position: relative; }
         .panel-image::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 10px; box-shadow: inset 0 0 15px 5px rgba(125, 211, 252, 0.4); opacity: 0; transition: opacity 0.5s ease; }
         .project-entry.is-active .panel-image::after { opacity: 1; }
-        .panel-image img { 
-            width: 100%; 
-            height: 100%; 
-            display: block; 
-            transition: transform 0.5s ease; 
-            object-fit: cover;
-        }
+        .panel-image img { width: 100%; height: auto; display: block; transition: transform 0.5s ease; }
         .project-panel:hover .panel-image img { transform: scale(1.05); }
-        
-        .panel-title { 
-            font-family: var(--font-poppins); 
-            font-weight: 600; 
-            font-size: 1.8rem; 
-            color: var(--dim-text-color);
-            margin-bottom: 15px; 
-            position: relative;
-        }
-        .panel-title::after {
-            content: attr(data-text);
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 4;
-            background: linear-gradient(90deg, var(--dim-text-color), #b0b8c4, var(--dim-text-color));
-            background-size: 200% 100%;
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            animation: glow-scan 10s linear infinite alternate;
-        }
 
         .panel-description { font-size: 1rem; line-height: 1.6; color: var(--text-medium); }
         .panel-tags { display: flex; flex-wrap: wrap; gap: 10px; }
@@ -359,7 +330,6 @@
         @media (max-width: 768px) {
             .panel-main { grid-template-columns: 1fr; }
             .panel-image { max-width: 100%; margin: 0; }
-            .panel-text { min-height: auto; } /* Disable min-height on mobile for natural flow */
         }
     </style>
 </head>
@@ -486,6 +456,7 @@
                             gsap.set(newPanels, { clearProps: "opacity,transform" });
                             setupAdvancedTimeline();
                             setupProjectActivation();
+                            setupHeadingGlows();
                             isAnimating = false;
                         }
                     });
@@ -541,6 +512,7 @@
             setTimeout(() => {
                 setupAdvancedTimeline();
                 setupProjectActivation(); 
+                setupHeadingGlows();
             }, 100);
         }
 
@@ -711,13 +683,14 @@
             });
         }
         
+        // CORRECTED: This function restores the original timeline path and node animations.
         function setupAdvancedTimeline() {
             const svg = document.querySelector('.timeline-svg');
             const path = document.querySelector('.timeline-path');
             const projectNodes = document.querySelectorAll('.project-node');
             
             if (!svg || !path || projectNodes.length < 2) {
-                if (svg) gsap.set(svg, { opacity: 0 });
+                if(svg) gsap.set(svg, { opacity: 0 });
                 return;
             }
 
@@ -748,12 +721,10 @@
 
                 masterTl.to(path, {
                     strokeDashoffset: currentOffset,
-                    duration: duration * 10,
+                    duration: duration * 10, // The duration multiplier controls the "speed" of the draw
                     ease: "none"
                 });
                 
-                const fill = node.querySelector('.project-fill');
-
                 masterTl.call(() => {
                     if (!node.classList.contains('connecting-signal')) {
                         node.classList.add('connecting-signal');
@@ -761,13 +732,7 @@
                     }
                 }, [], ">");
                 
-                masterTl.to(fill, {
-                    opacity: 1,
-                    scale: 1,
-                    duration: 0.7,
-                    ease: 'power2.out'
-                }, "<");
-
+                // Add a delay between each node connection event in the master timeline
                 if (index < projectNodes.length - 1) {
                     masterTl.to({}, { duration: 2 }); 
                 }
@@ -798,16 +763,39 @@
                 });
                 activeScrollTriggers.push(st);
             });
+            
+            // Add the special disconnect animation for the last node when scrolling up
+            const lastProjectEntry = projectEntries[projectEntries.length - 1];
+            if (lastProjectEntry) {
+                const lastNode = lastProjectEntry.querySelector('.project-node');
+                if (lastNode) {
+                     const st = ScrollTrigger.create({
+                        trigger: lastProjectEntry,
+                        start: "top center",
+                        onLeaveBack: () => {
+                            if (!lastNode.classList.contains('connecting-signal')) {
+                                lastNode.classList.add('connecting-signal');
+                                setTimeout(() => {
+                                    lastNode.classList.remove('connecting-signal');
+                                }, 1200);
+                            }
+                        }
+                    });
+                    activeScrollTriggers.push(st);
+                }
+            }
         }
         
-        const headingGlow = document.querySelector('.timeline-header h2');
-        if (headingGlow) {
-            document.body.addEventListener('mousemove', (e) => {
-                const rect = headingGlow.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                headingGlow.style.setProperty('--x', `${x}px`);
-                headingGlow.style.setProperty('--y', `${y}px`);
+        function setupHeadingGlows() {
+            const headings = document.querySelectorAll('.timeline-header h2, .panel-title');
+            headings.forEach(heading => {
+                heading.addEventListener('mousemove', (e) => {
+                    const rect = heading.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    heading.style.setProperty('--x', `${x}px`);
+                    heading.style.setProperty('--y', `${y}px`);
+                });
             });
         }
         

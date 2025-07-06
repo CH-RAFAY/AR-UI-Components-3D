@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>White Version</title>
+    <title>Base</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Orbitron:wght@700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -24,7 +24,6 @@
             --heading-glow-color: rgba(14, 165, 233, 0.6);
             --glow-size: 175px;
             --reveal-size: 120px;
-            --hint-accent-color: #38bdf8; /* New color for hint text */
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -91,11 +90,10 @@
             margin: 15px auto 0;
         }
         
-        /* Reduced size of the category selector */
         .category-selector {
             margin: 60px auto 80px;
-            width: 260px; /* Reduced from 300px */
-            height: 46px; /* Reduced from 50px */
+            width: 300px;
+            height: 50px;
             position: relative;
             perspective: 1200px;
             cursor: grab;
@@ -128,7 +126,7 @@
             align-items: center;
             justify-content: center;
             font-family: var(--font-poppins);
-            font-size: 1.1rem; /* Slightly smaller font for smaller button */
+            font-size: 1.2rem;
             font-weight: 600;
             color: var(--text-light);
             background: var(--glass-bg);
@@ -146,11 +144,10 @@
             border-color: var(--primary-accent);
             box-shadow: 0 0 15px rgba(125, 211, 252, 0.3), inset 0 0 10px rgba(125, 211, 252, 0.1);
         }
-        .category-label.hint-suppressed {
+        .category-label.active.hint-suppressed {
             box-shadow: none;
         }
         
-        /* Changed color of the PREV/NEXT hint text */
         .tumbler-side {
             position: absolute;
             top: 0;
@@ -164,18 +161,19 @@
             font-size: 1.1rem;
             letter-spacing: 2px;
             font-weight: 700;
-            color: var(--hint-accent-color); /* Changed color */
-            text-shadow: 0 0 12px var(--hint-accent-color); /* Updated shadow */
+            color: var(--primary-accent);
+            text-shadow: 0 0 10px var(--primary-accent-dark);
             backface-visibility: hidden;
             opacity: 0;
             pointer-events: none;
         }
         .side-prev {
-            transform: rotateY(-90deg) translateZ(130px); /* Adjusted for new size */
+            transform: rotateY(-90deg) translateZ(150px);
         }
         .side-next {
-            transform: rotateY(90deg) translateZ(130px); /* Adjusted for new size */
+            transform: rotateY(90deg) translateZ(150px);
         }
+
 
         .timeline-container {
             position: relative;
@@ -219,12 +217,10 @@
             box-shadow: 0 0 7px 1px var(--primary-accent-glass), 0 0 14px 2px var(--primary-accent-dark);
             opacity: 0;
             transform: translate(-50%, -50%) scale(0.7);
-            transition: box-shadow 0.7s cubic-bezier(.4,1,.6,1), opacity 0.5s ease, transform 0.5s ease;
+            transition: box-shadow 0.7s cubic-bezier(.4,1,.6,1);
         }
         .project-entry.is-active .project-fill {
             box-shadow: 0 0 10px 2px var(--primary-accent-glass), 0 0 18px 4px var(--primary-accent-dark);
-            opacity: 1;
-            transform: translate(-50%, -50%) scale(1);
         }
         .project-fill::after { content: ""; position: absolute; left: 18%; top: 18%; width: 32%; height: 32%; background: radial-gradient(circle, rgba(255,255,255,0.38) 0%, rgba(255,255,255,0.05) 100%); border-radius: 50%; filter: blur(0.5px); opacity: 0.7; }
         
@@ -351,23 +347,16 @@
             "Front-End Development": [
                 { title: "QuantumCart", description: "A full-stack e-commerce platform with a focus on user experience and secure payment processing.", year: "2021", image: "https://images.unsplash.com/photo-1522199755839-a2bacb67c546?q=80&w=800&auto=format&fit=crop", tags: ["Next.js", "Stripe", "PostgreSQL", "Tailwind CSS"], liveUrl: "#", repoUrl: "#" },
                 { title: "AetherFlow", description: "A sleek, cross-platform mobile application for intuitive task management and real-time productivity tracking.", year: "2022", image: "https://images.unsplash.com/photo-1607706189992-5a5ee42c5aa8?q=80&w=800&auto=format&fit=crop", tags: ["React Native", "Firebase", "GSAP", "Redux"], liveUrl: "#", repoUrl: "#" },
-                { title: "Axiom Data", description: "An interactive data visualization dashboard designed to make complex datasets accessible and engaging.", year: "2024", image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=800&auto=format&fit=crop", tags: ["D3.js", "React", "Node.js", "BigQuery"], liveUrl: "#", repoUrl: "#" },
-                { title: "ChronoGlyph", description: "A portfolio website template featuring a unique, timeline-based layout and fluid animations.", year: "2023", image: "https://images.unsplash.com/photo-1566241440091-ec10de8db2e1?q=80&w=800&auto=format&fit=crop", tags: ["GSAP", "ScrollTrigger", "Vanilla JS"], liveUrl: "#", repoUrl: "#" },
-                { title: "Vivid", description: "A browser-based creative coding environment for generative art using WebGL.", year: "2024", image: "https://images.unsplash.com/photo-1589182373726-e4f658ab50f0?q=80&w=800&auto=format&fit=crop", tags: ["Three.js", "WebGL", "Vite"], liveUrl: "#", repoUrl: "#" }
+                { title: "Axiom Data", description: "An interactive data visualization dashboard designed to make complex datasets accessible and engaging.", year: "2024", image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=800&auto=format&fit=crop", tags: ["D3.js", "React", "Node.js", "BigQuery"], liveUrl: "#", repoUrl: "#" }
             ],
             "UI/UX Design": [
                 { title: "Flowspace", description: "A collaborative design tool for creating intuitive user flows and wireframes in real-time.", year: "2023", image: "https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?q=80&w=800&auto=format&fit=crop", tags: ["Figma", "User Research", "Prototyping"], liveUrl: "#", repoUrl: "#" },
-                { title: "Mindful App", description: "A wellness application concept focused on guided meditation and stress reduction through a calming UI.", year: "2022", image: "https://images.unsplash.com/photo-1599658880112-054546a11149?q=80&w=800&auto=format&fit=crop", tags: ["UI Design", "UX Research", "Adobe XD"], liveUrl: "#", repoUrl: "#" }
-            ],
-            "Data Science": [
-                { title: "Market-Basket Insight", description: "Analyzed transactional data to uncover product associations and inform cross-selling strategies.", year: "2023", image: "https://images.unsplash.com/photo-1591696205602-2f950c417cb9?q=80&w=800&auto=format&fit=crop", tags: ["Python", "Pandas", "Apriori"], liveUrl: "#", repoUrl: "#" },
-                { title: "Sentiment Analyzer", description: "A model that classifies customer reviews as positive, negative, or neutral to gauge public opinion.", year: "2024", image: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?q=80&w=800&auto=format&fit=crop", tags: ["Scikit-learn", "NLTK", "Matplotlib"], liveUrl: "#", repoUrl: "#" }
-            ],
-            "Machine Learning": [
-                { title: "Predictive Churn Model", description: "A classification model to predict customer churn, enabling proactive retention efforts.", year: "2024", image: "https://images.unsplash.com/photo-1611606063065-ee7946f0b34a?q=80&w=800&auto=format&fit=crop", tags: ["TensorFlow", "Keras", "Pandas"], liveUrl: "#", repoUrl: "#" }
+                { title: "Mindful App", description: "A wellness application concept focused on guided meditation and stress reduction through a calming UI.", year: "2022", image: "https://images.unsplash.com/photo-1599658880112-054546a11149?q=80&w=800&auto=format&fit=crop", tags: ["UI Design", "UX Research", "Adobe XD"], liveUrl: "#", repoUrl: "#" },
             ],
             "Backend & APIs": [
-                { title: "SynapseAI", description: "An intelligent conversational AI built to understand user intent and provide contextually relevant responses.", year: "2023", image: "https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?q=80&w=800&auto=format&fit=crop", tags: ["Python", "TensorFlow", "Flask", "NLP"], liveUrl: "#", repoUrl: "#" }
+                { title: "SynapseAI", description: "An intelligent conversational AI built to understand user intent and provide contextually relevant responses.", year: "2023", image: "https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?q=80&w=800&auto=format&fit=crop", tags: ["Python", "TensorFlow", "Flask", "NLP"], liveUrl: "#", repoUrl: "#" },
+                { title: "SecureAuth", description: "A microservice for handling user authentication and authorization using JWT and OAuth2.", year: "2024", image: "https://images.unsplash.com/photo-1555949963-c74a3f256a46?q=80&w=800&auto=format&fit=crop", tags: ["Go", "Docker", "JWT", "gRPC"], liveUrl: "#", repoUrl: "#" },
+                { title: "DataStream API", description: "A high-throughput RESTful API for ingesting and processing real-time event data.", year: "2022", image: "https://images.unsplash.com/photo-1587620962725-abab7fe55159?q=80&w=800&auto=format&fit=crop", tags: ["Node.js", "Express", "Kafka", "MongoDB"], liveUrl: "#", repoUrl: "#" }
             ]
         };
 
@@ -427,11 +416,14 @@
                         timelineContainer.appendChild(entry);
                     });
                     
+                    // FIXED: This new logic ensures a smooth, single-step animation.
                     const newEntries = timelineContainer.querySelectorAll('.project-entry');
                     const newPanels = timelineContainer.querySelectorAll('.project-panel');
 
+                    // 1. Temporarily override the panel's CSS to its "active" state for the animation.
                     gsap.set(newPanels, { opacity: 1, y: 0 });
 
+                    // 2. Animate the parent entries from a hidden state. They will animate *to* the active state we just set.
                     gsap.from(newEntries, {
                         opacity: 0,
                         y: 30,
@@ -439,7 +431,10 @@
                         stagger: 0.1,
                         ease: 'power3.out',
                         onComplete: () => {
+                            // 3. Hand control back to the stylesheet by clearing the temporary override.
+                            // ScrollTrigger will now correctly manage the active state based on the CSS classes.
                             gsap.set(newPanels, { clearProps: "opacity,transform" });
+                            
                             setupAdvancedTimeline();
                             setupProjectActivation();
                             isAnimating = false;
@@ -526,32 +521,30 @@
             });
 
             updateActiveCategory(currentCategoryIndex);
-            
-            function setTumblerAppearance(is3D) {
-                const allLabels = tumbler.querySelectorAll('.category-label');
-                allLabels.forEach(label => {
-                    gsap.to(label, { 
-                        opacity: is3D || label.classList.contains('active') ? 1 : 0, 
-                        duration: 0.3 
-                    });
-                });
-            }
 
             const introAnimation = gsap.timeline({
                 onComplete: () => {
-                    setTumblerAppearance(false);
                     const hintAnimation = gsap.timeline({
                         repeat: -1,
                         defaults: { duration: 0.8, ease: 'sine.inOut' }
                     });
                     
                     const activeLabel = tumbler.querySelector('.category-label.active');
+                    const allLabels = tumbler.querySelectorAll('.category-label');
+
+                    const manageLabelVisibility = (show) => {
+                        allLabels.forEach(label => {
+                            if (!label.classList.contains('active')) {
+                                gsap.to(label, { opacity: show ? 1 : 0, duration: 0.2 });
+                            }
+                        });
+                    };
                     
                     hintAnimation.to(tumbler, {
                         rotationY: -35,
                         onStart: () => {
                             activeLabel.classList.add('hint-suppressed');
-                            setTumblerAppearance(true);
+                            manageLabelVisibility(false);
                         }
                     }, "+=2")
                     .to(sideNext, { opacity: 1 }, "<")
@@ -559,7 +552,7 @@
                         rotationY: 0,
                         onComplete: () => {
                             activeLabel.classList.remove('hint-suppressed');
-                            setTumblerAppearance(false);
+                            manageLabelVisibility(true);
                         }
                     }, ">0.6")
                     .to(sideNext, { opacity: 0 }, "<");
@@ -568,7 +561,7 @@
                         rotationY: 35,
                         onStart: () => {
                             activeLabel.classList.add('hint-suppressed');
-                            setTumblerAppearance(true);
+                            manageLabelVisibility(false);
                         }
                     }, "+=2")
                     .to(sidePrev, { opacity: 1 }, "<")
@@ -576,11 +569,11 @@
                         rotationY: 0,
                         onComplete: () => {
                             activeLabel.classList.remove('hint-suppressed');
-                            setTumblerAppearance(false);
+                            manageLabelVisibility(true);
                         }
                     }, ">0.6")
                     .to(sidePrev, { opacity: 0 }, "<");
-                    
+
                     selector.hintAnimation = hintAnimation;
                 }
             });
@@ -588,9 +581,9 @@
             introAnimation.from(tumbler, { 
                 rotationY: '-=360', 
                 duration: 2.5, 
-                ease: 'power3.out',
-                onStart: () => setTumblerAppearance(true)
+                ease: 'power3.out' 
             });
+
             selector.introAnimation = introAnimation;
 
             let isDragging = false;
@@ -604,11 +597,8 @@
 
                 gsap.to(tumbler, {
                     rotationY: targetRotation,
-                    duration: 1.1, // Reduced speed by increasing duration
-                    ease: 'power3.out',
-                    onComplete: () => {
-                        setTumblerAppearance(false);
-                    }
+                    duration: 0.7,
+                    ease: 'power3.out'
                 });
 
                 if (newIndex !== currentCategoryIndex) {
@@ -622,9 +612,11 @@
                 if (selector.introAnimation) selector.introAnimation.kill();
                 if (selector.hintAnimation) selector.hintAnimation.kill();
                 gsap.to([sidePrev, sideNext], { opacity: 0, duration: 0.1 });
-                document.querySelectorAll('.category-label').forEach(l => l.classList.remove('hint-suppressed'));
-
-                setTumblerAppearance(true);
+                document.querySelectorAll('.category-label').forEach(l => {
+                    l.classList.remove('hint-suppressed');
+                    gsap.to(l, { opacity: 1, duration: 0.2 });
+                });
+                
                 isDragging = true;
                 startX = e.pageX - gsap.getProperty(tumbler, "rotationY") * 2.5; 
                 gsap.killTweensOf(tumbler);
@@ -656,7 +648,8 @@
             const projectNodes = document.querySelectorAll('.project-node');
             
             if (!svg || !path || projectNodes.length < 2) {
-                if (svg) gsap.set(svg, { opacity: 0 });
+                if(svg) gsap.set(svg, {opacity: 0});
+                if (projectNodes.length > 0) gsap.to(svg, { opacity: 1, duration: 0.3 });
                 return;
             }
 
@@ -750,25 +743,7 @@
             });
         }
         
-        // Use a function to debounce the resize reload
-        function debounce(func, wait) {
-            let timeout;
-            return function executedFunction(...args) {
-                const later = () => {
-                    clearTimeout(timeout);
-                    func(...args);
-                };
-                clearTimeout(timeout);
-                timeout = setTimeout(later, wait);
-            };
-        };
-
-        // Reloading on every resize can be jarring; this waits until the user has stopped resizing.
-        const debouncedReload = debounce(() => {
-            location.reload();
-        }, 250);
-
-        window.addEventListener('resize', debouncedReload);
+        window.addEventListener('resize', () => { location.reload(); });
 
         setupTumblerSelector();
         initialRender(currentCategoryIndex);
