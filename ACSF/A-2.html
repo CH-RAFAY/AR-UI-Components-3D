@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A-2 Impv</title>
+    <title>Blue Version</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Orbitron:wght@700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -24,7 +24,7 @@
             --heading-glow-color: rgba(14, 165, 233, 0.6);
             --glow-size: 175px;
             --reveal-size: 120px;
-            --hint-accent-color: #38bdf8; /* New color for hint text */
+            --hint-accent-color: #38bdf8;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -91,11 +91,10 @@
             margin: 15px auto 0;
         }
         
-        /* Reduced size of the category selector */
         .category-selector {
             margin: 60px auto 80px;
-            width: 260px; /* Reduced from 300px */
-            height: 46px; /* Reduced from 50px */
+            width: 260px;
+            height: 46px;
             position: relative;
             perspective: 1200px;
             cursor: grab;
@@ -128,7 +127,7 @@
             align-items: center;
             justify-content: center;
             font-family: var(--font-poppins);
-            font-size: 1.1rem; /* Slightly smaller font for smaller button */
+            font-size: 1.1rem;
             font-weight: 600;
             color: var(--text-light);
             background: var(--glass-bg);
@@ -137,7 +136,7 @@
             border: 1px solid var(--glass-border);
             border-radius: 12px;
             backface-visibility: hidden;
-            transition: box-shadow 0.4s ease, border-color 0.4s ease, opacity 0.3s ease;
+            transition: box-shadow 0.4s ease, border-color 0.4s ease, opacity 0.3s ease, color 0.4s ease;
             user-select: none;
             -webkit-user-select: none;
             -moz-user-select: none;
@@ -149,8 +148,11 @@
         .category-label.hint-suppressed {
             box-shadow: none;
         }
+        /* Added class for hint styling */
+        .category-label.hint-visible {
+            color: var(--hint-accent-color);
+        }
         
-        /* Changed color of the PREV/NEXT hint text */
         .tumbler-side {
             position: absolute;
             top: 0;
@@ -164,17 +166,17 @@
             font-size: 1.1rem;
             letter-spacing: 2px;
             font-weight: 700;
-            color: var(--hint-accent-color); /* Changed color */
-            text-shadow: 0 0 12px var(--hint-accent-color); /* Updated shadow */
+            color: var(--hint-accent-color);
+            text-shadow: 0 0 12px var(--hint-accent-color);
             backface-visibility: hidden;
             opacity: 0;
             pointer-events: none;
         }
         .side-prev {
-            transform: rotateY(-90deg) translateZ(130px); /* Adjusted for new size */
+            transform: rotateY(-90deg) translateZ(130px);
         }
         .side-next {
-            transform: rotateY(90deg) translateZ(130px); /* Adjusted for new size */
+            transform: rotateY(90deg) translateZ(130px);
         }
 
         .timeline-container {
@@ -289,14 +291,54 @@
         .corner-accent.bottom-right { bottom: -3.5px; right: -3.5px; border-left: none; border-top: none; border-bottom-right-radius: 24px; }
 
         .panel-content { display: flex; flex-direction: column; gap: 20px; position: relative; z-index: 3; }
-        .panel-main { display: grid; grid-template-columns: 1fr 2fr; gap: 25px; align-items: center; }
-        .panel-image { border-radius: 10px; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.1); position: relative; }
+        .panel-main { 
+            display: grid; 
+            grid-template-columns: 1fr 2fr; 
+            gap: 25px; 
+            align-items: stretch;
+        }
+        .panel-image { 
+            border-radius: 10px; 
+            overflow: hidden; 
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+            position: relative; 
+            height: 100%;
+        }
+        /* Added min-height to the text panel to enforce consistent image height */
+        .panel-text {
+            min-height: 160px;
+        }
         .panel-image::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 10px; box-shadow: inset 0 0 15px 5px rgba(125, 211, 252, 0.4); opacity: 0; transition: opacity 0.5s ease; }
         .project-entry.is-active .panel-image::after { opacity: 1; }
-        .panel-image img { width: 100%; height: auto; display: block; transition: transform 0.5s ease; }
+        .panel-image img { 
+            width: 100%; 
+            height: 100%; 
+            display: block; 
+            transition: transform 0.5s ease; 
+            object-fit: cover;
+        }
         .project-panel:hover .panel-image img { transform: scale(1.05); }
-        .panel-title { font-family: var(--font-poppins); font-weight: 600; font-size: 1.8rem; color: var(--text-light); margin-bottom: 15px; transition: text-shadow 0.5s ease; }
-        .project-entry.is-active .panel-title { text-shadow: 0 0 12px rgba(125, 211, 252, 0.3); }
+        
+        .panel-title { 
+            font-family: var(--font-poppins); 
+            font-weight: 600; 
+            font-size: 1.8rem; 
+            color: var(--dim-text-color);
+            margin-bottom: 15px; 
+            position: relative;
+        }
+        .panel-title::after {
+            content: attr(data-text);
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 4;
+            background: linear-gradient(90deg, var(--dim-text-color), #b0b8c4, var(--dim-text-color));
+            background-size: 200% 100%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: glow-scan 10s linear infinite alternate;
+        }
+
         .panel-description { font-size: 1rem; line-height: 1.6; color: var(--text-medium); }
         .panel-tags { display: flex; flex-wrap: wrap; gap: 10px; }
         .panel-tags span { background-color: rgba(125, 211, 252, 0.1); color: var(--primary-accent); padding: 5px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 500; border: 1px solid rgba(125, 211, 252, 0.2); transition: all 0.3s ease; }
@@ -317,6 +359,7 @@
         @media (max-width: 768px) {
             .panel-main { grid-template-columns: 1fr; }
             .panel-image { max-width: 100%; margin: 0; }
+            .panel-text { min-height: auto; } /* Disable min-height on mobile for natural flow */
         }
     </style>
 </head>
@@ -404,6 +447,7 @@
                         const entry = document.createElement('div');
                         entry.className = `project-entry ${alignment}`;
                         const tagsHTML = project.tags.map(tag => `<span>${tag}</span>`).join('');
+                        const projectTitleText = `${project.title} (${project.year})`;
                         entry.innerHTML = `
                             <div class="project-node"><span class="project-fill"></span><div class="ripple"></div><div class="ripple"></div></div>
                             <div class="project-panel">
@@ -413,7 +457,7 @@
                                     <div class="panel-main">
                                         <div class="panel-image"><img src="${project.image}" alt="${project.title}"></div>
                                         <div class="panel-text">
-                                            <h3 class="panel-title">${project.title} (${project.year})</h3>
+                                            <h3 class="panel-title" data-text="${projectTitleText}">${projectTitleText}</h3>
                                             <p class="panel-description">${project.description}</p>
                                         </div>
                                     </div>
@@ -470,6 +514,7 @@
                 const entry = document.createElement('div');
                 entry.className = `project-entry ${alignment}`;
                 const tagsHTML = project.tags.map(tag => `<span>${tag}</span>`).join('');
+                const projectTitleText = `${project.title} (${project.year})`;
                 entry.innerHTML = `
                     <div class="project-node"><span class="project-fill"></span><div class="ripple"></div><div class="ripple"></div></div>
                     <div class="project-panel">
@@ -479,7 +524,7 @@
                             <div class="panel-main">
                                 <div class="panel-image"><img src="${project.image}" alt="${project.title}"></div>
                                 <div class="panel-text">
-                                    <h3 class="panel-title">${project.title} (${project.year})</h3>
+                                    <h3 class="panel-title" data-text="${projectTitleText}">${projectTitleText}</h3>
                                     <p class="panel-description">${project.description}</p>
                                 </div>
                             </div>
@@ -527,13 +572,29 @@
 
             updateActiveCategory(currentCategoryIndex);
             
-            function setTumblerAppearance(is3D) {
+            function setTumblerAppearance(is3D, hintDirection = null) {
                 const allLabels = tumbler.querySelectorAll('.category-label');
                 allLabels.forEach(label => {
-                    gsap.to(label, { 
-                        opacity: is3D || label.classList.contains('active') ? 1 : 0, 
-                        duration: 0.3 
-                    });
+                    const labelIndex = parseInt(label.dataset.index);
+                    const isActive = label.classList.contains('active');
+                    let show = is3D || isActive;
+
+                    label.classList.remove('hint-visible');
+                    
+                    if (hintDirection) {
+                        const nextIndex = (currentCategoryIndex + 1) % categories.length;
+                        const prevIndex = (currentCategoryIndex - 1 + categories.length) % categories.length;
+
+                        if (hintDirection === 'next' && labelIndex === nextIndex) {
+                            label.classList.add('hint-visible');
+                            show = true;
+                        } else if (hintDirection === 'prev' && labelIndex === prevIndex) {
+                            label.classList.add('hint-visible');
+                            show = true;
+                        }
+                    }
+
+                    gsap.to(label, { opacity: show ? 1 : 0, duration: 0.3 });
                 });
             }
 
@@ -551,7 +612,7 @@
                         rotationY: -35,
                         onStart: () => {
                             activeLabel.classList.add('hint-suppressed');
-                            setTumblerAppearance(true);
+                            setTumblerAppearance(true, 'next');
                         }
                     }, "+=2")
                     .to(sideNext, { opacity: 1 }, "<")
@@ -568,7 +629,7 @@
                         rotationY: 35,
                         onStart: () => {
                             activeLabel.classList.add('hint-suppressed');
-                            setTumblerAppearance(true);
+                            setTumblerAppearance(true, 'prev');
                         }
                     }, "+=2")
                     .to(sidePrev, { opacity: 1 }, "<")
@@ -604,7 +665,7 @@
 
                 gsap.to(tumbler, {
                     rotationY: targetRotation,
-                    duration: 1.1, // Reduced speed by increasing duration
+                    duration: 1.1,
                     ease: 'power3.out',
                     onComplete: () => {
                         setTumblerAppearance(false);
@@ -622,7 +683,7 @@
                 if (selector.introAnimation) selector.introAnimation.kill();
                 if (selector.hintAnimation) selector.hintAnimation.kill();
                 gsap.to([sidePrev, sideNext], { opacity: 0, duration: 0.1 });
-                document.querySelectorAll('.category-label').forEach(l => l.classList.remove('hint-suppressed'));
+                document.querySelectorAll('.category-label').forEach(l => l.classList.remove('hint-suppressed', 'hint-visible'));
 
                 setTumblerAppearance(true);
                 isDragging = true;
@@ -750,7 +811,6 @@
             });
         }
         
-        // Use a function to debounce the resize reload
         function debounce(func, wait) {
             let timeout;
             return function executedFunction(...args) {
@@ -763,7 +823,6 @@
             };
         };
 
-        // Reloading on every resize can be jarring; this waits until the user has stopped resizing.
         const debouncedReload = debounce(() => {
             location.reload();
         }, 250);
