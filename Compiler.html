@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enhanced Blue</title>
+    <title>Information Added!</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Orbitron:wght@700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -321,6 +321,86 @@
         .panel-button:hover::before{left:100%}
         .panel-button:hover{border-color:rgba(125,211,252,.4);box-shadow:0 0 15px rgba(125,211,252,.15);color:#f1f5f9;}
 
+        .notification-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(15px); /* Increased blur */
+            -webkit-backdrop-filter: blur(15px); /* Increased blur */
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
+        .notification-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .notification-modal {
+            background: rgba(22, 28, 41, 0.7); /* Cleaner, non-reflective glass */
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 20px;
+            padding: 30px 40px;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            position: relative;
+            transform: scale(0.9);
+            transition: transform 0.4s cubic-bezier(0.2, 1.2, 0.8, 1);
+            max-width: 90%;
+            width: 500px;
+        }
+        .notification-overlay.active .notification-modal {
+            transform: scale(1);
+        }
+        .notification-modal h3 {
+            font-family: var(--font-poppins);
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--text-light);
+            text-shadow: 0 0 10px rgba(125, 211, 252, 0.3);
+        }
+        .notification-modal p {
+            color: var(--text-medium);
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+        .notification-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            opacity: 0.6;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        .notification-close:hover {
+            opacity: 1;
+            transform: rotate(90deg);
+        }
+        .notification-close::before, .notification-close::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 2px;
+            background-color: var(--text-medium);
+            border-radius: 2px;
+        }
+        .notification-close::before {
+            transform: translate(-50%, -50%) rotate(45deg);
+        }
+        .notification-close::after {
+            transform: translate(-50%, -50%) rotate(-45deg);
+        }
+
         @media (max-width: 992px) {
             .timeline-svg { left: 32px; }
             .project-entry { width: 100%; padding-left: 70px; padding-right: 0; }
@@ -334,6 +414,14 @@
     </style>
 </head>
 <body>
+    <div class="notification-overlay">
+        <div class="notification-modal">
+            <div class="notification-close"></div>
+            <h3>Project is Under Development!</h3>
+            <p>The live demo and codebase will be available soon. Thank you for your patience.</p>
+        </div>
+    </div>
+
     <section class="timeline-section">
         <header class="timeline-header">
             <h2 data-text="Project Chronology">Project Chronology</h2>
@@ -362,25 +450,25 @@
 
         const projectData = {
             "Front-End Development": [
-                { title: "QuantumCart", description: "A full-stack e-commerce platform with a focus on user experience and secure payment processing.", year: "2021", image: "https://images.unsplash.com/photo-1522199755839-a2bacb67c546?q=80&w=800&auto=format&fit=crop", tags: ["Next.js", "Stripe", "PostgreSQL", "Tailwind CSS"], liveUrl: "#", repoUrl: "#" },
-                { title: "AetherFlow", description: "A sleek, cross-platform mobile application for intuitive task management and real-time productivity tracking.", year: "2022", image: "https://images.unsplash.com/photo-1607706189992-5a5ee42c5aa8?q=80&w=800&auto=format&fit=crop", tags: ["React Native", "Firebase", "GSAP", "Redux"], liveUrl: "#", repoUrl: "#" },
-                { title: "Axiom Data", description: "An interactive data visualization dashboard designed to make complex datasets accessible and engaging.", year: "2024", image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=800&auto=format&fit=crop", tags: ["D3.js", "React", "Node.js", "BigQuery"], liveUrl: "#", repoUrl: "#" },
-                { title: "ChronoGlyph", description: "A portfolio website template featuring a unique, timeline-based layout and fluid animations.", year: "2023", image: "https://images.unsplash.com/photo-1566241440091-ec10de8db2e1?q=80&w=800&auto=format&fit=crop", tags: ["GSAP", "ScrollTrigger", "Vanilla JS"], liveUrl: "#", repoUrl: "#" },
-                { title: "Vivid", description: "A browser-based creative coding environment for generative art using WebGL.", year: "2024", image: "https://images.unsplash.com/photo-1589182373726-e4f658ab50f0?q=80&w=800&auto=format&fit=crop", tags: ["Three.js", "WebGL", "Vite"], liveUrl: "#", repoUrl: "#" }
+                { title: "ElectroMotion", description: "A high-end electric vehicle showroom interface crafted for seamless UX and dynamic frontend interactions.", image: "/* Add image URL for ElectroMotion here */", tags: ["React.js", "Tailwind CSS", "Framer Motion", "TypeScript", "GSAP"], liveUrl: "https://teslaauto.netlify.app", repoUrl: "https://github.com/CH-RAFAY/Electric-Vehicle-Website" },
+                { title: "TeraByte", description: "A sleek audio streaming frontend inspired by modern platforms, built for performance and immersive user experience.", image: "/* Add image URL for TeraByte here */", tags: ["React.js", "Tailwind CSS", "Framer Motion", "Redux", "Responsive Design"], liveUrl: "https://tera-byte.netlify.app", repoUrl: "https://github.com/CH-RAFAY/Audio-Streaming-Website" },
+                { title: "RestRiser", description: "An elegant hotel reservation platform with full-stack functionality, inspired by the UX of top booking services.", image: "/* Add image URL for RestRiser here */", tags: ["React.js", "Tailwind CSS", "Node.js", "Express", "MongoDB"], liveUrl: "https://shorturl.at/bmip7", repoUrl: "https://github.com/CH-RAFAY/Hotel-Reservation-Website" },
+                { title: "Math-Odyssey", description: "A visually rich calculator site with 3D themes, animated interactions, and immersive UI using advanced JS animations.", image: "/* Add image URL for Math-Odyssey here */", tags: ["Vanilla JavaScript", "GSAP", "Three.js", "ScrollTrigger", "Responsive Design"], liveUrl: "https://mathodesy.netlify.app", repoUrl: "https://github.com/CH-RAFAY/Javascript-Animation-Website" },
+                { title: "CampQuest", description: "A vibrant and responsive website designed for a youth summer camp and scouting competition event.", image: "/* Add image URL for CampQuest here */", tags: ["HTML5", "CSS3", "JavaScript", "Responsive Design", "Accessibility"], liveUrl: "https://ch-rafay.github.io/Michigan-Static-Website", repoUrl: "https://github.com/CH-RAFAY/Michigan-Static-Website" }
             ],
             "UI/UX Design": [
-                { title: "Flowspace", description: "A collaborative design tool for creating intuitive user flows and wireframes in real-time.", year: "2023", image: "https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?q=80&w=800&auto=format&fit=crop", tags: ["Figma", "User Research", "Prototyping"], liveUrl: "#", repoUrl: "#" },
-                { title: "Mindful App", description: "A wellness application concept focused on guided meditation and stress reduction through a calming UI.", year: "2022", image: "https://images.unsplash.com/photo-1599658880112-054546a11149?q=80&w=800&auto=format&fit=crop", tags: ["UI Design", "UX Research", "Adobe XD"], liveUrl: "#", repoUrl: "#" }
+                { title: "Flowspace", description: "A collaborative design tool for creating intuitive user flows and wireframes in real-time.", image: "/* image: '...' */", tags: ["Figma", "User Research", "Prototyping"], liveUrl: "#", repoUrl: "#" },
+                { title: "Mindful App", description: "A wellness application concept focused on guided meditation and stress reduction through a calming UI.", image: "/* image: '...' */", tags: ["UI Design", "UX Research", "Adobe XD"], liveUrl: "#", repoUrl: "#" }
             ],
             "Data Science": [
-                { title: "Market-Basket Insight", description: "Analyzed transactional data to uncover product associations and inform cross-selling strategies.", year: "2023", image: "https://images.unsplash.com/photo-1591696205602-2f950c417cb9?q=80&w=800&auto=format&fit=crop", tags: ["Python", "Pandas", "Apriori"], liveUrl: "#", repoUrl: "#" },
-                { title: "Sentiment Analyzer", description: "A model that classifies customer reviews as positive, negative, or neutral to gauge public opinion.", year: "2024", image: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?q=80&w=800&auto=format&fit=crop", tags: ["Scikit-learn", "NLTK", "Matplotlib"], liveUrl: "#", repoUrl: "#" }
+                { title: "Market-Basket Insight", description: "Analyzed transactional data to uncover product associations and inform cross-selling strategies.", image: "/* image: '...' */", tags: ["Python", "Pandas", "Apriori"], liveUrl: "#", repoUrl: "#" },
+                { title: "Sentiment Analyzer", description: "A model that classifies customer reviews as positive, negative, or neutral to gauge public opinion.", image: "/* image: '...' */", tags: ["Scikit-learn", "NLTK", "Matplotlib"], liveUrl: "#", repoUrl: "#" }
             ],
             "Machine Learning": [
-                { title: "Predictive Churn Model", description: "A classification model to predict customer churn, enabling proactive retention efforts.", year: "2024", image: "https://images.unsplash.com/photo-1611606063065-ee7946f0b34a?q=80&w=800&auto=format&fit=crop", tags: ["TensorFlow", "Keras", "Pandas"], liveUrl: "#", repoUrl: "#" }
+                { title: "Predictive Churn Model", description: "A classification model to predict customer churn, enabling proactive retention efforts.", image: "/* image: '...' */", tags: ["TensorFlow", "Keras", "Pandas"], liveUrl: "#", repoUrl: "#" }
             ],
             "Backend & APIs": [
-                { title: "SynapseAI", description: "An intelligent conversational AI built to understand user intent and provide contextually relevant responses.", year: "2023", image: "https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?q=80&w=800&auto=format&fit=crop", tags: ["Python", "TensorFlow", "Flask", "NLP"], liveUrl: "#", repoUrl: "#" }
+                { title: "SynapseAI", description: "An intelligent conversational AI built to understand user intent and provide contextually relevant responses.", image: "/* image: '...' */", tags: ["Python", "TensorFlow", "Flask", "NLP"], liveUrl: "#", repoUrl: "#" }
             ]
         };
 
@@ -417,7 +505,7 @@
                         const entry = document.createElement('div');
                         entry.className = `project-entry ${alignment}`;
                         const tagsHTML = project.tags.map(tag => `<span>${tag}</span>`).join('');
-                        const projectTitleText = `${project.title} (${project.year})`;
+                        const projectTitleText = project.title;
                         entry.innerHTML = `
                             <div class="project-node"><span class="project-fill"></span><div class="ripple"></div><div class="ripple"></div></div>
                             <div class="project-panel">
@@ -485,7 +573,7 @@
                 const entry = document.createElement('div');
                 entry.className = `project-entry ${alignment}`;
                 const tagsHTML = project.tags.map(tag => `<span>${tag}</span>`).join('');
-                const projectTitleText = `${project.title} (${project.year})`;
+                const projectTitleText = project.title;
                 entry.innerHTML = `
                     <div class="project-node"><span class="project-fill"></span><div class="ripple"></div><div class="ripple"></div></div>
                     <div class="project-panel">
@@ -683,7 +771,6 @@
             });
         }
         
-        // CORRECTED: This function restores the original timeline path and node animations.
         function setupAdvancedTimeline() {
             const svg = document.querySelector('.timeline-svg');
             const path = document.querySelector('.timeline-path');
@@ -721,7 +808,7 @@
 
                 masterTl.to(path, {
                     strokeDashoffset: currentOffset,
-                    duration: duration * 10, // The duration multiplier controls the "speed" of the draw
+                    duration: duration * 10,
                     ease: "none"
                 });
                 
@@ -732,7 +819,6 @@
                     }
                 }, [], ">");
                 
-                // Add a delay between each node connection event in the master timeline
                 if (index < projectNodes.length - 1) {
                     masterTl.to({}, { duration: 2 }); 
                 }
@@ -763,8 +849,7 @@
                 });
                 activeScrollTriggers.push(st);
             });
-            
-            // Add the special disconnect animation for the last node when scrolling up
+
             const lastProjectEntry = projectEntries[projectEntries.length - 1];
             if (lastProjectEntry) {
                 const lastNode = lastProjectEntry.querySelector('.project-node');
@@ -799,6 +884,31 @@
             });
         }
         
+        function setupNotification() {
+            const overlay = document.querySelector('.notification-overlay');
+            const closeBtn = document.querySelector('.notification-close');
+
+            document.body.addEventListener('click', (e) => {
+                if (e.target.matches('.panel-button')) {
+                    const link = e.target.getAttribute('href');
+                    if (link === '#') {
+                        e.preventDefault();
+                        overlay.classList.add('active');
+                    }
+                }
+            });
+
+            closeBtn.addEventListener('click', () => {
+                overlay.classList.remove('active');
+            });
+            
+            overlay.addEventListener('click', (e) => {
+                if (e.target === overlay) {
+                    overlay.classList.remove('active');
+                }
+            });
+        }
+
         function debounce(func, wait) {
             let timeout;
             return function executedFunction(...args) {
@@ -819,7 +929,11 @@
 
         setupTumblerSelector();
         initialRender(currentCategoryIndex);
+        setupNotification();
     });
     </script>
 </body>
 </html>
+
+
+
