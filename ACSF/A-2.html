@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Selected A-1</title>
+    <title>A-2 Impv</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Orbitron:wght@700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -24,6 +24,7 @@
             --heading-glow-color: rgba(14, 165, 233, 0.6);
             --glow-size: 175px;
             --reveal-size: 120px;
+            --hint-accent-color: #38bdf8; /* New color for hint text */
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -90,10 +91,11 @@
             margin: 15px auto 0;
         }
         
+        /* Reduced size of the category selector */
         .category-selector {
             margin: 60px auto 80px;
-            width: 300px;
-            height: 50px;
+            width: 260px; /* Reduced from 300px */
+            height: 46px; /* Reduced from 50px */
             position: relative;
             perspective: 1200px;
             cursor: grab;
@@ -126,7 +128,7 @@
             align-items: center;
             justify-content: center;
             font-family: var(--font-poppins);
-            font-size: 1.2rem;
+            font-size: 1.1rem; /* Slightly smaller font for smaller button */
             font-weight: 600;
             color: var(--text-light);
             background: var(--glass-bg);
@@ -148,6 +150,7 @@
             box-shadow: none;
         }
         
+        /* Changed color of the PREV/NEXT hint text */
         .tumbler-side {
             position: absolute;
             top: 0;
@@ -161,17 +164,17 @@
             font-size: 1.1rem;
             letter-spacing: 2px;
             font-weight: 700;
-            color: var(--primary-accent);
-            text-shadow: 0 0 10px var(--primary-accent-dark);
+            color: var(--hint-accent-color); /* Changed color */
+            text-shadow: 0 0 12px var(--hint-accent-color); /* Updated shadow */
             backface-visibility: hidden;
             opacity: 0;
             pointer-events: none;
         }
         .side-prev {
-            transform: rotateY(-90deg) translateZ(150px);
+            transform: rotateY(-90deg) translateZ(130px); /* Adjusted for new size */
         }
         .side-next {
-            transform: rotateY(90deg) translateZ(150px);
+            transform: rotateY(90deg) translateZ(130px); /* Adjusted for new size */
         }
 
         .timeline-container {
@@ -601,10 +604,10 @@
 
                 gsap.to(tumbler, {
                     rotationY: targetRotation,
-                    duration: 0.7,
+                    duration: 1.1, // Reduced speed by increasing duration
                     ease: 'power3.out',
                     onComplete: () => {
-                        setTumblerAppearance(false); // Revert to 2D state after snap
+                        setTumblerAppearance(false);
                     }
                 });
 
@@ -652,10 +655,8 @@
             const path = document.querySelector('.timeline-path');
             const projectNodes = document.querySelectorAll('.project-node');
             
-            // FIX: If there are fewer than 2 projects, hide the timeline path completely.
             if (!svg || !path || projectNodes.length < 2) {
                 if (svg) gsap.set(svg, { opacity: 0 });
-                // The activation of the single node's fill is handled by setupProjectActivation now.
                 return;
             }
 
@@ -699,11 +700,9 @@
                     }
                 }, [], ">");
                 
-                // The fill animation is handled by CSS now for simplicity when active.
-                // We keep this to ensure the timing with the path drawing remains.
                 masterTl.to(fill, {
-                    opacity: 1, // Will be controlled by is-active
-                    scale: 1,   // Will be controlled by is-active
+                    opacity: 1,
+                    scale: 1,
                     duration: 0.7,
                     ease: 'power2.out'
                 }, "<");
@@ -730,7 +729,6 @@
         function setupProjectActivation() {
             const projectEntries = document.querySelectorAll('.project-entry');
             projectEntries.forEach(entry => {
-                // The .is-active class toggling remains the primary mechanism for styling active states.
                 const st = ScrollTrigger.create({
                     trigger: entry,
                     start: "top center",
@@ -752,7 +750,25 @@
             });
         }
         
-        window.addEventListener('resize', () => { location.reload(); });
+        // Use a function to debounce the resize reload
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        };
+
+        // Reloading on every resize can be jarring; this waits until the user has stopped resizing.
+        const debouncedReload = debounce(() => {
+            location.reload();
+        }, 250);
+
+        window.addEventListener('resize', debouncedReload);
 
         setupTumblerSelector();
         initialRender(currentCategoryIndex);
