@@ -4,12 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Abdul Rafay Ather - Software Engineer</title>
+    
+    <!-- MODIFIED: Google Fonts loaded via <link> for better performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&family=Orbitron:wght@400;500;700;900&display=swap" rel="stylesheet">
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&family=Orbitron:wght@400;500;700;900&display=swap');
+        /* REMOVED: @import for Google Fonts is no longer here */
         
         * {
             margin: 0;
@@ -24,7 +30,7 @@
             perspective: 1000px;
         }
         
-        /* Glass Box Styling (Unchanged) */
+        /* MODIFIED: Removed 'cursor: pointer' for better UX */
         .glass-side-box {
             background: linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.015) 50%, rgba(255, 255, 255, 0.04) 100%);
             backdrop-filter: blur(25px) saturate(180%);
@@ -39,7 +45,6 @@
             width: 350px;
             max-width: 350px;
             min-height: 500px;
-            cursor: pointer;
         }
         .glass-side-box::before {
             content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
@@ -54,7 +59,6 @@
             background: linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 50%, rgba(255, 255, 255, 0.06) 100%);
         }
         
-        /* Desktop Layout (Unchanged) */
         .main-layout {
             display: flex; justify-content: space-between; align-items: center;
             min-height: 100vh; max-width: 1400px; margin: 0 auto; padding: 0 2rem; position: relative;
@@ -64,29 +68,29 @@
         .right-side { margin-left: 2rem; }
         .center-space { flex: 1; min-height: 100vh; position: relative; display: flex; align-items: center; justify-content: center; }
         
-        /* Text Styles (Unchanged) */
         .profile-name { font-size: 2.6rem; font-weight: 700; color: #f1f5f9; line-height: 1.1; margin-bottom: 0.5rem; font-family: 'Poppins', sans-serif; }
         .profile-title { font-size: 1.25rem; font-weight: 800; color: #94a3b8; margin-bottom: 1.5rem; font-family: 'Inter', sans-serif; }
-        .profile-description { font-size: 1.1rem; font-weight: 400; color: #64748b; line-height: 1.6; font-family: 'Inter', sans-serif; }
+        /* MODIFIED: Increased color contrast for accessibility */
+        .profile-description { font-size: 1.1rem; font-weight: 400; color: #94a3b8; line-height: 1.6; font-family: 'Inter', sans-serif; }
         .about-title { font-size: 1.2rem; font-weight: 600; color: #f1f5f9; margin-bottom: 1rem; font-family: 'Poppins', sans-serif; }
         .about-description { font-size: 1.1rem; font-weight: 400; color: #cbd5e1; line-height: 1.7; font-family: 'Inter', sans-serif; }
         
-        /* Globe Container Style (Unchanged) */
         .tech-globe-container {
             position: absolute; top: 50%; left: 50%;
             transform: translate(-50%, -50%);
             width: 800px; height: 800px; z-index: 1;
         }
         
-        /* --- MODIFIED: Button Styles for Visual Hierarchy --- */
         .button-container {
             position: absolute; bottom: 4rem; left: 50%;
             transform: translateX(-50%); display: flex; gap: 1.5rem; z-index: 20;
         }
 
-        /* Base button style for shared properties */
-        .btn-base {
-            padding: 0.75rem 2rem; /* Consistent padding */
+        /* MODIFIED: Renamed to .btn-link to reflect change to <a> tags */
+        .btn-link {
+            display: inline-block; /* Added for <a> tag styling */
+            text-decoration: none; /* Removes underline from links */
+            padding: 0.75rem 2rem;
             border-radius: 16px;
             font-weight: 600;
             cursor: pointer;
@@ -95,7 +99,6 @@
             overflow: hidden;
         }
 
-        /* Primary button style */
         .btn-primary {
             background: linear-gradient(135deg,rgba(255,255,255,.04),rgba(255,255,255,.015));
             backdrop-filter: blur(25px) saturate(180%);
@@ -116,7 +119,6 @@
             background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,.02))
         }
 
-        /* Secondary "ghost" button style */
         .btn-secondary {
             background: transparent;
             border: 1.5px solid rgba(255, 255, 255, 0.2);
@@ -128,7 +130,6 @@
             color: #f1f5f9;
         }
 
-        /* Responsive Design (Unchanged) */
         @media (max-width: 1200px) {
             body { perspective: none; }
             .main-layout { flex-direction: column; justify-content: center; align-items: center; padding: 2rem 1rem; gap: 2rem; min-height: 100vh; }
@@ -145,20 +146,21 @@
             .profile-title { font-size: 1.1rem; }
             .profile-description, .about-description { font-size: 1rem; }
             .button-container { flex-direction: row; gap: 1rem; margin-top: 2rem; }
-            .btn-base { flex: 1; text-align: center; }
+            .btn-link { flex: 1; text-align: center; }
         }
         @media (max-width: 582px) {
             .button-container { flex-direction: column; }
-            .btn-base { flex: none; width: 100%; }
+            .btn-link { flex: none; width: 100%; }
         }
     </style>
 </head>
 <body class="text-white">
 
-    <section id="hero-section">
-        <div class="tech-globe-container" id="globeContainer"></div>
+    <!-- MODIFIED: Swapped <main> and <section> for better semantic HTML structure -->
+    <main class="relative z-10">
+        <section id="hero-section">
+            <div class="tech-globe-container" id="globeContainer"></div>
 
-        <main class="relative z-10">
             <div class="main-layout">
                 <div class="side-box-container left-side" id="leftSideBox">
                     <div class="glass-side-box p-8 flex flex-col justify-center">
@@ -174,7 +176,8 @@
 
                 <div class="side-box-container right-side" id="rightSideBox">
                     <div class="glass-side-box p-8 flex flex-col justify-center">
-                        <h3 class="about-title">About Me</h3>
+                        <!-- MODIFIED: Changed <h3> to <h2> for semantic heading structure -->
+                        <h2 class="about-title">About Me</h2>
                         <p class="about-description">
                             I'm a passionate Software Engineer with expertise in modern web technologies. 
                             I specialize in creating innovative solutions that drive business growth and 
@@ -187,18 +190,18 @@
                     </div>
                 </div>
                 
-                <!-- MODIFIED: Button container with new classes -->
+                <!-- MODIFIED: Changed <button> to <a> for semantic correctness (navigation) -->
                 <div class="button-container">
-                    <button class="btn-base btn-primary">
+                    <a href="#" class="btn-link btn-primary">
                         <span class="relative z-10">EXPLORE PROJECTS</span>
-                    </button>
-                    <button class="btn-base btn-secondary">
+                    </a>
+                    <a href="#" class="btn-link btn-secondary" download>
                         <span class="relative z-10">DOWNLOAD RESUME</span>
-                    </button>
+                    </a>
                 </div>
             </div>
-        </main>
-    </section>
+        </section>
+    </main>
     
     <script>
         gsap.registerPlugin(ScrollTrigger);
@@ -208,9 +211,11 @@
         function init3DGlobe() {
             const container = document.getElementById('globeContainer');
             if (!container) return;
+
             scene = new THREE.Scene();
             camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
             renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+            
             renderer.setSize(container.clientWidth, container.clientHeight);
             renderer.setClearColor(0x000000, 0);
             container.appendChild(renderer.domElement);
@@ -229,17 +234,26 @@
             const glowWireframe = new THREE.LineSegments(glowEdges, glowMaterial);
             globeGroup.add(glowWireframe);
             
+            // --- MODIFIED: Performance optimization for the globe lights ---
             const blueColors = [0x7dd3fc, 0x0ea5e9, 0x0284c7, 0x0369a1];
-            const vertices = geometry.attributes.position.array;
             const infoLightGeometry = new THREE.SphereGeometry(2.5, 8, 8);
+            const numLights = 200; // Reduced from thousands to a fixed number for performance
             
-            for (let i = 0; i < vertices.length; i += 3) {
+            for (let i = 0; i < numLights; i++) {
                 const colorIndex = Math.floor(Math.random() * blueColors.length);
                 const infoLightMaterial = new THREE.MeshBasicMaterial({ color: blueColors[colorIndex], transparent: true, opacity: 0.8 });
                 const infoLight = new THREE.Mesh(infoLightGeometry, infoLightMaterial);
-                infoLight.position.set(vertices[i], vertices[i + 1], vertices[i + 2]);
+                
+                // Position lights randomly on the sphere's surface
+                const phi = Math.acos(-1 + (2 * (i + 1)) / (numLights + 1));
+                const theta = Math.sqrt((numLights + 1) * Math.PI) * phi;
+                const pointOnSphere = new THREE.Vector3();
+                pointOnSphere.setFromSphericalCoords(180, phi, theta);
+                infoLight.position.copy(pointOnSphere);
+
                 const glowSphere = new THREE.Mesh(new THREE.SphereGeometry(4, 8, 8), new THREE.MeshBasicMaterial({ color: blueColors[colorIndex], transparent: true, opacity: 0.3 }));
                 glowSphere.position.copy(infoLight.position);
+                
                 globeGroup.add(infoLight);
                 globeGroup.add(glowSphere);
                 infoLights.push({ light: infoLight, glow: glowSphere, originalOpacity: 0.8, pulseSpeed: Math.random() * 0.02 + 0.01 });
@@ -282,8 +296,21 @@
             init3DGlobe();
             setupScrollAnimations();
         });
-        
-        window.addEventListener('resize', () => {
+
+        // --- MODIFIED: Debounced resize handler for better performance ---
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        const handleResize = debounce(() => {
             if (camera && renderer) {
                 const container = document.getElementById('globeContainer');
                 if (!container) return;
@@ -295,7 +322,9 @@
                 camera.updateProjectionMatrix();
                 renderer.setSize(width, height);
             }
-        });
+        }, 250); // 250ms delay
+
+        window.addEventListener('resize', handleResize);
     </script>
 </body>
 </html>

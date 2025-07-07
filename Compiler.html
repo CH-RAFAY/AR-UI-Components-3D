@@ -190,6 +190,7 @@
             user-select: none;
             -webkit-user-select: none;
             -moz-user-select: none;
+            padding: 0 10px;
         }
         .category-label.active {
             border-color: var(--primary-accent);
@@ -701,7 +702,7 @@
             transform: translate(-50%, -50%) rotate(-45deg);
         }
 
-        /* NEW STYLES for 993px to 1199px range */
+        /* STYLES for 993px to 1199px range */
         @media (min-width: 993px) and (max-width: 1199px) {
             .project-panel {
                 max-width: 480px;
@@ -725,7 +726,7 @@
             }
         }
 
-        /* UPDATED STYLES for screens below 992px */
+        /* STYLES for screens below 992px */
         @media (max-width: 992px) {
             .timeline-svg {
                 left: 32px;
@@ -757,8 +758,8 @@
             }
         }
         
-        /* STYLES for 591px to 768px range */
-        @media (min-width: 591px) and (max-width: 768px) {
+        /* STYLES for 590px to 768px range */
+        @media (min-width: 590px) and (max-width: 768px) {
             .project-panel {
                 max-width: 480px;
                 padding: 15px;
@@ -783,68 +784,46 @@
             }
         }
 
-        /* RESPONSIVE DESIGN STYLES for screens below 591px */
-        @media (max-width: 590px) {
-            .timeline-header h2 {
-                font-size: 2.8rem;
-            }
-            .timeline-header p {
-                font-size: 1rem;
-            }
-            .category-selector {
-                width: 240px;
-                height: 42px;
-                margin: 40px auto 60px;
-            }
-            .project-entry,
-            .project-entry.align-right {
-                padding-left: 65px;
-                padding-right: 10px;
-            }
-            .project-node,
-            .align-left .project-node,
-            .align-right .project-node {
-                left: 10px;
-            }
-            .project-panel {
-                padding: 12px;
-                border-radius: 14px;
-            }
-            .panel-main {
-                grid-template-columns: 1fr;
-                gap: 12px;
-            }
-            .panel-image {
-                max-width: 95%;
-                margin: 0 auto;
-                border-radius: 8px;
-            }
-            .panel-text {
-                text-align: center;
-            }
-            .panel-title {
-                font-size: 1.5rem;
-            }
-            .panel-description {
-                font-size: 0.85rem;
-                line-height: 1.6;
-            }
-            .panel-tags {
-                justify-content: center;
-                gap: 6px;
-            }
-            .panel-tags span {
-                font-size: 0.7rem;
-                padding: 3px 8px;
-            }
-            .panel-actions {
-                justify-content: center;
-                gap: 10px;
-            }
-            .panel-button {
-                padding: 6px 14px;
-                font-size: 0.8rem;
-            }
+        /* STYLES for 481px to 589px range */
+        @media (min-width: 481px) and (max-width: 589px) {
+            .timeline-header h2 { font-size: 2.5rem; }
+            .category-selector { width: 240px; height: 42px; }
+            .category-label { font-size: 1.05rem; }
+            .side-prev { transform: rotateY(-90deg) translateZ(120px); }
+            .side-next { transform: rotateY(90deg) translateZ(120px); }
+            .project-entry, .project-entry.align-right { padding-left: 65px; padding-right: 10px; }
+            .project-panel { padding: 12px; border-radius: 12px; }
+            .panel-main { grid-template-columns: 1fr; gap: 12px; }
+            .panel-image { max-width: 95%; margin: 0 auto; border-radius: 8px; }
+            .panel-text { text-align: center; }
+            .panel-title { font-size: 1.3rem; }
+            .panel-description { font-size: 0.8rem; }
+            .panel-tags { justify-content: center; gap: 6px; }
+            .panel-tags span { font-size: 0.7rem; padding: 3px 8px; }
+            .panel-actions { justify-content: center; }
+            .panel-button { padding: 5px 12px; font-size: 0.75rem; }
+        }
+
+        /* STYLES for screens below 480px */
+        @media (max-width: 480px) {
+            .timeline-header h2 { font-size: 2.2rem; }
+            .timeline-header p { font-size: 0.9rem; }
+            .category-selector { width: 220px; height: 40px; margin: 40px auto 60px; }
+            .category-label { font-size: 1rem; }
+            .side-prev { transform: rotateY(-90deg) translateZ(110px); }
+            .side-next { transform: rotateY(90deg) translateZ(110px); }
+            .project-entry, .project-entry.align-right { padding-left: 55px; padding-right: 10px; }
+            .project-node, .align-left .project-node, .align-right .project-node { left: 10px; }
+            .project-panel { padding: 10px; border-radius: 10px; }
+            .panel-main { grid-template-columns: 1fr; gap: 10px; }
+            .panel-image { max-width: 100%; margin: 0 auto; border-radius: 6px; }
+            .panel-text { text-align: center; }
+            .panel-title { font-size: 1.2rem; }
+            .panel-description { font-size: 0.75rem; line-height: 1.5; }
+            .panel-tags { justify-content: center; gap: 5px; }
+            .panel-tags span { font-size: 0.65rem; padding: 2px 7px; }
+            .panel-actions { justify-content: center; gap: 8px; }
+            .panel-button { padding: 4px 10px; font-size: 0.7rem; }
         }
     </style>
 </head>
@@ -1136,7 +1115,8 @@
                         </div>`;
                     timelineContainer.appendChild(entry);
                 });
-
+                
+                // Use a short timeout to ensure the DOM is fully updated before setting up animations
                 setTimeout(() => {
                     setupAdvancedTimeline();
                     setupProjectActivation();
@@ -1153,7 +1133,7 @@
                 const sideNext = tumbler.querySelector(".side-next");
 
                 const angleStep = 360 / categories.length;
-                const radius = (selector.offsetWidth / 2) / Math.tan(Math.PI / categories.length);
+                let radius = (selector.offsetWidth / 2) / Math.tan(Math.PI / categories.length);
 
                 const existingLabels = tumbler.querySelectorAll(".category-label");
                 existingLabels.forEach((label) => label.remove());
@@ -1207,10 +1187,11 @@
                         });
 
                         const activeLabel = tumbler.querySelector(".category-label.active");
+                        const hintRotationAngle = window.innerWidth < 480 ? 20 : (window.innerWidth < 600 ? 25 : 35);
 
                         hintAnimation
                             .to(tumbler, {
-                                rotationY: -35,
+                                rotationY: -hintRotationAngle,
                                 onStart: () => {
                                     activeLabel.classList.add("hint-suppressed");
                                     setTumblerAppearance(true, "next");
@@ -1230,7 +1211,7 @@
                             )
                             .to(sideNext, { opacity: 0 }, "<")
                             .to(tumbler, {
-                                rotationY: 35,
+                                rotationY: hintRotationAngle,
                                 onStart: () => {
                                     activeLabel.classList.add("hint-suppressed");
                                     setTumblerAppearance(true, "prev");
@@ -1318,7 +1299,8 @@
                     label.classList.toggle("active", isActive);
                 });
             }
-
+            
+            // RESTORED ANIMATION LOGIC
             function setupAdvancedTimeline() {
                 const svg = document.querySelector(".timeline-svg");
                 const path = document.querySelector(".timeline-path");
@@ -1328,76 +1310,63 @@
                     if (svg) gsap.set(svg, { opacity: 0 });
                     return;
                 }
-                
-                function updateTimelineHeight() {
+
+                // Use a timeout to ensure layout is calculated correctly
+                setTimeout(() => {
                     const containerRect = timelineContainer.getBoundingClientRect();
+                    if (containerRect.height === 0) return;
+
                     const firstNodeRect = projectNodes[0].getBoundingClientRect();
                     const lastNodeRect = projectNodes[projectNodes.length - 1].getBoundingClientRect();
-                    
-                    const y1 = firstNodeRect.top + firstNodeRect.height / 2 - containerRect.top;
-                    const height = lastNodeRect.top + lastNodeRect.height / 2 - y1;
+                    const y1 = firstNodeRect.top - containerRect.top + firstNodeRect.height / 2;
+                    const height = lastNodeRect.top - firstNodeRect.top;
 
+                    svg.style.top = `${y1}px`;
                     svg.setAttribute("height", height);
-                    svg.style.top = y1 + "px";
                     path.setAttribute("y2", height);
 
                     const pathTotalLength = path.getTotalLength();
-                    path.style.strokeDasharray = pathTotalLength;
-                    path.style.strokeDashoffset = pathTotalLength;
+                    gsap.set(path, {
+                        strokeDasharray: pathTotalLength,
+                        strokeDashoffset: pathTotalLength,
+                    });
+                    
+                    const tl = gsap.timeline({
+                        scrollTrigger: {
+                            trigger: ".timeline-container",
+                            start: "top center",
+                            end: "bottom bottom",
+                            scrub: 1.5,
+                        },
+                    });
 
-                    ScrollTrigger.refresh();
-                }
+                    tl.to(path, { strokeDashoffset: 0, ease: "none" });
 
-                updateTimelineHeight();
-
-                const masterTl = gsap.timeline({
-                    scrollTrigger: {
-                        trigger: ".timeline-container",
-                        start: "top center",
-                        end: "bottom bottom",
-                        scrub: 1.5,
-                        onUpdate: self => {
-                            const progress = self.progress;
-                            const currentOffset = path.getTotalLength() * (1 - progress);
-                            path.style.strokeDashoffset = currentOffset;
-
-                            projectNodes.forEach((node, index) => {
-                                const entry = node.closest('.project-entry');
-                                const st = ScrollTrigger.getById(`st-entry-${index}`);
-                                if (st && st.isActive) {
-                                     if (!entry.classList.contains('is-active')) {
-                                        entry.classList.add('is-active');
-                                     }
-                                } else if(entry.classList.contains('is-active')) {
-                                   entry.classList.remove('is-active');
+                    projectNodes.forEach(node => {
+                        const entry = node.closest('.project-entry');
+                        tl.call(() => {
+                            if (ScrollTrigger.isInViewport(entry, 0.5)) {
+                                if (!node.classList.contains("connecting-signal")) {
+                                    node.classList.add("connecting-signal");
+                                    setTimeout(() => node.classList.remove("connecting-signal"), 1200);
                                 }
-                            });
-                        }
-                    }
-                });
-                
-                activeScrollTriggers.push(masterTl.scrollTrigger);
-                gsap.to(svg, { opacity: 1, duration: 0.3 });
+                            }
+                        }, null, ">-0.1");
+                    });
+                    
+                    activeScrollTriggers.push(tl.scrollTrigger);
+                    gsap.to(svg, { opacity: 1, duration: 0.5 });
+                }, 100);
             }
 
             function setupProjectActivation() {
                 const projectEntries = document.querySelectorAll(".project-entry");
-                projectEntries.forEach((entry, index) => {
+                projectEntries.forEach((entry) => {
                     const st = ScrollTrigger.create({
-                        id: `st-entry-${index}`,
                         trigger: entry,
                         start: "top center",
                         end: "bottom center",
                         toggleClass: "is-active",
-                        onToggle: self => {
-                           if(self.isActive) {
-                               const node = self.trigger.querySelector('.project-node');
-                               if (!node.classList.contains("connecting-signal")) {
-                                   node.classList.add("connecting-signal");
-                                   setTimeout(() => node.classList.remove("connecting-signal"), 1200);
-                               }
-                           }
-                        }
                     });
                     activeScrollTriggers.push(st);
                 });
@@ -1462,16 +1431,18 @@
                 };
             };
 
-            const debouncedReload = debounce(() => {
+            const debouncedReinit = debounce(() => {
                  if (activeScrollTriggers.length) {
                     activeScrollTriggers.forEach((st) => st.kill());
                     activeScrollTriggers = [];
                 }
-                initialRender(currentCategoryIndex);
-
+                // Re-initialize animations
+                setupAdvancedTimeline();
+                setupProjectActivation();
+                setupHeadingGlows();
             }, 250);
 
-            window.addEventListener('resize', debouncedReload);
+            window.addEventListener('resize', debouncedReinit);
             
             setupTumblerSelector();
             initialRender(currentCategoryIndex);
