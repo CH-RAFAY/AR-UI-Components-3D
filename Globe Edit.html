@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abdul Rafay Ather - Software Engineer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&family=Orbitron:wght@400;500;700;900&display=swap');
+        
+        :root {
+            --globe-size: 800px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: radial-gradient(ellipse at center, #0a0a0a 0%, #000000 100%);
+            overflow-x: hidden;
+            font-family: 'Inter', sans-serif;
+            perspective: 1000px;
+        }
+        
+        /* Glass Box Styling (Unchanged) */
+        .glass-content-box {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.015) 50%, rgba(255, 255, 255, 0.04) 100%);
+            backdrop-filter: blur(25px) saturate(180%);
+            border: 1.5px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 8px 20px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.25), inset 0 -1px 0 rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+            border-radius: 16px;
+            transition: all 0.4s ease;
+            transform-style: preserve-3d;
+            cursor: pointer;
+            padding: 2.5rem;
+        }
+        .glass-content-box::before {
+            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(125, 211, 252, 0.08), transparent);
+            transition: left 0.8s ease;
+        }
+        .glass-content-box:hover::before { left: 100%; }
+        .glass-content-box:hover {
+            transform: translateZ(10px) scale(1.01);
+            border-color: rgba(125, 211, 252, 0.3);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.55), 0 10px 25px rgba(0, 0, 0, 0.35), 0 0 15px rgba(125, 211, 252, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.3), inset 0 -1px 0 rgba(255, 255, 255, 0.15);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 50%, rgba(255, 255, 255, 0.06) 100%);
+        }
+        
+        /* --- MODIFIED: Main Layout for Asymmetry --- */
+        .main-layout {
+            display: grid;
+            grid-template-columns: minmax(auto, 450px) 1fr; /* Column for text, column for globe */
+            align-items: center;
+            min-height: 100vh;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            gap: 2rem;
+        }
+
+        .content-panel {
+            z-index: 10;
+            transform: translateZ(15px);
+        }
+        
+        /* --- MODIFIED: Globe is now positioned within the grid --- */
+        .globe-space {
+            position: relative;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .tech-globe-container {
+            position: absolute;
+            width: var(--globe-size);
+            height: var(--globe-size);
+            z-index: 1;
+        }
+        
+        /* Text Styles (Unchanged) */
+        .profile-name { font-size: 2.6rem; font-weight: 700; color: #f1f5f9; line-height: 1.1; margin-bottom: 0.5rem; font-family: 'Poppins', sans-serif; }
+        .profile-title { font-size: 1.25rem; font-weight: 800; color: #94a3b8; margin-bottom: 1.5rem; font-family: 'Inter', sans-serif; }
+        .about-title { font-size: 1.2rem; font-weight: 600; color: #f1f5f9; margin-bottom: 1rem; margin-top: 2.5rem; }
+        .about-description { font-size: 1.05rem; font-weight: 400; color: #cbd5e1; line-height: 1.7; font-family: 'Inter', sans-serif; }
+        
+        /* Button Styles (Unchanged from previous version) */
+        .button-container {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2.5rem;
+        }
+        .btn-base {
+            padding: 0.75rem 1.5rem; border-radius: 12px; font-weight: 600; cursor: pointer;
+            transition: all .3s ease; position: relative; overflow: hidden; text-align: center;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg,rgba(255,255,255,.04),rgba(255,255,255,.015)); backdrop-filter: blur(25px) saturate(180%);
+            border: 1.5px solid rgba(255, 255, 255, .12); box-shadow: 0 15px 40px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.25);
+            color: #cbd5e1; flex: 1;
+        }
+        .btn-primary::before{ content:''; position:absolute; top:0; left:-100%; width:100%; height:100%; background:linear-gradient(90deg,transparent,rgba(125,211,252,.2),transparent); transition:left .5s ease }
+        .btn-primary:hover::before{ left:100% }
+        .btn-primary:hover{ border-color:rgba(125,211,252,.5); box-shadow:0 0 20px rgba(125,211,252,.2); color:#f1f5f9; background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,.02)) }
+        .btn-secondary { background: transparent; border: 1.5px solid rgba(255, 255, 255, 0.2); color: #94a3b8; }
+        .btn-secondary:hover { background: rgba(125, 211, 252, 0.1); border-color: rgba(125, 211, 252, 0.4); color: #f1f5f9; }
+
+        /* --- MODIFIED: Responsive Design --- */
+        @media (max-width: 1024px) {
+            .main-layout {
+                grid-template-columns: 1fr; /* Stack on top of each other */
+                padding: 2rem 1rem;
+            }
+            .globe-space {
+                position: fixed; /* Globe becomes fixed background element */
+                top: 0; left: 0; width: 100%; height: 100%;
+                z-index: -1; pointer-events: none;
+            }
+            .tech-globe-container { opacity: 0.3; }
+            .content-panel { max-width: 680px; margin: 0 auto; }
+        }
+        
+        @media (max-width: 768px) {
+            .main-layout { padding: 3rem 1rem; }
+            .glass-content-box { padding: 1.5rem; }
+            .profile-name { font-size: 2.2rem; }
+            .profile-title { font-size: 1.1rem; }
+            .about-title { margin-top: 2rem; }
+            .about-description { font-size: 1rem; }
+        }
+
+        @media (max-width: 582px) {
+            .button-container { flex-direction: column; }
+        }
+    </style>
+</head>
+<body class="text-white">
+
+    <section id="hero-section">
+        <main class="relative z-10">
+            <!-- MODIFIED: Unified Layout -->
+            <div class="main-layout">
+                
+                <!-- All text content is now in this single panel -->
+                <div class="content-panel" id="contentPanel">
+                    <div class="glass-content-box">
+                        <!-- Intro -->
+                        <h1 class="profile-name">Abdul Rafay Ather</h1>
+                        <h2 class="profile-title">Software Engineer</h2>
+                        
+                        <!-- About Me -->
+                        <h3 class="about-title">About Me</h3>
+                        <p class="about-description">
+                            I'm a passionate Software Engineer with expertise in modern web technologies. 
+                            I specialize in creating innovative solutions that drive business growth and 
+                            user engagement through clean, efficient code.
+                        </p>
+                        
+                        <!-- Buttons -->
+                        <div class="button-container">
+                            <button class="btn-base btn-primary">
+                                <span class="relative z-10">EXPLORE PROJECTS</span>
+                            </button>
+                            <button class="btn-base btn-secondary">
+                                <span class="relative z-10">DOWNLOAD RESUME</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- This space is now just for positioning the globe -->
+                <div class="globe-space">
+                    <div class="tech-globe-container" id="globeContainer"></div>
+                </div>
+
+            </div>
+        </main>
+    </section>
+    
+    <script>
+        gsap.registerPlugin(ScrollTrigger);
+        
+        let scene, camera, renderer, globeGroup, infoLights = [];
+        
+        function init3DGlobe() {
+            const container = document.getElementById('globeContainer');
+            if (!container) return;
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+            renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+            renderer.setSize(container.clientWidth, container.clientHeight);
+            renderer.setClearColor(0x000000, 0);
+            container.appendChild(renderer.domElement);
+            
+            globeGroup = new THREE.Group();
+            scene.add(globeGroup);
+            
+            const geometry = new THREE.SphereGeometry(180, 32, 32);
+            const edges = new THREE.EdgesGeometry(geometry);
+            const fiberMaterial = new THREE.LineBasicMaterial({ color: 0x7dd3fc, transparent: true, opacity: 0.4, linewidth: 3 });
+            const wireframe = new THREE.LineSegments(edges, fiberMaterial);
+            globeGroup.add(wireframe);
+            
+            const glowEdges = new THREE.EdgesGeometry(new THREE.SphereGeometry(182, 32, 32));
+            const glowMaterial = new THREE.LineBasicMaterial({ color: 0x0ea5e9, transparent: true, opacity: 0.15, linewidth: 2 });
+            const glowWireframe = new THREE.LineSegments(glowEdges, glowMaterial);
+            globeGroup.add(glowWireframe);
+            
+            const blueColors = [0x7dd3fc, 0x0ea5e9, 0x0284c7, 0x0369a1];
+            const vertices = geometry.attributes.position.array;
+            const infoLightGeometry = new THREE.SphereGeometry(2.5, 8, 8);
+            
+            for (let i = 0; i < vertices.length; i += 3) {
+                const colorIndex = Math.floor(Math.random() * blueColors.length);
+                const infoLightMaterial = new THREE.MeshBasicMaterial({ color: blueColors[colorIndex], transparent: true, opacity: 0.8 });
+                const infoLight = new THREE.Mesh(infoLightGeometry, infoLightMaterial);
+                infoLight.position.set(vertices[i], vertices[i + 1], vertices[i + 2]);
+                const glowSphere = new THREE.Mesh(new THREE.SphereGeometry(4, 8, 8), new THREE.MeshBasicMaterial({ color: blueColors[colorIndex], transparent: true, opacity: 0.3 }));
+                glowSphere.position.copy(infoLight.position);
+                globeGroup.add(infoLight);
+                globeGroup.add(glowSphere);
+                infoLights.push({ light: infoLight, glow: glowSphere, originalOpacity: 0.8, pulseSpeed: Math.random() * 0.02 + 0.01 });
+            }
+            
+            const innerGlow = new THREE.Mesh(new THREE.SphereGeometry(178, 32, 32), new THREE.MeshBasicMaterial({ color: 0x0ea5e9, transparent: true, opacity: 0.08 }));
+            globeGroup.add(innerGlow);
+            
+            camera.position.z = 400;
+            animate();
+        }
+        
+        function animate() {
+            requestAnimationFrame(animate);
+            if (globeGroup) {
+                globeGroup.rotation.y += 0.005;
+                globeGroup.rotation.x += 0.002;
+                infoLights.forEach((lightObj, index) => {
+                    const pulse = Math.sin(Date.now() * lightObj.pulseSpeed + index) * 0.3 + 0.7;
+                    lightObj.light.material.opacity = lightObj.originalOpacity * pulse;
+                    lightObj.glow.material.opacity = 0.3 * pulse;
+                    if (Math.random() > 0.998) {
+                        lightObj.light.material.opacity = 1;
+                        lightObj.glow.material.opacity = 0.6;
+                    }
+                });
+            }
+            if(renderer) renderer.render(scene, camera);
+        }
+        
+        // MODIFIED: Simplified scroll animations
+        function setupScrollAnimations() {
+            if (globeGroup) {
+                gsap.to(globeGroup.scale, { scrollTrigger: { trigger: "body", start: "top top", end: "bottom bottom", scrub: 1 }, x: 1.05, y: 1.05, z: 1.05 });
+            }
+            gsap.fromTo("#contentPanel", { x: -150, opacity: 0 }, { x: 0, opacity: 1, duration: 1.2, delay: 0.3, ease: "power3.out" });
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            init3DGlobe();
+            setupScrollAnimations();
+        });
+        
+        window.addEventListener('resize', () => {
+            if (camera && renderer) {
+                const container = document.getElementById('globeContainer');
+                if (!container) return;
+                
+                // When resizing, we need to determine the correct container size
+                let renderWidth = container.clientWidth;
+                let renderHeight = container.clientHeight;
+
+                // On mobile, the container might not have dimensions, so we use the window
+                if (window.innerWidth <= 1024) {
+                    const globeSpace = document.querySelector('.globe-space');
+                    if (globeSpace) {
+                        renderWidth = globeSpace.clientWidth;
+                        renderHeight = globeSpace.clientHeight;
+                    }
+                }
+                
+                camera.aspect = renderWidth / renderHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(renderWidth, renderHeight);
+            }
+        });
+    </script>
+</body>
+</html>

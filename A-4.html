@@ -76,6 +76,7 @@
             color: #b0b8c4;
         }
         
+        /* --- ANIMATION RESTORATION START --- */
         .timeline-header h2:hover::after {
             opacity: 0;
         }
@@ -110,7 +111,9 @@
             -webkit-clip-path: circle(var(--reveal-size) at var(--x, 50%) var(--y, 50%));
             clip-path: circle(var(--reveal-size) at var(--x, 50%) var(--y, 50%));
         }
+        /* --- ANIMATION RESTORATION END --- */
 
+        /* Glow effect for panel titles */
         .panel-title::before {
             content: attr(data-text);
             position: absolute;
@@ -201,7 +204,7 @@
         .category-label.hint-visible {
             color: var(--hint-accent-color);
         }
-        
+
         .tumbler-side {
             position: absolute;
             top: 0;
@@ -426,7 +429,7 @@
                 0 35px 90px rgba(0, 0, 0, 0.7),
                 0 0 35px rgba(14, 165, 233, 0.45);
         }
-        
+
         .corner-accent {
             position: absolute;
             width: 32px;
@@ -619,7 +622,7 @@
             border-color: #10b981;
             box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
         }
-        
+
         .notification-overlay {
             position: fixed;
             top: 0;
@@ -701,149 +704,31 @@
             transform: translate(-50%, -50%) rotate(-45deg);
         }
 
-        /* NEW STYLES for 993px to 1199px range */
-        @media (min-width: 993px) and (max-width: 1199px) {
-            .project-panel {
-                max-width: 480px;
-            }
-            .project-entry.align-right .project-panel {
-                margin-left: auto;
-            }
-            .panel-main {
-                grid-template-columns: 1fr;
-                gap: 15px;
-            }
-            .panel-image {
-                max-width: 90%;
-                margin: 0 auto;
-            }
-            .panel-text {
-                text-align: center;
-            }
-            .panel-tags, .panel-actions {
-                justify-content: center;
-            }
-        }
-
-        /* UPDATED STYLES for screens below 992px */
         @media (max-width: 992px) {
             .timeline-svg {
                 left: 32px;
-                transform: translateX(0);
             }
-            .project-entry,
-            .project-entry.align-right {
+            .project-entry {
                 width: 100%;
+                padding-left: 70px;
+                padding-right: 0;
+            }
+            .project-entry.align-right {
                 left: 0;
                 padding-left: 70px;
-                padding-right: 15px;
             }
-            .project-node,
-            .align-left .project-node,
-            .align-right .project-node {
-                left: 23px;
+            .project-node {
+                left: 10px;
                 right: auto;
             }
-            .project-panel {
-                margin-left: 0;
-                margin-right: auto;
-            }
         }
-
-        /* STYLES for 769px to 992px range */
-        @media (min-width: 769px) and (max-width: 992px) {
-            .project-panel {
-                max-width: 600px;
-            }
-        }
-        
-        /* STYLES for 591px to 768px range */
-        @media (min-width: 591px) and (max-width: 768px) {
-            .project-panel {
-                max-width: 480px;
-                padding: 15px;
-                border-radius: 14px;
-            }
+        @media (max-width: 768px) {
             .panel-main {
-                grid-template-columns: 160px 1fr;
-                gap: 15px;
+                grid-template-columns: 1fr;
             }
             .panel-image {
                 max-width: 100%;
-                border-radius: 8px;
-            }
-            .panel-title {
-                font-size: 1.4rem;
-            }
-            .panel-description {
-                font-size: 0.85rem;
-            }
-            .panel-tags span {
-                font-size: 0.75rem;
-            }
-        }
-
-        /* RESPONSIVE DESIGN STYLES for screens below 591px */
-        @media (max-width: 590px) {
-            .timeline-header h2 {
-                font-size: 2.8rem;
-            }
-            .timeline-header p {
-                font-size: 1rem;
-            }
-            .category-selector {
-                width: 240px;
-                height: 42px;
-                margin: 40px auto 60px;
-            }
-            .project-entry,
-            .project-entry.align-right {
-                padding-left: 65px;
-                padding-right: 10px;
-            }
-            .project-node,
-            .align-left .project-node,
-            .align-right .project-node {
-                left: 10px;
-            }
-            .project-panel {
-                padding: 12px;
-                border-radius: 14px;
-            }
-            .panel-main {
-                grid-template-columns: 1fr;
-                gap: 12px;
-            }
-            .panel-image {
-                max-width: 95%;
-                margin: 0 auto;
-                border-radius: 8px;
-            }
-            .panel-text {
-                text-align: center;
-            }
-            .panel-title {
-                font-size: 1.5rem;
-            }
-            .panel-description {
-                font-size: 0.85rem;
-                line-height: 1.6;
-            }
-            .panel-tags {
-                justify-content: center;
-                gap: 6px;
-            }
-            .panel-tags span {
-                font-size: 0.7rem;
-                padding: 3px 8px;
-            }
-            .panel-actions {
-                justify-content: center;
-                gap: 10px;
-            }
-            .panel-button {
-                padding: 6px 14px;
-                font-size: 0.8rem;
+                margin: 0;
             }
         }
     </style>
@@ -890,6 +775,7 @@
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             gsap.registerPlugin(ScrollTrigger);
+
             const projectData = {
                 "Front-End Development": [
                     {
@@ -980,7 +866,7 @@
                         status: "in-process",
                     },
                 ],
-                "Backend &amp; APIs": [
+                "Backend & APIs": [
                     {
                         title: "AutoHero SMTP",
                         description: "A backend-driven dynamic form with 10k+ dependent dropdowns, integrated with EmailJS to send selected data directly to the client.",
@@ -990,6 +876,7 @@
                     },
                 ],
             };
+
             const categories = Object.keys(projectData);
             let currentCategoryIndex = 0;
             let activeScrollTriggers = [];
@@ -1036,7 +923,7 @@
                             if (project.status === 'in-process') {
                                 buttonsHTML += `<a href="#" class="panel-button in-process">In-Process</a>`;
                             }
-                            
+
                             entry.innerHTML = `
                                 <div class="project-node"><span class="project-fill"></span><div class="ripple"></div><div class="ripple"></div></div>
                                 <div class="project-panel">
@@ -1143,7 +1030,7 @@
                     setupHeadingGlows();
                 }, 100);
             }
-            
+
             function setupTumblerSelector() {
                 const selector = document.querySelector(".category-selector");
                 const tumbler = document.querySelector(".tumbler");
@@ -1270,7 +1157,7 @@
                     const targetRotation = Math.round(currentRotation / angleStep) * angleStep;
 
                     let newIndex = ((-targetRotation / angleStep) % categories.length + categories.length) % categories.length;
-                    
+
                     gsap.to(tumbler, {
                         rotationY: targetRotation,
                         duration: 1.1,
@@ -1328,81 +1215,97 @@
                     if (svg) gsap.set(svg, { opacity: 0 });
                     return;
                 }
-                
-                function updateTimelineHeight() {
-                    const containerRect = timelineContainer.getBoundingClientRect();
-                    const firstNodeRect = projectNodes[0].getBoundingClientRect();
-                    const lastNodeRect = projectNodes[projectNodes.length - 1].getBoundingClientRect();
-                    
-                    const y1 = firstNodeRect.top + firstNodeRect.height / 2 - containerRect.top;
-                    const height = lastNodeRect.top + lastNodeRect.height / 2 - y1;
 
-                    svg.setAttribute("height", height);
-                    svg.style.top = y1 + "px";
-                    path.setAttribute("y2", height);
+                const containerRect = timelineContainer.getBoundingClientRect();
+                const firstNodeRect = projectNodes[0].getBoundingClientRect();
+                const lastNodeRect = projectNodes[projectNodes.length - 1].getBoundingClientRect();
+                const y1 = firstNodeRect.top + firstNodeRect.height / 2 - containerRect.top;
+                const height = lastNodeRect.top + lastNodeRect.height / 2 - (firstNodeRect.top + firstNodeRect.height / 2);
 
-                    const pathTotalLength = path.getTotalLength();
-                    path.style.strokeDasharray = pathTotalLength;
-                    path.style.strokeDashoffset = pathTotalLength;
+                svg.setAttribute("height", height);
+                svg.style.top = y1 + "px";
+                path.setAttribute("y2", height);
 
-                    ScrollTrigger.refresh();
-                }
+                const pathTotalLength = path.getTotalLength();
+                path.style.strokeDasharray = pathTotalLength;
+                path.style.strokeDashoffset = pathTotalLength;
 
-                updateTimelineHeight();
+                const masterTl = gsap.timeline({ paused: true });
+                let lastOffset = pathTotalLength;
 
-                const masterTl = gsap.timeline({
-                    scrollTrigger: {
-                        trigger: ".timeline-container",
-                        start: "top center",
-                        end: "bottom bottom",
-                        scrub: 1.5,
-                        onUpdate: self => {
-                            const progress = self.progress;
-                            const currentOffset = path.getTotalLength() * (1 - progress);
-                            path.style.strokeDashoffset = currentOffset;
+                projectNodes.forEach((node, index) => {
+                    const nodeRect = node.getBoundingClientRect();
+                    const nodeCenterY = nodeRect.top + nodeRect.height / 2 - (firstNodeRect.top + firstNodeRect.height / 2);
 
-                            projectNodes.forEach((node, index) => {
-                                const entry = node.closest('.project-entry');
-                                const st = ScrollTrigger.getById(`st-entry-${index}`);
-                                if (st && st.isActive) {
-                                     if (!entry.classList.contains('is-active')) {
-                                        entry.classList.add('is-active');
-                                     }
-                                } else if(entry.classList.contains('is-active')) {
-                                   entry.classList.remove('is-active');
-                                }
-                            });
+                    const progress = height > 0 ? nodeCenterY / height : 0;
+                    const currentOffset = pathTotalLength * (1 - progress);
+                    const duration = Math.abs(currentOffset - lastOffset) / pathTotalLength;
+
+                    masterTl.to(path, {
+                        strokeDashoffset: currentOffset,
+                        duration: duration * 10,
+                        ease: "none",
+                    });
+
+                    masterTl.call(() => {
+                        if (!node.classList.contains("connecting-signal")) {
+                            node.classList.add("connecting-signal");
+                            setTimeout(() => node.classList.remove("connecting-signal"), 1200);
                         }
+                    }, [], ">");
+
+                    if (index < projectNodes.length - 1) {
+                        masterTl.to({}, { duration: 2 });
                     }
+
+                    lastOffset = currentOffset;
                 });
-                
-                activeScrollTriggers.push(masterTl.scrollTrigger);
+
+                const st = ScrollTrigger.create({
+                    trigger: ".timeline-container",
+                    start: "top center",
+                    end: "bottom bottom",
+                    scrub: 1.5,
+                    animation: masterTl,
+                });
+                activeScrollTriggers.push(st);
+
                 gsap.to(svg, { opacity: 1, duration: 0.3 });
             }
 
             function setupProjectActivation() {
                 const projectEntries = document.querySelectorAll(".project-entry");
-                projectEntries.forEach((entry, index) => {
+                projectEntries.forEach((entry) => {
                     const st = ScrollTrigger.create({
-                        id: `st-entry-${index}`,
                         trigger: entry,
                         start: "top center",
                         end: "bottom center",
                         toggleClass: "is-active",
-                        onToggle: self => {
-                           if(self.isActive) {
-                               const node = self.trigger.querySelector('.project-node');
-                               if (!node.classList.contains("connecting-signal")) {
-                                   node.classList.add("connecting-signal");
-                                   setTimeout(() => node.classList.remove("connecting-signal"), 1200);
-                               }
-                           }
-                        }
                     });
                     activeScrollTriggers.push(st);
                 });
+
+                const lastProjectEntry = projectEntries[projectEntries.length - 1];
+                if (lastProjectEntry) {
+                    const lastNode = lastProjectEntry.querySelector(".project-node");
+                    if (lastNode) {
+                        const st = ScrollTrigger.create({
+                            trigger: lastProjectEntry,
+                            start: "top center",
+                            onLeaveBack: () => {
+                                if (!lastNode.classList.contains("connecting-signal")) {
+                                    lastNode.classList.add("connecting-signal");
+                                    setTimeout(() => {
+                                        lastNode.classList.remove("connecting-signal");
+                                    }, 1200);
+                                }
+                            },
+                        });
+                        activeScrollTriggers.push(st);
+                    }
+                }
             }
-            
+
             function setupHeadingGlows() {
                 const headings = document.querySelectorAll('.timeline-header h2, .panel-title');
                 headings.forEach(heading => {
@@ -1426,7 +1329,7 @@
                     if (!button) return;
                     
                     if (button.getAttribute('href') !== '#' && !button.dataset.repoStatus) {
-                        return;
+                        return; // Allow default behavior for normal links
                     }
 
                     e.preventDefault(); 
@@ -1463,19 +1366,15 @@
             };
 
             const debouncedReload = debounce(() => {
-                 if (activeScrollTriggers.length) {
-                    activeScrollTriggers.forEach((st) => st.kill());
-                    activeScrollTriggers = [];
-                }
-                initialRender(currentCategoryIndex);
-
+                location.reload();
             }, 250);
 
             window.addEventListener('resize', debouncedReload);
-            
+
             setupTumblerSelector();
             initialRender(currentCategoryIndex);
             setupNotification();
+            setupHeadingGlows();
         });
     </script>
 </body>
