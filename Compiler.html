@@ -702,8 +702,29 @@
             transform: translate(-50%, -50%) rotate(-45deg);
         }
 
-        /* STYLES for 993px to 1199px range */
-        @media (min-width: 993px) and (max-width: 1199px) {
+        /* NEW STYLES for 1050px to 1199px range */
+        @media (min-width: 1050px) and (max-width: 1199px) {
+            .project-panel {
+                max-width: 420px; 
+            }
+             .panel-main {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            .panel-image {
+                max-width: 90%;
+                margin: 0 auto;
+            }
+            .panel-text {
+                text-align: center;
+            }
+            .panel-tags, .panel-actions {
+                justify-content: center;
+            }
+        }
+        
+        /* STYLES for 993px to 1049px range */
+        @media (min-width: 993px) and (max-width: 1049px) {
             .project-panel {
                 max-width: 480px;
             }
@@ -760,6 +781,9 @@
         
         /* STYLES for 590px to 768px range */
         @media (min-width: 590px) and (max-width: 768px) {
+             .category-selector { width: 240px; height: 42px; }
+            .side-prev { transform: rotateY(-90deg) translateZ(120px); }
+            .side-next { transform: rotateY(90deg) translateZ(120px); }
             .project-panel {
                 max-width: 480px;
                 padding: 15px;
@@ -814,6 +838,7 @@
             .side-next { transform: rotateY(90deg) translateZ(110px); }
             .project-entry, .project-entry.align-right { padding-left: 55px; padding-right: 10px; }
             .project-node, .align-left .project-node, .align-right .project-node { left: 10px; }
+            .timeline-svg { left: 17px; } 
             .project-panel { padding: 10px; border-radius: 10px; }
             .panel-main { grid-template-columns: 1fr; gap: 10px; }
             .panel-image { max-width: 100%; margin: 0 auto; border-radius: 6px; }
@@ -1115,8 +1140,7 @@
                         </div>`;
                     timelineContainer.appendChild(entry);
                 });
-                
-                // Use a short timeout to ensure the DOM is fully updated before setting up animations
+
                 setTimeout(() => {
                     setupAdvancedTimeline();
                     setupProjectActivation();
@@ -1133,7 +1157,7 @@
                 const sideNext = tumbler.querySelector(".side-next");
 
                 const angleStep = 360 / categories.length;
-                let radius = (selector.offsetWidth / 2) / Math.tan(Math.PI / categories.length);
+                const radius = (selector.offsetWidth / 2) / Math.tan(Math.PI / categories.length);
 
                 const existingLabels = tumbler.querySelectorAll(".category-label");
                 existingLabels.forEach((label) => label.remove());
@@ -1299,8 +1323,7 @@
                     label.classList.toggle("active", isActive);
                 });
             }
-            
-            // RESTORED ANIMATION LOGIC
+
             function setupAdvancedTimeline() {
                 const svg = document.querySelector(".timeline-svg");
                 const path = document.querySelector(".timeline-path");
@@ -1311,52 +1334,61 @@
                     return;
                 }
 
-                // Use a timeout to ensure layout is calculated correctly
-                setTimeout(() => {
-                    const containerRect = timelineContainer.getBoundingClientRect();
-                    if (containerRect.height === 0) return;
+                const containerRect = timelineContainer.getBoundingClientRect();
+                const firstNodeRect = projectNodes[0].getBoundingClientRect();
+                const lastNodeRect = projectNodes[projectNodes.length - 1].getBoundingClientRect();
+                const y1 = firstNodeRect.top + firstNodeRect.height / 2 - containerRect.top;
+                const height = lastNodeRect.top + lastNodeRect.height / 2 - (firstNodeRect.top + firstNodeRect.height / 2);
 
-                    const firstNodeRect = projectNodes[0].getBoundingClientRect();
-                    const lastNodeRect = projectNodes[projectNodes.length - 1].getBoundingClientRect();
-                    const y1 = firstNodeRect.top - containerRect.top + firstNodeRect.height / 2;
-                    const height = lastNodeRect.top - firstNodeRect.top;
+                svg.setAttribute("height", height);
+                svg.style.top = y1 + "px";
+                path.setAttribute("y2", height);
 
-                    svg.style.top = `${y1}px`;
-                    svg.setAttribute("height", height);
-                    path.setAttribute("y2", height);
+                const pathTotalLength = path.getTotalLength();
+                path.style.strokeDasharray = pathTotalLength;
+                path.style.strokeDashoffset = pathTotalLength;
 
-                    const pathTotalLength = path.getTotalLength();
-                    gsap.set(path, {
-                        strokeDasharray: pathTotalLength,
-                        strokeDashoffset: pathTotalLength,
+                const masterTl = gsap.timeline({ paused: true });
+                let lastOffset = pathTotalLength;
+
+                projectNodes.forEach((node, index) => {
+                    const nodeRect = node.getBoundingClientRect();
+                    const nodeCenterY = nodeRect.top + nodeRect.height / 2 - (firstNodeRect.top + firstNodeRect.height / 2);
+
+                    const progress = height > 0 ? nodeCenterY / height : 0;
+                    const currentOffset = pathTotalLength * (1 - progress);
+                    const duration = Math.abs(currentOffset - lastOffset) / pathTotalLength;
+
+                    masterTl.to(path, {
+                        strokeDashoffset: currentOffset,
+                        duration: duration * 10,
+                        ease: "none",
                     });
-                    
-                    const tl = gsap.timeline({
-                        scrollTrigger: {
-                            trigger: ".timeline-container",
-                            start: "top center",
-                            end: "bottom bottom",
-                            scrub: 1.5,
-                        },
-                    });
 
-                    tl.to(path, { strokeDashoffset: 0, ease: "none" });
+                    masterTl.call(() => {
+                        if (!node.classList.contains("connecting-signal")) {
+                            node.classList.add("connecting-signal");
+                            setTimeout(() => node.classList.remove("connecting-signal"), 1200);
+                        }
+                    }, [], ">");
 
-                    projectNodes.forEach(node => {
-                        const entry = node.closest('.project-entry');
-                        tl.call(() => {
-                            if (ScrollTrigger.isInViewport(entry, 0.5)) {
-                                if (!node.classList.contains("connecting-signal")) {
-                                    node.classList.add("connecting-signal");
-                                    setTimeout(() => node.classList.remove("connecting-signal"), 1200);
-                                }
-                            }
-                        }, null, ">-0.1");
-                    });
-                    
-                    activeScrollTriggers.push(tl.scrollTrigger);
-                    gsap.to(svg, { opacity: 1, duration: 0.5 });
-                }, 100);
+                    if (index < projectNodes.length - 1) {
+                        masterTl.to({}, { duration: 2 });
+                    }
+
+                    lastOffset = currentOffset;
+                });
+
+                const st = ScrollTrigger.create({
+                    trigger: ".timeline-container",
+                    start: "top center",
+                    end: "bottom bottom",
+                    scrub: 1.5,
+                    animation: masterTl,
+                });
+                activeScrollTriggers.push(st);
+
+                gsap.to(svg, { opacity: 1, duration: 0.3 });
             }
 
             function setupProjectActivation() {
@@ -1370,6 +1402,26 @@
                     });
                     activeScrollTriggers.push(st);
                 });
+
+                const lastProjectEntry = projectEntries[projectEntries.length - 1];
+                if (lastProjectEntry) {
+                    const lastNode = lastProjectEntry.querySelector(".project-node");
+                    if (lastNode) {
+                        const st = ScrollTrigger.create({
+                            trigger: lastProjectEntry,
+                            start: "top center",
+                            onLeaveBack: () => {
+                                if (!lastNode.classList.contains("connecting-signal")) {
+                                    lastNode.classList.add("connecting-signal");
+                                    setTimeout(() => {
+                                        lastNode.classList.remove("connecting-signal");
+                                    }, 1200);
+                                }
+                            },
+                        });
+                        activeScrollTriggers.push(st);
+                    }
+                }
             }
             
             function setupHeadingGlows() {
@@ -1431,18 +1483,11 @@
                 };
             };
 
-            const debouncedReinit = debounce(() => {
-                 if (activeScrollTriggers.length) {
-                    activeScrollTriggers.forEach((st) => st.kill());
-                    activeScrollTriggers = [];
-                }
-                // Re-initialize animations
-                setupAdvancedTimeline();
-                setupProjectActivation();
-                setupHeadingGlows();
+            const debouncedReload = debounce(() => {
+                location.reload();
             }, 250);
 
-            window.addEventListener('resize', debouncedReinit);
+            window.addEventListener('resize', debouncedReload);
             
             setupTumblerSelector();
             initialRender(currentCategoryIndex);
