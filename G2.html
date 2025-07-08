@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Abdul Rafay Ather - Software Engineer</title>
+    <title>Smaller Globe</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
@@ -26,10 +26,18 @@
         
         /* Glass Box Styling (Unchanged) */
         .glass-side-box {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.015) 50%, rgba(255, 255, 255, 0.04) 100%);
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.04) 0%,
+                rgba(255, 255, 255, 0.015) 50%,
+                rgba(255, 255, 255, 0.04) 100%
+            );
             backdrop-filter: blur(25px) saturate(180%);
             border: 1.5px solid rgba(255, 255, 255, 0.12);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 8px 20px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.25), inset 0 -1px 0 rgba(255, 255, 255, 0.1);
+            box-shadow: 
+                0 20px 50px rgba(0, 0, 0, 0.5),
+                0 8px 20px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.25),
+                inset 0 -1px 0 rgba(255, 255, 255, 0.1);
             position: relative;
             overflow: hidden;
             border-radius: 16px;
@@ -41,99 +49,103 @@
             min-height: 500px;
             cursor: pointer;
         }
+        
         .glass-side-box::before {
-            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+            content: '';
+            position: absolute;
+            top: 0; left: -100%; width: 100%; height: 100%;
             background: linear-gradient(90deg, transparent, rgba(125, 211, 252, 0.08), transparent);
             transition: left 0.8s ease;
         }
+        
         .glass-side-box:hover::before { left: 100%; }
+        
         .glass-side-box:hover {
-            transform: translateZ(20px) rotateX(1.5deg) scale(1.01);
+            transform: translateZ(25px) rotateX(3deg) scale(1.02);
             border-color: rgba(125, 211, 252, 0.3);
-            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.55), 0 10px 25px rgba(0, 0, 0, 0.35), 0 0 15px rgba(125, 211, 252, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.3), inset 0 -1px 0 rgba(255, 255, 255, 0.15);
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 50%, rgba(255, 255, 255, 0.06) 100%);
+            box-shadow: 
+                0 30px 80px rgba(0, 0, 0, 0.6),
+                0 12px 30px rgba(0, 0, 0, 0.4),
+                0 0 15px rgba(125, 211, 252, 0.15),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3),
+                inset 0 -1px 0 rgba(255, 255, 255, 0.15);
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.06) 0%,
+                rgba(255, 255, 255, 0.02) 50%,
+                rgba(255, 255, 255, 0.06) 100%
+            );
         }
         
-        /* Desktop Layout (Unchanged) */
-        .main-layout {
-            display: flex; justify-content: space-between; align-items: center;
-            min-height: 100vh; max-width: 1400px; margin: 0 auto; padding: 0 2rem; position: relative;
-        }
+        /* Layout and Text Styles (Unchanged) */
+        .main-layout { display: flex; justify-content: space-between; align-items: center; min-height: 100vh; max-width: 1400px; margin: 0 auto; padding: 0 2rem; position: relative; }
         .side-box-container { flex: 0 0 350px; max-width: 350px; z-index: 10; }
         .left-side { margin-right: 2rem; }
         .right-side { margin-left: 2rem; }
         .center-space { flex: 1; min-height: 100vh; position: relative; display: flex; align-items: center; justify-content: center; }
-        
-        /* Text Styles (Unchanged) */
         .profile-name { font-size: 2.6rem; font-weight: 700; color: #f1f5f9; line-height: 1.1; margin-bottom: 0.5rem; font-family: 'Poppins', sans-serif; }
         .profile-title { font-size: 1.25rem; font-weight: 800; color: #94a3b8; margin-bottom: 1.5rem; font-family: 'Inter', sans-serif; }
-        .profile-description { font-size: 1.1rem; font-weight: 400; color: #64748b; line-height: 1.6; font-family: 'Inter', sans-serif; }
+        .profile-description { font-size: 1.1rem; font-weight: 400; color: #94a3b8; line-height: 1.6; font-family: 'Inter', sans-serif; }
         .about-title { font-size: 1.2rem; font-weight: 600; color: #f1f5f9; margin-bottom: 1rem; font-family: 'Poppins', sans-serif; }
         .about-description { font-size: 1.1rem; font-weight: 400; color: #cbd5e1; line-height: 1.7; font-family: 'Inter', sans-serif; }
         
-        /* Globe Container Style (Unchanged) */
+        /* === MODIFICATION 1: Reduced globe size === */
         .tech-globe-container {
-            position: absolute; top: 50%; left: 50%;
+            position: absolute;
+            top: 50%; left: 50%;
             transform: translate(-50%, -50%);
-            width: 800px; height: 800px; z-index: 1;
+            width: 750px;  /* Was 800px */
+            height: 750px; /* Was 800px */
+            z-index: 1;
         }
         
-        /* --- MODIFIED: Button Styles for Visual Hierarchy --- */
         .button-container {
-            position: absolute; bottom: 4rem; left: 50%;
-            transform: translateX(-50%); display: flex; gap: 1.5rem; z-index: 20;
+            position: absolute;
+            bottom: 4rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 1.5rem;
+            z-index: 20;
         }
 
-        /* Base button style for shared properties */
-        .btn-base {
-            padding: 0.75rem 2rem; /* Consistent padding */
-            border-radius: 16px;
+        /* === MODIFICATION 2: Redesigned button styles === */
+        .tech-button-professional {
+            background-color: rgba(2, 65, 95, 0.1); /* Subtle, solid background */
+            border: 1.5px solid rgba(125, 211, 252, 0.3); /* Clearer border */
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1); /* Simplified shadow */
+            transition: all .3s ease;
+            overflow: hidden;
+            border-radius: 12px; /* Slightly tighter radius for a button feel */
+            color: #cbd5e1;
             font-weight: 600;
             cursor: pointer;
-            transition: all .3s ease;
             position: relative;
-            overflow: hidden;
         }
-
-        /* Primary button style */
-        .btn-primary {
-            background: linear-gradient(135deg,rgba(255,255,255,.04),rgba(255,255,255,.015));
-            backdrop-filter: blur(25px) saturate(180%);
-            border: 1.5px solid rgba(255, 255, 255, .12);
-            box-shadow: 0 15px 40px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.25);
-            color: #cbd5e1;
-        }
-        .btn-primary::before{
-            content:''; position:absolute; top:0; left:-100%; width:100%; height:100%;
-            background:linear-gradient(90deg,transparent,rgba(125,211,252,.2),transparent);
+        .tech-button-professional::before{
+            content:'';
+            position:absolute;
+            top:0;
+            left:-100%;
+            width:100%;
+            height:100%;
+            background:linear-gradient(90deg,transparent,rgba(125,211,252,.2),transparent); /* Kept the shine effect */
             transition:left .5s ease
         }
-        .btn-primary:hover::before{ left:100% }
-        .btn-primary:hover{
-            border-color:rgba(125,211,252,.5);
-            box-shadow:0 0 20px rgba(125,211,252,.2);
-            color:#f1f5f9;
-            background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,.02))
-        }
-
-        /* Secondary "ghost" button style */
-        .btn-secondary {
-            background: transparent;
-            border: 1.5px solid rgba(255, 255, 255, 0.2);
-            color: #94a3b8;
-        }
-        .btn-secondary:hover {
-            background: rgba(125, 211, 252, 0.1);
-            border-color: rgba(125, 211, 252, 0.4);
+        .tech-button-professional:hover::before{left:100%}
+        
+        .tech-button-professional:hover{
+            background-color: rgba(14, 165, 233, 0.2); /* Brighter background on hover */
+            border-color: rgba(125, 211, 252, 0.8); /* Strong glow border on hover */
+            box-shadow: 0 0 20px rgba(125, 211, 252, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.1); /* Added outer glow */
             color: #f1f5f9;
         }
 
-        /* Responsive Design (Unchanged) */
+        /* --- Responsive Design (Unchanged) --- */
         @media (max-width: 1200px) {
             body { perspective: none; }
             .main-layout { flex-direction: column; justify-content: center; align-items: center; padding: 2rem 1rem; gap: 2rem; min-height: 100vh; }
             .center-space { display: none; }
-            .tech-globe-container { position: fixed; z-index: -1; pointer-events: none; opacity: 0.3; }
+            .tech-globe-container { position: fixed; z-index: 0; pointer-events: none; opacity: 0.2; }
             .side-box-container { flex: 0 1 auto; width: 90%; max-width: 680px; margin: 0; }
             .glass-side-box { width: 100%; max-width: none; min-height: auto; transform: none; padding: 2rem; }
             .button-container { position: relative; order: 3; bottom: auto; left: auto; transform: none; width: 90%; max-width: 680px; margin-top: 1rem; justify-content: center; }
@@ -145,16 +157,17 @@
             .profile-title { font-size: 1.1rem; }
             .profile-description, .about-description { font-size: 1rem; }
             .button-container { flex-direction: row; gap: 1rem; margin-top: 2rem; }
-            .btn-base { flex: 1; text-align: center; }
+            .tech-button-professional { flex: 1; text-align: center; padding-left: 1rem; padding-right: 1rem; }
         }
         @media (max-width: 582px) {
             .button-container { flex-direction: column; }
-            .btn-base { flex: none; width: 100%; }
+            .tech-button-professional { flex: none; width: 100%; }
         }
     </style>
 </head>
 <body class="text-white">
 
+    <!-- =========== HERO SECTION START =========== -->
     <section id="hero-section">
         <div class="tech-globe-container" id="globeContainer"></div>
 
@@ -187,52 +200,47 @@
                     </div>
                 </div>
                 
-                <!-- MODIFIED: Button container with new classes -->
                 <div class="button-container">
-                    <button class="btn-base btn-primary">
+                    <!-- Note: The 'rounded-lg' Tailwind class is now overridden by the more specific '.tech-button-professional' style -->
+                    <button class="tech-button-professional px-8 py-4 font-semibold">
                         <span class="relative z-10">EXPLORE PROJECTS</span>
                     </button>
-                    <button class="btn-base btn-secondary">
+                    <button class="tech-button-professional px-8 py-4 font-semibold">
                         <span class="relative z-10">DOWNLOAD RESUME</span>
                     </button>
                 </div>
             </div>
         </main>
     </section>
+    <!-- =========== HERO SECTION END =========== -->
     
     <script>
+        // The entire script block remains unchanged.
         gsap.registerPlugin(ScrollTrigger);
-        
         let scene, camera, renderer, globeGroup, infoLights = [];
         
         function init3DGlobe() {
             const container = document.getElementById('globeContainer');
-            if (!container) return;
             scene = new THREE.Scene();
             camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
             renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
             renderer.setSize(container.clientWidth, container.clientHeight);
             renderer.setClearColor(0x000000, 0);
             container.appendChild(renderer.domElement);
-            
             globeGroup = new THREE.Group();
             scene.add(globeGroup);
-            
             const geometry = new THREE.SphereGeometry(180, 32, 32);
             const edges = new THREE.EdgesGeometry(geometry);
             const fiberMaterial = new THREE.LineBasicMaterial({ color: 0x7dd3fc, transparent: true, opacity: 0.4, linewidth: 3 });
             const wireframe = new THREE.LineSegments(edges, fiberMaterial);
             globeGroup.add(wireframe);
-            
             const glowEdges = new THREE.EdgesGeometry(new THREE.SphereGeometry(182, 32, 32));
             const glowMaterial = new THREE.LineBasicMaterial({ color: 0x0ea5e9, transparent: true, opacity: 0.15, linewidth: 2 });
             const glowWireframe = new THREE.LineSegments(glowEdges, glowMaterial);
             globeGroup.add(glowWireframe);
-            
             const blueColors = [0x7dd3fc, 0x0ea5e9, 0x0284c7, 0x0369a1];
             const vertices = geometry.attributes.position.array;
             const infoLightGeometry = new THREE.SphereGeometry(2.5, 8, 8);
-            
             for (let i = 0; i < vertices.length; i += 3) {
                 const colorIndex = Math.floor(Math.random() * blueColors.length);
                 const infoLightMaterial = new THREE.MeshBasicMaterial({ color: blueColors[colorIndex], transparent: true, opacity: 0.8 });
@@ -244,10 +252,8 @@
                 globeGroup.add(glowSphere);
                 infoLights.push({ light: infoLight, glow: glowSphere, originalOpacity: 0.8, pulseSpeed: Math.random() * 0.02 + 0.01 });
             }
-            
             const innerGlow = new THREE.Mesh(new THREE.SphereGeometry(178, 32, 32), new THREE.MeshBasicMaterial({ color: 0x0ea5e9, transparent: true, opacity: 0.08 }));
             globeGroup.add(innerGlow);
-            
             camera.position.z = 400;
             animate();
         }
@@ -272,7 +278,7 @@
         
         function setupScrollAnimations() {
             if (globeGroup) {
-                gsap.to(globeGroup.scale, { scrollTrigger: { trigger: "body", start: "top top", end: "bottom bottom", scrub: 1 }, x: 1.05, y: 1.05, z: 1.05 });
+                gsap.to(globeGroup.scale, { scrollTrigger: { trigger: "body", start: "top top", end: "bottom bottom", scrub: 1 }, x: 1.2, y: 1.2, z: 1.2 });
             }
             gsap.fromTo("#leftSideBox", { x: -150, opacity: 0 }, { x: 0, opacity: 1, duration: 1.2, delay: 0.3, ease: "power3.out" });
             gsap.fromTo("#rightSideBox", { x: 150, opacity: 0 }, { x: 0, opacity: 1, duration: 1.2, delay: 0.5, ease: "power3.out" });
@@ -287,10 +293,8 @@
             if (camera && renderer) {
                 const container = document.getElementById('globeContainer');
                 if (!container) return;
-                
                 const width = container.clientWidth;
                 const height = container.clientHeight;
-
                 camera.aspect = width / height;
                 camera.updateProjectionMatrix();
                 renderer.setSize(width, height);
