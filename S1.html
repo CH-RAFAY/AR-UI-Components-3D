@@ -9,6 +9,13 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&display=swap');
         
+        :root {
+            --dim-text-color: #3a3a3a;
+            --heading-glow-color: rgba(14, 165, 233, 0.6);
+            --glow-size: 175px;
+            --reveal-size: 120px;
+        }
+        
         * {
             margin: 0;
             padding: 0;
@@ -21,17 +28,6 @@
             color: #f1f5f9;
             overflow-x: hidden;
             min-height: 100vh;
-        }
-
-        /* Neural Network Background */
-        #neuralCanvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            pointer-events: none;
         }
 
         .main-container {
@@ -48,20 +44,74 @@
             gap: 4rem;
         }
 
-        /* Professional Section Headings */
+        /* Enhanced Section Headings with Glow Animation */
+        @keyframes glow-scan {
+            0% { background-position: -200% center; }
+            100% { background-position: 200% center; }
+        }
+        
         .section-title {
             font-family: 'Poppins', sans-serif;
             font-size: clamp(1.8rem, 5vw, 3rem);
             font-weight: 700;
-            color: #f1f5f9;
+            color: var(--dim-text-color);
             text-align: center;
             margin-bottom: 2.5rem;
-            text-shadow: 0 0 20px rgba(125, 211, 252, 0.3);
             letter-spacing: -0.02em;
             position: relative;
+            user-select: none;
+            z-index: 10;
+            display: inline-block;
+        }
+
+        .section-title:hover::after {
+            opacity: 0;
         }
 
         .section-title::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 4;
+            background: linear-gradient(
+                90deg, 
+                var(--dim-text-color), 
+                #b0b8c4,
+                var(--dim-text-color)
+            );
+            background-size: 200% 100%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: glow-scan 10s linear infinite alternate;
+            transition: opacity 0.3s ease-out;
+        }
+
+        .section-title::before {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 5;
+            background: radial-gradient(
+                circle var(--glow-size) at var(--x, 50%) var(--y, 50%),
+                var(--heading-glow-color),
+                transparent 65%
+            );
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            -webkit-clip-path: circle(var(--reveal-size) at var(--x, 50%) var(--y, 50%));
+            clip-path: circle(var(--reveal-size) at var(--x, 50%) var(--y, 50%));
+        }
+
+        /* Keep the existing underline decoration */
+        .section-title:after {
             content: '';
             position: absolute;
             bottom: -8px;
@@ -71,6 +121,7 @@
             height: 3px;
             background: linear-gradient(90deg, #0ea5e9, #7dd3fc);
             border-radius: 2px;
+            z-index: 1;
         }
 
         /* Certificates Section */
@@ -340,6 +391,38 @@
             }
         }
 
+        /* Fix for 880px to 1030px range - prevents certificate deformation */
+        @media (min-width: 880px) and (max-width: 1030px) {
+            .certificates-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1.5rem;
+            }
+            
+            .certificate-card {
+                min-height: 100px;
+                padding: 1.5rem 2rem;
+            }
+            
+            .certificate-name {
+                font-size: 1.1rem;
+                margin-right: 1.2rem;
+            }
+            
+            .verify-button {
+                padding: 0.6rem 1.3rem;
+                font-size: 0.85rem;
+                min-width: 90px;
+            }
+        }
+
+        /* Default desktop screen - 2 certificates per row */
+        @media (min-width: 1031px) {
+            .certificates-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 2rem;
+            }
+        }
+
         @media (max-width: 768px) {
             .main-container {
                 padding: 2rem 1rem;
@@ -552,13 +635,10 @@
     </style>
 </head>
 <body>
-    <!-- Neural Network Background -->
-    <canvas id="neuralCanvas"></canvas>
-
     <div class="main-container">
         <!-- Certificates Section -->
         <section class="certificates-section">
-            <h1 class="section-title">Certificates</h1>
+            <h1 class="section-title" data-text="Certificates">Certificates</h1>
             
             <div class="certificates-grid">
                 <div class="certificate-card">
@@ -585,11 +665,11 @@
 
         <!-- Contact Section -->
         <section class="contact-section">
-            <h2 class="section-title">Contact</h2>
+            <h2 class="section-title" data-text="Contact">Contact</h2>
             
             <div class="email-container">
                 <div class="email-field">
-                    <div class="email-text">chrafayather@gmail.com</div>
+                    <div class="email-text">arafaychaudhry@gmail.com</div>
                     <button class="copy-button" onclick="copyEmail()" id="copyBtn">Copy</button>
                 </div>
             </div>
@@ -615,7 +695,7 @@
     <script>
         // Copy email function
         function copyEmail() {
-            const email = 'chrafayather@gmail.com';
+            const email = 'arafaychaudhry@gmail.com';
             const button = document.getElementById('copyBtn');
             
             navigator.clipboard.writeText(email).then(() => {
@@ -653,139 +733,6 @@
         function openLinkedIn() {
             window.open('https://www.linkedin.com/in/rafay-chaudhry-54b671301', '_blank');
         }
-
-        // Neural Network Background Animation
-        document.addEventListener('DOMContentLoaded', () => {
-            const canvas = document.getElementById('neuralCanvas');
-            const ctx = canvas.getContext('2d');
-            let nodes = [];
-            const nodeCount = window.innerWidth < 768 ? 20 : 30;
-            const connectionDistance = window.innerWidth < 768 ? 80 : 100;
-            const mouse = { x: null, y: null, radius: window.innerWidth < 768 ? 40 : 60 };
-
-            function resizeCanvas() {
-                canvas.width = window.innerWidth;
-                canvas.height = window.innerHeight;
-            }
-
-            class Node {
-                constructor(x, y) {
-                    this.x = x;
-                    this.y = y;
-                    this.vx = (Math.random() - 0.5) * 0.2;
-                    this.vy = (Math.random() - 0.5) * 0.2;
-                    this.radius = Math.random() * 1.2 + 0.5;
-                    this.opacity = Math.random() * 0.3 + 0.2;
-                }
-
-                update() {
-                    this.x += this.vx;
-                    this.y += this.vy;
-
-                    if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
-                    if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
-
-                    if (mouse.x && mouse.y) {
-                        const dx = mouse.x - this.x;
-                        const dy = mouse.y - this.y;
-                        const distance = Math.sqrt(dx * dx + dy * dy);
-                        
-                        if (distance < mouse.radius) {
-                            const force = (mouse.radius - distance) / mouse.radius;
-                            this.x -= dx * force * 0.003;
-                            this.y -= dy * force * 0.003;
-                        }
-                    }
-                }
-
-                draw() {
-                    ctx.beginPath();
-                    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-                    ctx.fillStyle = `rgba(125, 211, 252, ${this.opacity})`;
-                    ctx.fill();
-                }
-            }
-
-            function init() {
-                nodes = [];
-                for (let i = 0; i < nodeCount; i++) {
-                    nodes.push(new Node(
-                        Math.random() * canvas.width,
-                        Math.random() * canvas.height
-                    ));
-                }
-            }
-
-            function drawConnections() {
-                ctx.strokeStyle = 'rgba(14, 165, 233, 0.05)';
-                ctx.lineWidth = 0.5;
-
-                for (let i = 0; i < nodes.length; i++) {
-                    for (let j = i + 1; j < nodes.length; j++) {
-                        const dx = nodes[i].x - nodes[j].x;
-                        const dy = nodes[i].y - nodes[j].y;
-                        const distance = Math.sqrt(dx * dx + dy * dy);
-
-                        if (distance < connectionDistance) {
-                            const opacity = 1 - (distance / connectionDistance);
-                            ctx.strokeStyle = `rgba(14, 165, 233, ${opacity * 0.05})`;
-                            ctx.beginPath();
-                            ctx.moveTo(nodes[i].x, nodes[i].y);
-                            ctx.lineTo(nodes[j].x, nodes[j].y);
-                            ctx.stroke();
-                        }
-                    }
-                }
-            }
-
-            function animate() {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                
-                drawConnections();
-                
-                nodes.forEach(node => {
-                    node.update();
-                    node.draw();
-                });
-
-                requestAnimationFrame(animate);
-            }
-
-            // Event listeners
-            window.addEventListener('resize', () => {
-                resizeCanvas();
-                init();
-            });
-
-            window.addEventListener('mousemove', (e) => {
-                mouse.x = e.clientX;
-                mouse.y = e.clientY;
-            });
-
-            window.addEventListener('mouseleave', () => {
-                mouse.x = null;
-                mouse.y = null;
-            });
-
-            // Touch events for mobile
-            window.addEventListener('touchmove', (e) => {
-                e.preventDefault();
-                if (e.touches.length > 0) {
-                    mouse.x = e.touches[0].clientX;
-                    mouse.y = e.touches[0].clientY;
-                }
-            });
-
-            window.addEventListener('touchend', () => {
-                mouse.x = null;
-                mouse.y = null;
-            });
-
-            // Initialize
-            resizeCanvas();
-            init();
-            animate();
-        });
 
         // GSAP Animations
         gsap.registerPlugin(ScrollTrigger);
@@ -833,6 +780,19 @@
                     repeat: 1,
                     ease: "power2.inOut"
                 });
+            });
+        });
+
+        // Enhanced Heading Glow Effect (Mouse Tracking)
+        const headingGlowElements = document.querySelectorAll('.section-title');
+        
+        headingGlowElements.forEach(heading => {
+            document.body.addEventListener('mousemove', (e) => {
+                const rect = heading.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                heading.style.setProperty('--x', `${x}px`);
+                heading.style.setProperty('--y', `${y}px`);
             });
         });
     </script>
