@@ -18,6 +18,7 @@
             box-sizing: border-box;
         }
 
+
         body {
             background-color: #000000;
             overflow: hidden;
@@ -25,12 +26,14 @@
             color: #f1f5f9;
         }
 
+
         #synapse-section {
             height: 100vh;
             width: 100%;
             position: relative;
             background-color: #000000;
         }
+
 
         #synapseCanvas {
             position: absolute;
@@ -41,6 +44,7 @@
             z-index: 0;
         }
 
+
         .foreground-content {
             position: relative;
             z-index: 1;
@@ -50,6 +54,7 @@
             justify-content: center;
             text-align: center;
         }
+
 
         /* --- Front Layer (Nexus Skills) CSS --- */
         .skills-section {
@@ -70,6 +75,7 @@
             max-height: 800px;
         }
 
+
         .nexus-core {
             position: absolute;
             width: 25%;
@@ -82,7 +88,11 @@
             transition: box-shadow 0.4s ease;
             box-shadow: 0 0 30px rgba(14, 165, 233, 0.3), inset 0 0 20px rgba(14, 165, 233, 0.2);
             z-index: 10;
+            /* Initial state for animation */
+            opacity: 0;
+            transform: scale(0.5);
         }
+
 
         #core-skill-name {
             font-family: "Poppins", sans-serif;
@@ -96,6 +106,7 @@
             z-index: 11;
             pointer-events: none;
         }
+
 
         .skill-node {
             position: absolute;
@@ -111,6 +122,9 @@
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             z-index: 5;
             box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+            /* Initial state for animation */
+            opacity: 0;
+            transform: scale(0.5);
         }
         
         .skill-node img {
@@ -125,6 +139,7 @@
             height: 67%;
         }
 
+
         #connector-svg {
             position: absolute;
             top: 0; left: 0;
@@ -132,6 +147,7 @@
             pointer-events: none;
             overflow: visible;
         }
+
 
         #connector-line {
             stroke-width: 4px;
@@ -146,6 +162,33 @@
             z-index: 20;
         }
 
+
+        /* --- MODIFIED: Sequential Animation Styles --- */
+        @keyframes fadeInScale {
+            0% { 
+                opacity: 0; 
+                transform: scale(0.5); 
+            }
+            100% { 
+                opacity: 1; 
+                transform: scale(1); 
+            }
+        }
+
+
+        .fade-in-scale {
+            animation: fadeInScale 0.6s ease forwards;
+        }
+
+
+        /* --- MODIFIED: Responsive Improvements --- */
+        @media (max-width: 652px) {
+            .skill-node {
+                width: 13.5%;
+                height: 13.5%;
+            }
+        }
+        
         /* --- Small Screen Responsiveness --- */
         @media (max-width: 499px) {
             .skill-node {
@@ -173,7 +216,8 @@
         </div>
     </section>
 
-    <!-- MODIFIED: Background Layer Script -->
+
+    <!-- Background Layer Script (Unchanged) -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const canvas = document.getElementById('synapseCanvas');
@@ -221,24 +265,20 @@
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 nodes.forEach(node => node.update());
 
-                // Calculate core's real-time position and size (important for dynamic clipping)
+
                 const coreRect = coreElement.getBoundingClientRect();
                 const coreCanvasCenterX = coreRect.left + coreRect.width / 2;
                 const coreCanvasCenterY = coreRect.top + coreRect.height / 2;
-                // Add a small buffer to ensure no lines/nodes peek through
                 const exclusionRadius = (coreRect.width / 2) * 1.05; 
                 
-                // Save the current canvas state before applying the clip
                 ctx.save(); 
                 
-                // Define the clipping path: draw the entire canvas, then subtract the central circle
                 ctx.beginPath();
                 ctx.rect(0, 0, canvas.width, canvas.height);
-                // Draw the exclusion circle in counter-clockwise direction to create a "hole"
                 ctx.arc(coreCanvasCenterX, coreCanvasCenterY, exclusionRadius, 0, Math.PI * 2, true); 
-                ctx.clip(); // Apply the clip: only content drawn now will appear outside the circle
+                ctx.clip(); 
 
-                // --- Draw background threads (clipped) ---
+
                 nodes.forEach(nodeA => { 
                     nodeA.connections.forEach(nodeB => { 
                         if (nodeA.x > nodeB.x) return; 
@@ -260,13 +300,14 @@
                         ctx.strokeStyle = strokeStyle; ctx.lineWidth = lineWidth; ctx.beginPath(); ctx.moveTo(nodeA.x, nodeA.y); ctx.lineTo(nodeB.x, nodeB.y); ctx.stroke(); 
                     }); 
                 });
-                if (currentPulse) { currentPulse.draw(); } // Pulses are also clipped
+                if (currentPulse) { currentPulse.draw(); } 
 
-                // --- Draw background nodes (now also clipped!) ---
+
                 nodes.forEach(node => node.draw()); 
 
-                // Restore the canvas to its unclipped state for subsequent drawings
+
                 ctx.restore(); 
+
 
                 if (currentPulse) {
                     currentPulse.update();
@@ -283,7 +324,6 @@
                 requestAnimationFrame(animate);
             }
             
-            // Disable background hover only when over a skill node
             window.addEventListener('mousemove', e => {
                 if (e.target.closest('.skill-node')) {
                     mouse.x = null;
@@ -294,24 +334,94 @@
                 }
             });
 
+
             window.addEventListener('mouseout', () => { mouse.x = null; mouse.y = null; });
             window.addEventListener('resize', () => { resizeCanvas(); init(); });
             init(); animate(); startNextPulseSequence();
         });
     </script>
     
-    <!-- Front Layer (Nexus Skills) Script (Unchanged) -->
+    <!-- Front Layer (Nexus Skills) Script (with previous hover color change) -->
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const skillsData = [
-                { id: "html", name: "HTML5", iconUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/html5/html5-original.svg", auraColor: "227, 76, 38", lineGlowColor: "227, 76, 38" }, { id: "css", name: "CSS3", iconUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/css3/css3-original.svg", auraColor: "38, 77, 228", lineGlowColor: "38, 77, 228" }, { id: "js", name: "JavaScript", iconUrl: "https://cdn3d.iconscout.com/3d/free/thumb/free-javascript-3d-icon-download-in-png-blend-fbx-gltf-file-formats--html-logo-vue-angular-coding-lang-pack-logos-icons-7577991.png", auraColor: "247, 223, 30", lineGlowColor: "247, 223, 30" }, { id: "ts", name: "TypeScript", iconUrl: "https://cdn3d.iconscout.com/3d/free/thumb/free-typescript-9294849-7577992.png", auraColor: "49, 120, 198", lineGlowColor: "49, 120, 198" }, { id: "react", name: "React", iconUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/react/react-original.svg", auraColor: "97, 218, 251", lineGlowColor: "97, 218, 251" }, { id: "nextjs", name: "Next.js", iconUrl: "https://cdn.simpleicons.org/nextdotjs/white", auraColor: "255, 255, 255", lineGlowColor: "255, 255, 255" }, { id: "vuejs", name: "Vue.js", iconUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vuejs/vuejs-original.svg", auraColor: "65, 184, 131", lineGlowColor: "65, 184, 131" }, { id: "solidjs", name: "SolidJS", iconUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/solidjs/solidjs-original.svg", auraColor: "72, 118, 212", lineGlowColor: "72, 118, 212" }, { id: "tailwind", name: "Tailwind CSS", iconUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/tailwindcss/tailwindcss-original.svg", auraColor: "56, 189, 248", lineGlowColor: "56, 189, 248" }, { id: "bootstrap", name: "Bootstrap", iconUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/bootstrap/bootstrap-original.svg", auraColor: "121, 82, 179", lineGlowColor: "121, 82, 179" }, { id: "sass", name: "Sass/SCSS", iconUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/sass/sass-original.svg", auraColor: "205, 103, 153", lineGlowColor: "205, 103, 153" }, { id: "webpack", name: "Webpack", iconUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/webpack/webpack-original.svg", auraColor: "142, 214, 251", lineGlowColor: "142, 214, 251" }, { id: "vite", name: "Vite", iconUrl: "https://vitejs.dev/logo.svg", auraColor: "189, 52, 246", lineGlowColor: "189, 52, 246" }, { id: "npm", name: "npm", iconUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/npm/npm-original-wordmark.svg", auraColor: "203, 56, 55", lineGlowColor: "203, 56, 55" }, { id: "github", name: "GitHub", iconUrl: "https://cdn.simpleicons.org/github/white", auraColor: "255, 255, 255", lineGlowColor: "255, 255, 255" }, { id: "jest", name: "Jest", iconUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/jest/jest-plain.svg", auraColor: "156, 66, 92", lineGlowColor: "156, 66, 92" }
+                { id: "html", name: "HTML5", iconUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/html5/html5-original.svg", auraColor: "227, 76, 38" }, { id: "css", name: "CSS3", iconUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/css3/css3-original.svg", auraColor: "38, 77, 228" }, { id: "js", name: "JavaScript", iconUrl: "https://cdn3d.iconscout.com/3d/free/thumb/free-javascript-3d-icon-download-in-png-blend-fbx-gltf-file-formats--html-logo-vue-angular-coding-lang-pack-logos-icons-7577991.png", auraColor: "247, 223, 30" }, { id: "ts", name: "TypeScript", iconUrl: "https://cdn3d.iconscout.com/3d/free/thumb/free-typescript-9294849-7577992.png", auraColor: "49, 120, 198" }, { id: "react", name: "React", iconUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/react/react-original.svg", auraColor: "97, 218, 251" }, { id: "nextjs", name: "Next.js", iconUrl: "https://cdn.simpleicons.org/nextdotjs/white", auraColor: "255, 255, 255" }, { id: "vuejs", name: "Vue.js", iconUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vuejs/vuejs-original.svg", auraColor: "65, 184, 131" }, { id: "solidjs", name: "SolidJS", iconUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/solidjs/solidjs-original.svg", auraColor: "72, 118, 212" }, { id: "tailwind", name: "Tailwind CSS", iconUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/tailwindcss/tailwindcss-original.svg", auraColor: "56, 189, 248" }, { id: "bootstrap", name: "Bootstrap", iconUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/bootstrap/bootstrap-original.svg", auraColor: "121, 82, 179" }, { id: "sass", name: "Sass/SCSS", iconUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/sass/sass-original.svg", auraColor: "205, 103, 153" }, { id: "webpack", name: "Webpack", iconUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/webpack/webpack-original.svg", auraColor: "142, 214, 251" }, { id: "vite", name: "Vite", iconUrl: "https://vitejs.dev/logo.svg", auraColor: "189, 52, 246" }, { id: "npm", name: "npm", iconUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/npm/npm-original-wordmark.svg", auraColor: "203, 56, 55" }, { id: "github", name: "GitHub", iconUrl: "https://cdn.simpleicons.org/github/white", auraColor: "255, 255, 255" }, { id: "jest", name: "Jest", iconUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/jest/jest-plain.svg", auraColor: "156, 66, 92" }
             ];
             const nexusContainer = document.getElementById("nexus"); const core = document.getElementById("nexus-core"); const coreSkillName = document.getElementById("core-skill-name"); const line = document.getElementById("connector-line"); let isAnimationPaused = false; let nodeAngles = skillsData.map((_, index) => (index / skillsData.length) * 2 * Math.PI); let orbitRadius, containerCenterX, containerCenterY;
             const nodes = skillsData.map((skill) => { const node = document.createElement("div"); node.className = "skill-node"; node.style.setProperty("--aura-color", skill.auraColor); node.innerHTML = `<img src="${skill.iconUrl}" alt="${skill.name}">`; nexusContainer.appendChild(node); node.addEventListener("mouseenter", (e) => handleMouseEnter(skill, e.currentTarget)); node.addEventListener("mouseleave", handleMouseLeave); return { element: node, skillData: skill }; });
             function updateDimensionsAndPositions() { const containerRect = nexusContainer.getBoundingClientRect(); containerCenterX = containerRect.width / 2; containerCenterY = containerRect.height / 2; const coreWidth = core.offsetWidth; const coreHeight = core.offsetHeight; const nodeSize = nodes.length > 0 ? nodes[0].element.offsetWidth : 0; orbitRadius = containerRect.width * 0.35; core.style.left = `${containerCenterX - coreWidth / 2}px`; core.style.top = `${containerCenterY - coreHeight / 2}px`; nodes.forEach((node, index) => { const x = containerCenterX + orbitRadius * Math.cos(nodeAngles[index]) - (nodeSize / 2); const y = containerCenterY + orbitRadius * Math.sin(nodeAngles[index]) - (nodeSize / 2); node.element.style.left = `${x}px`; node.element.style.top = `${y}px`; }); }
             function animateNodes() { if (!isAnimationPaused) { const nodeSize = nodes.length > 0 ? nodes[0].element.offsetWidth : 0; nodes.forEach((node, index) => { nodeAngles[index] += 0.0005; const x = containerCenterX + orbitRadius * Math.cos(nodeAngles[index]) - (nodeSize / 2); const y = containerCenterY + orbitRadius * Math.sin(nodeAngles[index]) - (nodeSize / 2); node.element.style.left = `${x}px`; node.element.style.top = `${y}px`; }); } requestAnimationFrame(animateNodes); }
-            function handleMouseEnter(skill, nodeElement) { isAnimationPaused = true; const coreRect = core.getBoundingClientRect(); const nodeRect = nodeElement.getBoundingClientRect(); const svgRect = nexusContainer.getBoundingClientRect(); const coreCenterX = coreRect.left + coreRect.width / 2; const coreCenterY = coreRect.top + coreRect.height / 2; const nodeCenterX = nodeRect.left + nodeRect.width / 2; const nodeCenterY = nodeRect.top + nodeRect.height / 2; const dx = nodeCenterX - coreCenterX; const dy = nodeCenterY - coreCenterY; const distance = Math.sqrt(dx * dx + dy * dy); const startX = coreCenterX + (dx * (core.offsetWidth / 2)) / distance; const startY = coreCenterY + (dy * (core.offsetHeight / 2)) / distance; const endX = nodeCenterX - (dx * (nodeElement.offsetWidth / 2 * 1.2)) / distance; const endY = nodeCenterY - (dy * (nodeElement.offsetHeight / 2 * 1.2)) / distance; line.setAttribute("x1", startX - svgRect.left); line.setAttribute("y1", startY - svgRect.top); line.setAttribute("x2", endX - svgRect.left); line.setAttribute("y2", endY - svgRect.top); const lineLength = Math.sqrt(Math.pow(endX - startX, 2) + Math.pow(endY - startY, 2)); line.style.strokeDasharray = lineLength; line.style.strokeDashoffset = "0"; line.style.opacity = "1"; line.style.stroke = `rgb(${skill.lineGlowColor})`; line.style.setProperty("--line-glow-color", skill.lineGlowColor); coreSkillName.textContent = skill.name; coreSkillName.style.opacity = "1"; core.style.boxShadow = `0 0 50px rgba(${skill.auraColor}, 0.9), inset 0 0 35px rgba(${skill.auraColor}, 0.5)`; }
+            
+            function handleMouseEnter(skill, nodeElement) {
+                isAnimationPaused = true;
+                const coreRect = core.getBoundingClientRect();
+                const nodeRect = nodeElement.getBoundingClientRect();
+                const svgRect = nexusContainer.getBoundingClientRect();
+                const coreCenterX = coreRect.left + coreRect.width / 2;
+                const coreCenterY = coreRect.top + coreRect.height / 2;
+                const nodeCenterX = nodeRect.left + nodeRect.width / 2;
+                const nodeCenterY = nodeRect.top + nodeRect.height / 2;
+                const dx = nodeCenterX - coreCenterX;
+                const dy = nodeCenterY - coreCenterY;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                const startX = coreCenterX + (dx * (core.offsetWidth / 2)) / distance;
+                const startY = coreCenterY + (dy * (core.offsetHeight / 2)) / distance;
+                const endX = nodeCenterX - (dx * (nodeElement.offsetWidth / 2 * 1.2)) / distance;
+                const endY = nodeCenterY - (dy * (nodeElement.offsetHeight / 2 * 1.2)) / distance;
+                line.setAttribute("x1", startX - svgRect.left);
+                line.setAttribute("y1", startY - svgRect.top);
+                line.setAttribute("x2", endX - svgRect.left);
+                line.setAttribute("y2", endY - svgRect.top);
+                const lineLength = Math.sqrt(Math.pow(endX - startX, 2) + Math.pow(endY - startY, 2));
+                line.style.strokeDasharray = lineLength;
+                line.style.strokeDashoffset = "0";
+                line.style.opacity = "1";
+
+
+                const themeColorRgb = "14, 165, 233";
+                
+                line.style.stroke = `rgb(${themeColorRgb})`;
+                line.style.setProperty("--line-glow-color", themeColorRgb);
+                
+                core.style.boxShadow = `0 0 50px rgba(${themeColorRgb}, 0.9), inset 0 0 35px rgba(${themeColorRgb}, 0.5)`;
+
+
+                coreSkillName.textContent = skill.name;
+                coreSkillName.style.opacity = "1";
+            }
+            
             function handleMouseLeave() { isAnimationPaused = false; line.style.opacity = "0"; coreSkillName.style.opacity = "0"; core.style.boxShadow = "0 0 30px rgba(14, 165, 233, 0.3), inset 0 0 20px rgba(14, 165, 233, 0.2)"; }
+            
+            // MODIFIED: Sequential Animation Function
+            function animateSequentially(elements, delay) {
+                elements.forEach((el, index) => {
+                    setTimeout(() => {
+                        el.classList.add('fade-in-scale');
+                    }, index * delay);
+                });
+            }
+
+
+            // MODIFIED: Trigger Sequential Animation on Load
+            setTimeout(() => {
+                // Animate core first
+                core.classList.add('fade-in-scale');
+
+                // Set steady glow on core until animation completes
+                core.style.boxShadow = "0 0 50px rgba(14, 165, 233, 0.9), inset 0 0 35px rgba(14, 165, 233, 0.5)";
+
+                // Then animate skill nodes sequentially
+                setTimeout(() => {
+                    const skillNodeElements = nodes.map(node => node.element);
+                    animateSequentially(skillNodeElements, 180);
+
+                    // Return core to normal state after all skill nodes have appeared
+                    setTimeout(() => {
+                        core.style.boxShadow = "0 0 30px rgba(14, 165, 233, 0.3), inset 0 0 20px rgba(14, 165, 233, 0.2)";
+                    }, skillNodeElements.length * 180 + 600);
+                }, 600);
+            }, 300);
+            
             updateDimensionsAndPositions(); animateNodes(); window.addEventListener('resize', updateDimensionsAndPositions);
         });
     </script>

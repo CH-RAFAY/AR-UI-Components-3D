@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Certificates & Contact | Abdul Rafay Ather</title>
+    <title>Certificates-I</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <style>
@@ -23,17 +23,6 @@
             min-height: 100vh;
         }
 
-        /* Neural Network Background */
-        #neuralCanvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            pointer-events: none;
-        }
-
         .main-container {
             position: relative;
             z-index: 1;
@@ -42,32 +31,32 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 3rem 2rem;
+            padding: 2rem 2rem;
             max-width: 1200px;
             margin: 0 auto;
-            gap: 4rem;
+            gap: 3rem;
         }
 
         /* Professional Section Headings */
         .section-title {
             font-family: 'Poppins', sans-serif;
-            font-size: clamp(2.2rem, 4vw, 3rem);
+            font-size: clamp(1.4rem, 4vw, 2.2rem);
             font-weight: 700;
-            color: #f1f5f9;
+            color: #b0b8c4;
             text-align: center;
-            margin-bottom: 2.5rem;
+            margin-bottom: 1.8rem;
             text-shadow: 0 0 20px rgba(125, 211, 252, 0.3);
             letter-spacing: -0.02em;
             position: relative;
+            opacity: 0;
         }
 
-        .section-title::after {
-            content: '';
+        .section-title .underline {
             position: absolute;
             bottom: -8px;
             left: 50%;
             transform: translateX(-50%);
-            width: 60px;
+            width: 0;
             height: 3px;
             background: linear-gradient(90deg, #0ea5e9, #7dd3fc);
             border-radius: 2px;
@@ -76,13 +65,13 @@
         /* Certificates Section */
         .certificates-section {
             width: 100%;
-            max-width: 1000px;
+            max-width: 900px;
         }
 
         .certificates-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 1.8rem;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: clamp(1rem, 3vw, 1.5rem);
         }
 
         .certificate-card {
@@ -92,21 +81,22 @@
                 rgba(255, 255, 255, 0.04) 100%
             );
             backdrop-filter: blur(25px) saturate(180%);
-            border: 1.5px solid rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(14, 165, 233, 0.2);
             box-shadow: 
-                0 12px 30px rgba(0, 0, 0, 0.4),
-                0 4px 12px rgba(0, 0, 0, 0.3),
+                0 8px 20px rgba(0, 0, 0, 0.3),
+                0 3px 8px rgba(0, 0, 0, 0.2),
                 inset 0 1px 0 rgba(255, 255, 255, 0.25),
                 inset 0 -1px 0 rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
-            padding: 2rem;
+            border-radius: clamp(10px, 2vw, 14px);
+            padding: clamp(1rem, 3vw, 1.5rem);
             position: relative;
             overflow: hidden;
             transition: all 0.3s ease;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            min-height: 100px;
+            min-height: clamp(70px, 12vw, 85px);
+            opacity: 0;
         }
 
         .certificate-card::before {
@@ -135,11 +125,11 @@
 
         .certificate-name {
             font-family: 'Poppins', sans-serif;
-            font-size: 1.15rem;
+            font-size: clamp(0.85rem, 2.2vw, 1rem);
             font-weight: 600;
             color: #f1f5f9;
             flex-grow: 1;
-            margin-right: 1.5rem;
+            margin-right: clamp(0.8rem, 3vw, 1.2rem);
             line-height: 1.4;
         }
 
@@ -147,19 +137,20 @@
             background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
             color: #f1f5f9;
             border: 1px solid rgba(125, 211, 252, 0.25);
-            padding: 0.7rem 1.4rem;
-            border-radius: 8px;
-            font-size: 0.9rem;
+            padding: clamp(0.45rem, 1.8vw, 0.6rem) clamp(0.7rem, 2.5vw, 1.2rem);
+            border-radius: clamp(6px, 1.5vw, 8px);
+            font-size: clamp(0.7rem, 1.8vw, 0.85rem);
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            min-width: 100px;
+            min-width: clamp(65px, 12vw, 85px);
             font-family: 'Inter', sans-serif;
             text-decoration: none;
             display: inline-block;
             text-align: center;
+            white-space: nowrap;
         }
 
         .verify-button:hover {
@@ -178,11 +169,11 @@
         /* Contact Section */
         .contact-section {
             width: 100%;
-            max-width: 600px;
+            max-width: 550px;
         }
 
         .email-container {
-            margin-bottom: 2.5rem;
+            margin-bottom: clamp(1.2rem, 3vw, 2rem);
         }
 
         .email-field {
@@ -192,21 +183,22 @@
                 rgba(255, 255, 255, 0.04) 100%
             );
             backdrop-filter: blur(25px) saturate(180%);
-            border: 1.5px solid rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(14, 165, 233, 0.2);
             box-shadow: 
-                0 8px 25px rgba(0, 0, 0, 0.3),
-                0 3px 10px rgba(0, 0, 0, 0.2),
+                0 6px 18px rgba(0, 0, 0, 0.25),
+                0 2px 8px rgba(0, 0, 0, 0.15),
                 inset 0 1px 0 rgba(255, 255, 255, 0.25),
                 inset 0 -1px 0 rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            padding: 1.2rem 1.5rem;
+            border-radius: clamp(8px, 2vw, 12px);
+            padding: clamp(0.9rem, 2.5vw, 1.1rem) clamp(1rem, 2.5vw, 1.3rem);
             position: relative;
             overflow: hidden;
             transition: all 0.3s ease;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            height: 60px;
+            min-height: clamp(45px, 8vw, 55px);
+            opacity: 0;
         }
 
         .email-field::before {
@@ -235,27 +227,29 @@
 
         .email-text {
             font-family: 'Inter', sans-serif;
-            font-size: 1rem;
+            font-size: clamp(0.8rem, 2.2vw, 0.95rem);
             font-weight: 500;
             color: #f1f5f9;
             flex-grow: 1;
             user-select: all;
+            word-break: break-all;
         }
 
         .copy-button {
             background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
             color: #f1f5f9;
             border: 1px solid rgba(125, 211, 252, 0.25);
-            padding: 0.5rem 1rem;
-            border-radius: 6px;
-            font-size: 0.85rem;
+            padding: clamp(0.35rem, 1.8vw, 0.45rem) clamp(0.7rem, 2.2vw, 0.9rem);
+            border-radius: clamp(4px, 1vw, 6px);
+            font-size: clamp(0.65rem, 1.8vw, 0.8rem);
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            min-width: 70px;
+            min-width: clamp(45px, 10vw, 65px);
             font-family: 'Inter', sans-serif;
+            white-space: nowrap;
         }
 
         .copy-button:hover {
@@ -279,15 +273,16 @@
         .social-logos {
             display: flex;
             justify-content: center;
-            gap: 2rem;
+            gap: clamp(1rem, 4vw, 2rem);
+            flex-wrap: wrap;
         }
 
         .social-logo {
-            width: 64px;
-            height: 64px;
+            width: clamp(48px, 10vw, 64px);
+            height: clamp(48px, 10vw, 64px);
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 16px;
+            border-radius: clamp(12px, 3vw, 16px);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -295,6 +290,7 @@
             cursor: pointer;
             position: relative;
             overflow: hidden;
+            opacity: 0;
         }
 
         .social-logo::before {
@@ -320,25 +316,32 @@
         }
 
         .social-icon {
-            width: 32px;
-            height: 32px;
+            width: clamp(24px, 5vw, 32px);
+            height: clamp(24px, 5vw, 32px);
         }
 
-        /* Responsive Design */
-        @media (max-width: 768px) {
+        /* Enhanced Responsive Design */
+        @media (max-width: 1024px) {
             .main-container {
-                padding: 2rem 1rem;
-                gap: 3rem;
+                padding: 2rem 1.5rem;
+                gap: 2.5rem;
             }
             
             .certificates-grid {
-                grid-template-columns: 1fr;
+                grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            }
+        }
+
+        /* Fix for 880px to 1030px range - prevents certificate deformation */
+        @media (min-width: 880px) and (max-width: 1030px) {
+            .certificates-grid {
+                grid-template-columns: repeat(2, 1fr);
                 gap: 1.5rem;
             }
             
             .certificate-card {
-                padding: 1.5rem;
-                min-height: 90px;
+                min-height: 80px;
+                padding: 1.2rem 1.5rem;
             }
             
             .certificate-name {
@@ -347,24 +350,60 @@
             }
             
             .verify-button {
-                padding: 0.6rem 1.2rem;
+                padding: 0.5rem 1.1rem;
                 font-size: 0.8rem;
-                min-width: 90px;
+                min-width: 80px;
+            }
+        }
+
+        /* Default desktop screen - 2 certificates per row */
+        @media (min-width: 1031px) {
+            .certificates-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1.8rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                padding: 1.8rem 1rem;
+                gap: 2.5rem;
+            }
+            
+            .certificates-grid {
+                grid-template-columns: 1fr;
+                gap: 1.3rem;
+            }
+            
+            .certificate-card {
+                padding: 1.3rem;
+                min-height: 75px;
+            }
+            
+            .certificate-name {
+                font-size: 0.95rem;
+                margin-right: 0.9rem;
+            }
+            
+            .verify-button {
+                padding: 0.5rem 1rem;
+                font-size: 0.75rem;
+                min-width: 75px;
             }
             
             .email-field {
-                height: 56px;
-                padding: 1rem 1.2rem;
+                min-height: 50px;
+                padding: 0.9rem 1rem;
             }
             
             .email-text {
-                font-size: 0.95rem;
+                font-size: 0.9rem;
             }
             
             .copy-button {
-                padding: 0.45rem 0.9rem;
-                font-size: 0.8rem;
-                min-width: 65px;
+                padding: 0.4rem 0.8rem;
+                font-size: 0.75rem;
+                min-width: 60px;
             }
             
             .social-logos {
@@ -382,42 +421,165 @@
             }
         }
 
+        @media (max-width: 640px) {
+            .main-container {
+                padding: 1.5rem 0.8rem;
+                gap: 2rem;
+            }
+            
+            .section-title {
+                margin-bottom: 1.5rem;
+            }
+            
+            .certificates-grid {
+                gap: 1.1rem;
+            }
+            
+            .certificate-card {
+                padding: 1.1rem;
+                min-height: 70px;
+            }
+            
+            .email-container {
+                margin-bottom: 1.5rem;
+            }
+        }
+
         @media (max-width: 480px) {
+            .main-container {
+                padding: 1rem 0.5rem;
+                gap: 1.8rem;
+            }
+            
             .certificate-card {
                 flex-direction: column;
-                gap: 1rem;
+                gap: 0.8rem;
                 text-align: center;
                 min-height: auto;
-                padding: 1.2rem;
+                padding: 1.1rem;
             }
             
             .certificate-name {
                 margin-right: 0;
-                margin-bottom: 0.5rem;
+                margin-bottom: 0.4rem;
+                font-size: 0.9rem;
+            }
+            
+            .verify-button {
+                width: 100%;
+                max-width: 180px;
             }
             
             .email-field {
                 flex-direction: column;
-                gap: 0.8rem;
-                height: auto;
-                padding: 1rem;
+                gap: 0.7rem;
+                min-height: auto;
+                padding: 0.9rem;
                 text-align: center;
+            }
+            
+            .email-text {
+                margin-bottom: 0.4rem;
+            }
+            
+            .copy-button {
+                width: 100%;
+                max-width: 110px;
             }
             
             .social-logos {
                 gap: 1rem;
             }
+            
+            .social-logo {
+                width: 48px;
+                height: 48px;
+            }
+            
+            .social-icon {
+                width: 24px;
+                height: 24px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .main-container {
+                padding: 0.8rem 0.3rem;
+                gap: 1.3rem;
+            }
+            
+            .section-title {
+                font-size: 1.3rem;
+                margin-bottom: 1.2rem;
+            }
+            
+            .certificate-card {
+                padding: 0.9rem;
+            }
+            
+            .certificate-name {
+                font-size: 0.85rem;
+            }
+            
+            .verify-button {
+                font-size: 0.7rem;
+                padding: 0.45rem 0.9rem;
+            }
+            
+            .email-field {
+                padding: 0.7rem;
+            }
+            
+            .email-text {
+                font-size: 0.75rem;
+            }
+            
+            .copy-button {
+                font-size: 0.65rem;
+                padding: 0.35rem 0.7rem;
+            }
+        }
+
+        /* Landscape orientation adjustments */
+        @media (max-height: 500px) and (orientation: landscape) {
+            .main-container {
+                padding: 1rem;
+                gap: 1.5rem;
+            }
+            
+            .section-title {
+                font-size: 1.6rem;
+                margin-bottom: 1.2rem;
+            }
+            
+            .certificate-card {
+                min-height: 60px;
+                padding: 0.9rem;
+            }
+            
+            .email-field {
+                min-height: 45px;
+            }
+            
+            .social-logo {
+                width: 45px;
+                height: 45px;
+            }
+        }
+
+        /* High DPI displays */
+        @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+            .section-title {
+                text-shadow: 0 0 10px rgba(125, 211, 252, 0.3);
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Neural Network Background -->
-    <canvas id="neuralCanvas"></canvas>
-
     <div class="main-container">
         <!-- Certificates Section -->
         <section class="certificates-section">
-            <h1 class="section-title">Certificates</h1>
+            <h1 class="section-title">Certificates<span class="underline"></span></h1>
             
             <div class="certificates-grid">
                 <div class="certificate-card">
@@ -426,17 +588,17 @@
                 </div>
                 
                 <div class="certificate-card">
-                    <div class="certificate-name">Responsive Design</div>
+                    <div class="certificate-name">Responsive web Design</div>
                     <a href="https://coursera.org/share/6d31391a7511209f4ea46310f09cd56d" class="verify-button" target="_blank" rel="noopener noreferrer">Verify</a>
                 </div>
                 
                 <div class="certificate-card">
-                    <div class="certificate-name">Interactive JS</div>
+                    <div class="certificate-name">Responsive web Design</div>
                     <a href="https://coursera.org/share/39e89a71982c993b6a55fdedce440b88" class="verify-button" target="_blank" rel="noopener noreferrer">Verify</a>
                 </div>
                 
                 <div class="certificate-card">
-                    <div class="certificate-name">Html - Css</div>
+                    <div class="certificate-name">Responsive web Design</div>
                     <a href="https://coursera.org/share/18cbb8cf311aeb42c8fa400904906861" class="verify-button" target="_blank" rel="noopener noreferrer">Verify</a>
                 </div>
             </div>
@@ -444,11 +606,11 @@
 
         <!-- Contact Section -->
         <section class="contact-section">
-            <h2 class="section-title">Contact</h2>
+            <h2 class="section-title">Contact<span class="underline"></span></h2>
             
             <div class="email-container">
                 <div class="email-field">
-                    <div class="email-text">chrafayather@gmail.com</div>
+                    <div class="email-text">arafaychaudhry@gmail.com</div>
                     <button class="copy-button" onclick="copyEmail()" id="copyBtn">Copy</button>
                 </div>
             </div>
@@ -474,7 +636,7 @@
     <script>
         // Copy email function
         function copyEmail() {
-            const email = 'chrafayather@gmail.com';
+            const email = 'arafaychaudhry@gmail.com';
             const button = document.getElementById('copyBtn');
             
             navigator.clipboard.writeText(email).then(() => {
@@ -504,158 +666,44 @@
             });
         }
 
-        // Updated social media functions with new links
+        // Updated social media functions
         function openGithub() {
             window.open('https://github.com/CH-RAFAY', '_blank');
         }
 
         function openLinkedIn() {
-            window.open('https://www.linkedin.com/in/rafay-chaudhry-54b671301/', '_blank');
+            window.open('https://www.linkedin.com/in/rafay-chaudhry-54b671301', '_blank');
         }
-
-        // Neural Network Background Animation
-        document.addEventListener('DOMContentLoaded', () => {
-            const canvas = document.getElementById('neuralCanvas');
-            const ctx = canvas.getContext('2d');
-            let nodes = [];
-            const nodeCount = 30;
-            const connectionDistance = 100;
-            const mouse = { x: null, y: null, radius: 60 };
-
-            function resizeCanvas() {
-                canvas.width = window.innerWidth;
-                canvas.height = window.innerHeight;
-            }
-
-            class Node {
-                constructor(x, y) {
-                    this.x = x;
-                    this.y = y;
-                    this.vx = (Math.random() - 0.5) * 0.2;
-                    this.vy = (Math.random() - 0.5) * 0.2;
-                    this.radius = Math.random() * 1.2 + 0.5;
-                    this.opacity = Math.random() * 0.3 + 0.2;
-                }
-
-                update() {
-                    this.x += this.vx;
-                    this.y += this.vy;
-
-                    if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
-                    if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
-
-                    if (mouse.x && mouse.y) {
-                        const dx = mouse.x - this.x;
-                        const dy = mouse.y - this.y;
-                        const distance = Math.sqrt(dx * dx + dy * dy);
-                        
-                        if (distance < mouse.radius) {
-                            const force = (mouse.radius - distance) / mouse.radius;
-                            this.x -= dx * force * 0.003;
-                            this.y -= dy * force * 0.003;
-                        }
-                    }
-                }
-
-                draw() {
-                    ctx.beginPath();
-                    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-                    ctx.fillStyle = `rgba(125, 211, 252, ${this.opacity})`;
-                    ctx.fill();
-                }
-            }
-
-            function init() {
-                nodes = [];
-                for (let i = 0; i < nodeCount; i++) {
-                    nodes.push(new Node(
-                        Math.random() * canvas.width,
-                        Math.random() * canvas.height
-                    ));
-                }
-            }
-
-            function drawConnections() {
-                ctx.strokeStyle = 'rgba(14, 165, 233, 0.05)';
-                ctx.lineWidth = 0.5;
-
-                for (let i = 0; i < nodes.length; i++) {
-                    for (let j = i + 1; j < nodes.length; j++) {
-                        const dx = nodes[i].x - nodes[j].x;
-                        const dy = nodes[i].y - nodes[j].y;
-                        const distance = Math.sqrt(dx * dx + dy * dy);
-
-                        if (distance < connectionDistance) {
-                            const opacity = 1 - (distance / connectionDistance);
-                            ctx.strokeStyle = `rgba(14, 165, 233, ${opacity * 0.05})`;
-                            ctx.beginPath();
-                            ctx.moveTo(nodes[i].x, nodes[i].y);
-                            ctx.lineTo(nodes[j].x, nodes[j].y);
-                            ctx.stroke();
-                        }
-                    }
-                }
-            }
-
-            function animate() {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                
-                drawConnections();
-                
-                nodes.forEach(node => {
-                    node.update();
-                    node.draw();
-                });
-
-                requestAnimationFrame(animate);
-            }
-
-            // Event listeners
-            window.addEventListener('resize', () => {
-                resizeCanvas();
-                init();
-            });
-
-            window.addEventListener('mousemove', (e) => {
-                mouse.x = e.clientX;
-                mouse.y = e.clientY;
-            });
-
-            window.addEventListener('mouseleave', () => {
-                mouse.x = null;
-                mouse.y = null;
-            });
-
-            // Initialize
-            resizeCanvas();
-            init();
-            animate();
-        });
 
         // GSAP Animations
         gsap.registerPlugin(ScrollTrigger);
 
-        // Animate elements on load
+        // Animate elements on load with smoother transitions
         const tl = gsap.timeline();
 
         tl.fromTo('.section-title', 
-            { opacity: 0, y: 30 },
-            { opacity: 1, y: 0, duration: 0.8, stagger: 0.2, ease: "power3.out" }
+            { opacity: 0, y: 20 },
+            { opacity: 1, y: 0, duration: 1, stagger: 0.15, ease: "power2.out" }
+        )
+        .fromTo('.section-title .underline',
+            { width: 0 },
+            { width: 'clamp(40px, 8vw, 60px)', duration: 1, stagger: 0.15, ease: "power2.out" },
+            "<"
         )
         .fromTo('.certificate-card', 
-            { opacity: 0, x: -40, scale: 0.95 },
-            { opacity: 1, x: 0, scale: 1, duration: 0.6, stagger: 0.1, ease: "power3.out" }, 
-            "-=0.3"
+            { opacity: 0, y: 25, scale: 0.98 },
+            { opacity: 1, y: 0, scale: 1, duration: 0.8, stagger: 0.08, ease: "power2.out" }, 
+            "-=0.4"
         )
         .fromTo('.email-field', 
-            { opacity: 0, y: 30, scale: 0.95 },
-            { opacity: 1, y: 0, scale: 1, duration: 0.6, ease: "power3.out" }, 
-            "-=0.2"
+            { opacity: 0, y: 20, scale: 0.98 },
+            { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "power2.out" }, 
+            "-=0.3"
         )
         .fromTo('.social-logo', 
-            { opacity: 0, y: 30, scale: 0.8 },
-            { opacity: 1, y: 0, scale: 1, duration: 0.6, stagger: 0.1, ease: "back.out(1.7)" }, 
-            "-=0.2"
+            { opacity: 0, y: 20, scale: 0.9 },
+            { opacity: 1, y: 0, scale: 1, duration: 0.8, stagger: 0.08, ease: "back.out(1.2)" }, 
+            "-=0.3"
         );
 
         // Add click animations
