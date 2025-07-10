@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HSection</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&family=Orbitron:wght@400;500;700;900&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: radial-gradient(ellipse at center, #0a0a0a 0%, #000000 100%);
+            overflow-x: hidden;
+            font-family: 'Inter', sans-serif;
+            perspective: 1000px;
+        }
+
+        /* Updated Navbar Styling with Smoother Animations */
+        .glassmorphic-navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 100;
+            background: transparent;
+            padding: 12px 24px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateY(-100px);
+            opacity: 0;
+        }
+
+        .glassmorphic-navbar.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .glassmorphic-navbar ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            margin: 0;
+            padding: 0;
+            align-items: center;
+        }
+
+        .glassmorphic-navbar li {
+            position: relative;
+        }
+
+        .glassmorphic-navbar a {
+            text-decoration: none;
+            color: #f1f5f9;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 500;
+            padding: 10px 18px;
+            border-radius: 8px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            display: block;
+            overflow: hidden;
+        }
+
+        .glassmorphic-navbar a:hover {
+            color: #7dd3fc;
+            background: rgba(125, 211, 252, 0.1);
+            transform: translateY(-2px);
+        }
+
+        /* Simple Transparent 3D Glass Active State */
+        .glassmorphic-navbar a.active {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px) saturate(150%);
+            border: 1px solid rgba(125, 211, 252, 0.2);
+            color: #f1f5f9;
+            transform: translateY(-2px) translateZ(5px);
+            box-shadow: 
+                0 4px 20px rgba(0, 0, 0, 0.3),
+                0 2px 10px rgba(0, 0, 0, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        /* Mobile menu toggle */
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: #f1f5f9;
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 8px;
+            margin-left: auto;
+            z-index: 1001;
+            transition: transform 0.3s ease;
+        }
+
+        .mobile-menu-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        .navbar-menu {
+            display: flex;
+        }
+
+        /* Enhanced Mobile overlay with glassy blur */
+        .mobile-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, 
+                rgba(0, 0, 0, 0.6) 0%,
+                rgba(0, 0, 0, 0.4) 50%,
+                rgba(0, 0, 0, 0.6) 100%
+            );
+            backdrop-filter: blur(25px) saturate(120%);
+            z-index: 999;
+            display: none;
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .mobile-overlay.active {
+            display: flex;
+            opacity: 1;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mobile-nav-menu {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+            transform: translateY(50px) scale(0.9);
+            opacity: 0;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .mobile-overlay.active .mobile-nav-menu {
+            transform: translateY(0) scale(1);
+            opacity: 1;
+        }
+
+        .mobile-nav-menu a {
+            color: #f1f5f9;
+            font-family: 'Inter', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 500;
+            text-decoration: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            min-width: 200px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mobile-nav-menu a:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-3px);
+        }
+
+        /* Mobile Active State - Same Simple Glass Look */
+        .mobile-nav-menu a.active {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px) saturate(150%);
+            border: 1px solid rgba(125, 211, 252, 0.2);
+            color: #f1f5f9;
+            transform: translateY(-3px) translateZ(5px);
+            box-shadow: 
+                0 6px 25px rgba(0, 0, 0, 0.4),
+                0 3px 15px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Glass Box Styling */
+        .glass-side-box {
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.04) 0%,
+                rgba(255, 255, 255, 0.015) 50%,
+                rgba(255, 255, 255, 0.04) 100%
+            );
+            backdrop-filter: blur(25px) saturate(180%);
+            border: 1px solid rgba(125, 211, 252, 0.2);
+            box-shadow: 
+                0 20px 50px rgba(0, 0, 0, 0.5),
+                0 8px 20px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.25),
+                inset 0 -1px 0 rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+            border-radius: 16px;
+            transform: translateZ(15px) rotateX(1deg);
+            transition: all 0.4s ease;
+            transform-style: preserve-3d;
+            width: 350px;
+            max-width: 350px;
+            min-height: 500px;
+            cursor: pointer;
+        }
+        
+        .glass-side-box::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(125, 211, 252, 0.08), transparent);
+            transition: left 0.8s ease;
+        }
+        
+        .glass-side-box:hover::before { left: 100%; }
+        
+        .glass-side-box:hover {
+            transform: translateZ(25px) rotateX(3deg) scale(1.02);
+            border-color: rgba(125, 211, 252, 0.3);
+            box-shadow: 
+                0 30px 80px rgba(0, 0, 0, 0.6),
+                0 12px 30px rgba(0, 0, 0, 0.4),
+                0 0 15px rgba(125, 211, 252, 0.15),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3),
+                inset 0 -1px 0 rgba(255, 255, 255, 0.15);
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.06) 0%,
+                rgba(255, 255, 255, 0.02) 50%,
+                rgba(255, 255, 255, 0.06) 100%
+            );
+        }
+        
+        /* Layout and Text Styles */
+        .main-layout { display: flex; justify-content: space-between; align-items: center; min-height: 100vh; max-width: 1400px; margin: 0 auto; padding: 0 2rem; position: relative; opacity: 0; }
+        .side-box-container { flex: 0 0 350px; max-width: 350px; z-index: 10; }
+        .left-side { margin-right: 2rem; }
+        .right-side { margin-left: 2rem; }
+        .center-space { flex: 1; min-height: 100vh; position: relative; display: flex; align-items: center; justify-content: center; }
+        .profile-name { font-size: 2.6rem; font-weight: 700; color: #f1f5f9; line-height: 1.1; margin-bottom: 0.5rem; font-family: 'Poppins', sans-serif; }
+        .profile-title { font-size: 1.25rem; font-weight: 800; color: #94a3b8; margin-bottom: 1.5rem; font-family: 'Inter', sans-serif; }
+        .profile-description { font-size: 1.1rem; font-weight: 400; color: #94a3b8; line-height: 1.6; font-family: 'Inter', sans-serif; }
+        .about-title { font-size: 1.2rem; font-weight: 600; color: #f1f5f9; margin-bottom: 1rem; font-family: 'Poppins', sans-serif; }
+        .about-description { font-size: 1.1rem; font-weight: 400; color: #cbd5e1; line-height: 1.7; font-family: 'Inter', sans-serif; }
+        
+        /* Globe Container */
+        .tech-globe-container {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 750px;
+            height: 750px;
+            z-index: 1;
+            opacity: 0;
+        }
+        
+        /* Dark overlay on globe for smaller screens */
+        .globe-overlay {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 750px;
+            height: 750px;
+            background-color: rgba(0, 0, 0, 0.6);
+            pointer-events: none;
+            z-index: 2;
+            border-radius: 50%;
+            display: none;
+        }
+        
+        .button-container {
+            position: absolute;
+            bottom: 4rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 1.5rem;
+            z-index: 20;
+            opacity: 0;
+        }
+
+        /* Enhanced Button Styling */
+        .js-border-beam {
+            position: relative;
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #000000 0%, #0f172a 100%);
+            color: #f1f5f9;
+            border: 1px solid rgba(125, 211, 252, 0.2);
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            overflow: hidden;
+            z-index: 1;
+            transition: all 0.3s ease;
+            box-shadow: 
+                0 4px 15px rgba(0, 0, 0, 0.4),
+                0 2px 8px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        .js-border-beam::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            background: conic-gradient(
+                from var(--angle, 0deg),
+                transparent 0deg,
+                #0ea5e9 36deg,
+                #0ea5e9 72deg,
+                transparent 108deg,
+                transparent 360deg
+            );
+            border-radius: 10px;
+            z-index: -1;
+            transition: background 0.1s ease;
+        }
+
+        .js-border-beam::after {
+            content: '';
+            position: absolute;
+            inset: 2px;
+            background: linear-gradient(135deg, #1e293b 0%, #000000 100%);
+            border-radius: 6px;
+            z-index: -1;
+        }
+
+        .js-border-beam:hover {
+            transform: scale(1.02);
+            background: linear-gradient(135deg, #253750 0%, #1e293b 100%);
+            border-color: rgba(89, 199, 250, 0.4);
+            box-shadow: 
+                0 8px 25px rgba(0, 0, 0, 0.5),
+                0 4px 15px rgba(0, 0, 0, 0.4),
+                0 0 8px rgba(125, 211, 252, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.15);
+        }
+
+        .js-border-beam:hover::after {
+            background: linear-gradient(135deg, #000000 0%, #1e293b 100%);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            body { perspective: none; }
+            .main-layout { flex-direction: column; justify-content: center; align-items: center; padding: 2rem 1rem; gap: 2rem; min-height: 100vh; opacity: 1; }
+            .center-space { display: none; }
+            .tech-globe-container { position: fixed; z-index: 0; pointer-events: none; opacity: 0.2; }
+            .globe-overlay { display: block; }
+            .side-box-container { flex: 0 1 auto; width: 90%; max-width: 680px; margin: 0; }
+            .glass-side-box { width: 100%; max-width: none; min-height: auto; transform: none; padding: 2rem; border: 1px solid rgba(125, 211, 252, 0.2); }
+            .button-container { position: relative; order: 3; bottom: auto; left: auto; transform: none; width: 90%; max-width: 680px; margin-top: 1rem; justify-content: center; opacity: 1; }
+        }
+
+        @media (max-width: 768px) {
+            .main-layout { padding: 3rem 1rem; gap: 1.5rem; }
+            .glass-side-box { padding: 1.5rem; }
+            .profile-name { font-size: 2.2rem; }
+            .profile-title { font-size: 1.1rem; }
+            .profile-description, .about-description { font-size: 1rem; }
+            .button-container { flex-direction: row; gap: 1rem; margin-top: 2rem; }
+            .js-border-beam { flex: 1; text-align: center; padding-left: 1rem; padding-right: 1rem; }
+            
+            /* Mobile navbar styles */
+            .glassmorphic-navbar {
+                padding: 10px 16px;
+                justify-content: space-between;
+            }
+            
+            .navbar-menu {
+                display: none;
+            }
+            
+            .mobile-menu-toggle {
+                display: block;
+            }
+            
+            .glassmorphic-navbar ul {
+                gap: 0;
+            }
+        }
+
+        @media (max-width: 582px) {
+            .button-container { flex-direction: column; }
+            .js-border-beam { flex: none; width: 100%; }
+        }
+    </style>
+</head>
+<body class="text-white">
+
+    <!-- Mobile Overlay -->
+    <div class="mobile-overlay" id="mobileOverlay">
+        <div class="mobile-nav-menu">
+            <a href="#introduction" class="mobile-nav-link">Introduction</a>
+            <a href="#expertise" class="mobile-nav-link">Expertise</a>
+            <a href="#projects" class="mobile-nav-link">Projects</a>
+            <a href="#certificated" class="mobile-nav-link">Certificated</a>
+        </div>
+    </div>
+
+    <!-- =========== GLASSMORPHIC NAVBAR START =========== -->
+    <nav class="glassmorphic-navbar" id="glassmorphicNavbar">
+        <div class="navbar-menu" id="navbarMenu">
+            <ul>
+                <li><a href="#introduction" class="nav-link">Introduction</a></li>
+                <li><a href="#expertise" class="nav-link">Expertise</a></li>
+                <li><a href="#projects" class="nav-link">Projects</a></li>
+                <li><a href="#certificated" class="nav-link">Certificated</a></li>
+            </ul>
+        </div>
+        <button class="mobile-menu-toggle" id="mobileMenuToggle">☰</button>
+    </nav>
+    <!-- =========== GLASSMORPHIC NAVBAR END =========== -->
+
+    <!-- =========== HERO SECTION START =========== -->
+    <section id="hero-section">
+        <div class="tech-globe-container" id="globeContainer"></div>
+        <div class="globe-overlay"></div>
+
+        <main class="relative z-10">
+            <div class="main-layout" id="mainLayout">
+                <div class="side-box-container left-side" id="leftSideBox">
+                    <div class="glass-side-box p-8 flex flex-col justify-center">
+                        <h1 class="profile-name">Abdul Rafay Ather</h1>
+                        <h2 class="profile-title">Software Engineer</h2>
+                        <p class="profile-description">
+                            I build accessible, pixel-perfect digital experiences for the web.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="center-space"></div>
+
+                <div class="side-box-container right-side" id="rightSideBox">
+                    <div class="glass-side-box p-8 flex flex-col justify-center">
+                        <h3 class="about-title">About Me</h3>
+                        <p class="about-description">
+                            I'm a passionate Software Engineer with expertise in modern web technologies. 
+                            I specialize in creating innovative solutions that drive business growth and 
+                            user engagement through clean, efficient code.
+                            <br><br>
+                            With experience in full-stack development, UI/UX design, and emerging technologies 
+                            like AI/ML, I deliver comprehensive solutions that are scalable, maintainable, 
+                            and impactful.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="button-container" id="buttonContainer">
+                    <button class="js-border-beam" id="projectsButton">
+                        <span>EXPLORE PROJECTS</span>
+                    </button>
+                    <button class="js-border-beam" id="resumeButton">
+                        <span>DOWNLOAD RESUME</span>
+                    </button>
+                </div>
+            </div>
+        </main>
+    </section>
+    <!-- =========== HERO SECTION END =========== -->
+    
+    <script>
+        // Enhanced navbar scroll detection with 3-second timer and smoother animations
+        let lastScrollTop = 0;
+        const navbar = document.getElementById('glassmorphicNavbar');
+        let isScrolling = false;
+        let hideTimer = null;
+
+        function showNavbar() {
+            navbar.classList.add('show');
+            
+            // Clear existing timer
+            if (hideTimer) {
+                clearTimeout(hideTimer);
+            }
+            
+            // Set timer to hide navbar after 3 seconds
+            hideTimer = setTimeout(() => {
+                navbar.classList.remove('show');
+            }, 3000);
+        }
+
+        function hideNavbar() {
+            navbar.classList.remove('show');
+            if (hideTimer) {
+                clearTimeout(hideTimer);
+                hideTimer = null;
+            }
+        }
+
+        window.addEventListener('scroll', () => {
+            if (!isScrolling) {
+                window.requestAnimationFrame(() => {
+                    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                    
+                    if (scrollTop > lastScrollTop && scrollTop > 100) {
+                        // Scrolling down - hide navbar
+                        hideNavbar();
+                    } else if (scrollTop < lastScrollTop || scrollTop <= 100) {
+                        // Scrolling up or at top - show navbar
+                        showNavbar();
+                    }
+                    
+                    lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
+                    isScrolling = false;
+                });
+                isScrolling = true;
+            }
+        });
+
+        // Active nav link functionality for desktop
+        const navLinks = document.querySelectorAll('.nav-link');
+        
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                
+                // Remove active class from all links
+                navLinks.forEach(l => l.classList.remove('active'));
+                
+                // Add active class to clicked link
+                link.classList.add('active');
+            });
+        });
+
+        // Set first nav item as active by default
+        if (navLinks.length > 0) {
+            navLinks[0].classList.add('active');
+        }
+
+        // Mobile menu functionality
+        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+        const mobileOverlay = document.getElementById('mobileOverlay');
+        const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+
+        // Toggle mobile menu
+        mobileMenuToggle.addEventListener('click', function() {
+            mobileOverlay.classList.toggle('active');
+        });
+
+        // Close mobile menu when clicking overlay
+        mobileOverlay.addEventListener('click', function(e) {
+            if (e.target === mobileOverlay) {
+                mobileOverlay.classList.remove('active');
+            }
+        });
+
+        // Mobile nav link functionality
+        mobileNavLinks.forEach((link, index) => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                
+                // Remove active class from all mobile links
+                mobileNavLinks.forEach(l => l.classList.remove('active'));
+                
+                // Add active class to clicked link
+                link.classList.add('active');
+                
+                // Also update desktop nav if it exists
+                if (navLinks[index]) {
+                    navLinks.forEach(l => l.classList.remove('active'));
+                    navLinks[index].classList.add('active');
+                }
+                
+                // Close mobile menu
+                mobileOverlay.classList.remove('active');
+            });
+        });
+
+        // Set first mobile nav item as active by default
+        if (mobileNavLinks.length > 0) {
+            mobileNavLinks[0].classList.add('active');
+        }
+
+        // BorderBeam Class for Animated Buttons
+        class BorderBeam {
+            constructor(element, options = {}) {
+                this.element = element;
+                this.angle = 0;
+                this.speed = options.speed || 0.8;
+                this.isAnimating = true;
+                this.init();
+            }
+            
+            init() {
+                this.startAnimation();
+            }
+            
+            startAnimation() {
+                this.isAnimating = true;
+                this.animate();
+            }
+            
+            animate() {
+                if (!this.isAnimating) return;
+                
+                this.angle = (this.angle + this.speed) % 360;
+                this.element.style.setProperty('--angle', `${this.angle}deg`);
+                
+                requestAnimationFrame(() => this.animate());
+            }
+            
+            stop() {
+                this.isAnimating = false;
+            }
+            
+            setSpeed(newSpeed) {
+                this.speed = newSpeed;
+            }
+            
+            toggle() {
+                if (this.isAnimating) {
+                    this.stop();
+                } else {
+                    this.startAnimation();
+                }
+            }
+        }
+
+        // 3D Globe Code with immediate appearance
+        gsap.registerPlugin(ScrollTrigger);
+        let scene, camera, renderer, globeGroup, infoLights = [];
+        let globeAnimationStarted = false;
+        
+        function init3DGlobe() {
+            const container = document.getElementById('globeContainer');
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+            renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+            renderer.setSize(container.clientWidth, container.clientHeight);
+            renderer.setClearColor(0x000000, 0);
+            container.appendChild(renderer.domElement);
+            globeGroup = new THREE.Group();
+            scene.add(globeGroup);
+            const geometry = new THREE.SphereGeometry(180, 32, 32);
+            const edges = new THREE.EdgesGeometry(geometry);
+            const fiberMaterial = new THREE.LineBasicMaterial({ color: 0x7dd3fc, transparent: true, opacity: 0.4, linewidth: 3 });
+            const wireframe = new THREE.LineSegments(edges, fiberMaterial);
+            globeGroup.add(wireframe);
+            const glowEdges = new THREE.EdgesGeometry(new THREE.SphereGeometry(182, 32, 32));
+            const glowMaterial = new THREE.LineBasicMaterial({ color: 0x0ea5e9, transparent: true, opacity: 0.15, linewidth: 2 });
+            const glowWireframe = new THREE.LineSegments(glowEdges, glowMaterial);
+            globeGroup.add(glowWireframe);
+            const blueColors = [0x7dd3fc, 0x0ea5e9, 0x0284c7, 0x0369a1];
+            const vertices = geometry.attributes.position.array;
+            const infoLightGeometry = new THREE.SphereGeometry(2.5, 8, 8);
+            for (let i = 0; i < vertices.length; i += 3) {
+                const colorIndex = Math.floor(Math.random() * blueColors.length);
+                const infoLightMaterial = new THREE.MeshBasicMaterial({ color: blueColors[colorIndex], transparent: true, opacity: 0.8 });
+                const infoLight = new THREE.Mesh(infoLightGeometry, infoLightMaterial);
+                infoLight.position.set(vertices[i], vertices[i + 1], vertices[i + 2]);
+                const glowSphere = new THREE.Mesh(new THREE.SphereGeometry(4, 8, 8), new THREE.MeshBasicMaterial({ color: blueColors[colorIndex], transparent: true, opacity: 0.3 }));
+                glowSphere.position.copy(infoLight.position);
+                globeGroup.add(infoLight);
+                globeGroup.add(glowSphere);
+                infoLights.push({ light: infoLight, glow: glowSphere, originalOpacity: 0.8, pulseSpeed: Math.random() * 0.02 + 0.01 });
+            }
+            const innerGlow = new THREE.Mesh(new THREE.SphereGeometry(178, 32, 32), new THREE.MeshBasicMaterial({ color: 0x0ea5e9, transparent: true, opacity: 0.08 }));
+            globeGroup.add(innerGlow);
+            camera.position.z = 400;
+            globeAnimationStarted = true;
+            animate();
+        }
+        
+        function animate() {
+            requestAnimationFrame(animate);
+            if (globeAnimationStarted && globeGroup) {
+                globeGroup.rotation.y += 0.0015;
+                globeGroup.rotation.x += 0.0006;
+                infoLights.forEach((lightObj, index) => {
+                    const pulse = Math.sin(Date.now() * lightObj.pulseSpeed + index) * 0.3 + 0.7;
+                    lightObj.light.material.opacity = lightObj.originalOpacity * pulse;
+                    lightObj.glow.material.opacity = 0.3 * pulse;
+                    if (Math.random() > 0.998) {
+                        lightObj.light.material.opacity = 1;
+                        lightObj.glow.material.opacity = 0.6;
+                    }
+                });
+            }
+            if(renderer) renderer.render(scene, camera);
+        }
+        
+        function setupScrollAnimations() {
+            if (globeGroup) {
+                gsap.to(globeGroup.scale, { scrollTrigger: { trigger: "body", start: "top top", end: "bottom bottom", scrub: 1 }, x: 1.2, y: 1.2, z: 1.2 });
+            }
+            
+            // Smooth page load animation
+            const tl = gsap.timeline();
+            tl.to(".main-layout", { opacity: 1, duration: 1, ease: "power1.out" });
+            tl.fromTo("#leftSideBox", { x: -150, opacity: 0 }, { x: 0, opacity: 1, duration: 1.2, ease: "power3.out" }, "-=0.8");
+            tl.fromTo("#rightSideBox", { x: 150, opacity: 0 }, { x: 0, opacity: 1, duration: 1.2, ease: "power3.out" }, "-=1");
+            tl.to(".button-container", { opacity: 1, duration: 1, ease: "power1.out" }, "-=0.8");
+            tl.to(".tech-globe-container", { opacity: 1, duration: 1.5, ease: "power1.out" }, "-=0.8");
+            
+            // Show navbar after page load
+            setTimeout(() => {
+                showNavbar();
+            }, 1000);
+        }
+        
+        // Initialize Border Beam Buttons
+        let projectsButtonBeam, resumeButtonBeam;
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initially hide all components
+            gsap.set(".main-layout", { opacity: 0 });
+            gsap.set(".tech-globe-container", { opacity: 0 });
+            gsap.set(".button-container", { opacity: 0 });
+            
+            // Initialize globe immediately (no delay)
+            init3DGlobe();
+            
+            // Start page load animations
+            setupScrollAnimations();
+            
+            // Initialize animated border beam buttons
+            const projectsButton = document.getElementById('projectsButton');
+            const resumeButton = document.getElementById('resumeButton');
+            
+            if (projectsButton) {
+                projectsButtonBeam = new BorderBeam(projectsButton, { speed: 0.8 });
+            }
+            
+            if (resumeButton) {
+                resumeButtonBeam = new BorderBeam(resumeButton, { speed: 0.8 });
+            }
+            
+            // Add click effects to buttons
+            [projectsButton, resumeButton].forEach(button => {
+                if (button) {
+                    button.addEventListener('click', function() {
+                        this.style.transform = 'scale(0.98)';
+                        setTimeout(() => {
+                            this.style.transform = '';
+                        }, 150);
+                    });
+                }
+            });
+        });
+        
+        window.addEventListener('resize', () => {
+            if (camera && renderer) {
+                const container = document.getElementById('globeContainer');
+                if (!container) return;
+                const width = container.clientWidth;
+                const height = container.clientHeight;
+                camera.aspect = width / height;
+                camera.updateProjectionMatrix();
+                renderer.setSize(width, height);
+            }
+        });
+    </script>
+</body>
+</html>
