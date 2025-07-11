@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HSection</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <link rel="stylesheet" href="Css/S1.css">
+</head>
+<body class="text-white">
+
+    <!-- Mobile Overlay -->
+    <div class="mobile-overlay" id="mobileOverlay">
+        <div class="mobile-nav-menu">
+            <a href="#introduction" class="mobile-nav-link">Introduction</a>
+            <a href="#expertise" class="mobile-nav-link">Expertise</a>
+            <a href="#projects" class="mobile-nav-link">Projects</a>
+            <a href="#certificated" class="mobile-nav-link">Certificated</a>
+        </div>
+    </div>
+
+    <!-- =========== GLASSMORPHIC NAVBAR START =========== -->
+    <nav class="glassmorphic-navbar" id="glassmorphicNavbar">
+        <div class="navbar-menu" id="navbarMenu">
+            <ul>
+                <li><a href="#introduction" class="nav-link">Introduction</a></li>
+                <li><a href="#expertise" class="nav-link">Expertise</a></li>
+                <li><a href="#projects" class="nav-link">Projects</a></li>
+                <li><a href="#certificated" class="nav-link">Certificated</a></li>
+            </ul>
+        </div>
+        <button class="mobile-menu-toggle" id="mobileMenuToggle">☰</button>
+    </nav>
+    <!-- =========== GLASSMORPHIC NAVBAR END =========== -->
+
+    <!-- =========== HERO SECTION START =========== -->
+    <section id="hero-section">
+        <div class="tech-globe-container" id="globeContainer"></div>
+        <div class="globe-overlay"></div>
+
+        <main class="relative z-10">
+            <div class="main-layout" id="mainLayout">
+                <div class="side-box-container left-side" id="leftSideBox">
+                    <div class="glass-side-box p-8 flex flex-col justify-center">
+                        <h1 class="profile-name">Abdul Rafay Ather</h1>
+                        <h2 class="profile-title">Software Engineer</h2>
+                        <p class="profile-description">
+                            I build accessible, pixel-perfect digital experiences for the web.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="center-space"></div>
+
+                <div class="side-box-container right-side" id="rightSideBox">
+                    <div class="glass-side-box p-8 flex flex-col justify-center">
+                        <h3 class="about-title">About Me</h3>
+                        <p class="about-description">
+                            I'm a passionate Software Engineer with expertise in modern web technologies. 
+                            I specialize in creating innovative solutions that drive business growth and 
+                            user engagement through clean, efficient code.
+                            <br><br>
+                            With experience in full-stack development, UI/UX design, and emerging technologies 
+                            like AI/ML, I deliver comprehensive solutions that are scalable, maintainable, 
+                            and impactful.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="button-container" id="buttonContainer">
+                    <button class="js-border-beam" id="projectsButton">
+                        <span>EXPLORE PROJECTS</span>
+                    </button>
+                    <button class="js-border-beam" id="resumeButton">
+                        <span>DOWNLOAD RESUME</span>
+                    </button>
+                </div>
+            </div>
+        </main>
+    </section>
+    <!-- =========== HERO SECTION END =========== -->
+    
+    <script src="JS/J1.js"></script>
+</body>
+</html>
