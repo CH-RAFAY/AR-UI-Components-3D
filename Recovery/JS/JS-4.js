@@ -1,36 +1,26 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Get the correct canvas element
-    const canvas = document.getElementById('synapseCanvas3');
-    if (!canvas) return;
-    
+    // --- Background Synapse Animation ---
+    const canvas = document.getElementById('synapseCanvas');
     const ctx = canvas.getContext('2d');
+    let nodes = [];
+    let currentPulse = null;
+    let nodeCount = 50;
+    const connectionRadius = 250;
+    const blinkDuration = 2000;
+    let mouse = { x: null, y: null, radius: 180 };
     
-    // Initialize canvas size
     function resizeCanvas() {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
+        nodeCount = window.innerWidth < 768 ? 30 : 50;
     }
-    resizeCanvas();
-
-    // Animation variables
-    let nodes = [];
-    let nodeCount = window.innerWidth < 768 ? 30 : 50;
-    const connectionRadius = 250;
-    const blinkDuration = 2000;
-    let currentPulse = null;
-    let mouse = { x: null, y: null, radius: 180 };
-
+    
     class Node {
-        constructor(x, y) {
-            this.x = x;
-            this.y = y;
-            this.originX = x;
-            this.originY = y;
-            this.connections = [];
-            this.isBlinking = false;
-            this.density = (Math.random() * 20) + 10;
+        constructor(x, y) { 
+            this.x = x; this.y = y; this.originX = x; this.originY = y; 
+            this.connections = []; this.isBlinking = false; this.density = (Math.random() * 20) + 10; 
         }
-
+        
         draw() {
             ctx.beginPath();
             let radius = 3; 
@@ -92,28 +82,30 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     
-    // Initialize background
     function init() {
-        nodes = [];
-        for (let i = 0; i < nodeCount; i++) {
-            const x = Math.random() * canvas.width;
-            const y = Math.random() * canvas.height;
-            nodes.push(new Node(x, y));
+        nodes = []; 
+        for (let i = 0; i < nodeCount; i++) { 
+            let x = Math.random() * canvas.width; let y = Math.random() * canvas.height; 
+            nodes.push(new Node(x, y)); 
         }
-
-        // Create connections between nodes
-        nodes.forEach(nodeA => {
-            nodes.forEach(nodeB => {
-                if (nodeA === nodeB) return;
-                const distance = Math.sqrt(Math.pow(nodeA.x - nodeB.x, 2) + Math.pow(nodeA.y - nodeB.y, 2));
-                if (distance < connectionRadius) {
-                    nodeA.connections.push(nodeB);
-                }
-            });
+        nodes.forEach(nodeA => { 
+            nodes.forEach(nodeB => { 
+                if (nodeA === nodeB) return; 
+                const distance = Math.sqrt(Math.pow(nodeA.x - nodeB.x, 2) + Math.pow(nodeA.y - nodeB.y, 2)); 
+                if (distance < connectionRadius) { nodeA.connections.push(nodeB); } 
+            }); 
         });
     }
-
-    // Animation loop
+    
+    function startNextPulseSequence() { 
+        if (nodes.length === 0 || currentPulse) return; 
+        let startNode; 
+        do { startNode = nodes[Math.floor(Math.random() * nodes.length)]; } 
+        while (startNode.connections.length === 0 || startNode.isBlinking); 
+        const endNode = startNode.connections[Math.floor(Math.random() * startNode.connections.length)]; 
+        currentPulse = new Pulse(startNode, endNode); 
+    }
+    
     function animate() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         nodes.forEach(node => node.update());
@@ -148,53 +140,72 @@ document.addEventListener('DOMContentLoaded', () => {
         requestAnimationFrame(animate);
     }
     
-    // Event listeners
     window.addEventListener('mousemove', e => {
-        mouse.x = e.clientX;
-        mouse.y = e.clientY;
-    });
-
-    window.addEventListener('mouseout', () => {
-        mouse.x = null;
-        mouse.y = null;
-    });
-
-    window.addEventListener('resize', () => {
-        resizeCanvas();
-        init();
-    });
-
-    // Start the animation
-    init();
-    animate();
-
-    // Certificate section animations
-    const certificates = document.querySelectorAll('.certificate-card');
-    const sectionTitle = document.querySelector('.section-title');
-
-    // Animate section title underline
-    if (sectionTitle) {
-        const underline = sectionTitle.querySelector('.underline');
-        if (underline) {
-            setTimeout(() => {
-                underline.style.width = '100%';
-            }, 300);
+        if (e.target.closest('.certificate-card, .email-field, .social-logo, .copy-button, .verify-button')) {
+            mouse.x = null; mouse.y = null;
+        } else {
+            mouse.x = e.clientX; mouse.y = e.clientY;
         }
-    }
-
-    // Initialize copy functionality for email
-    const copyBtn = document.getElementById('copyBtn');
-    const emailText = document.querySelector('.email-text');
+    });
+    window.addEventListener('mouseout', () => { mouse.x = null; mouse.y = null; });
+    window.addEventListener('resize', () => { resizeCanvas(); init(); });
     
-    if (copyBtn && emailText) {
-        copyBtn.addEventListener('click', () => {
-            navigator.clipboard.writeText(emailText.textContent)
-                .then(() => {
-                    copyBtn.textContent = 'Copied!';
-                    setTimeout(() => {
-                        copyBtn.textContent = 'Copy';
-                    }, 2000);
-                });
+    resizeCanvas(); init(); animate(); startNextPulseSequence();
+
+    // --- UI Interactions and GSAP Animations ---
+    const copyBtn = document.getElementById('copyBtn');
+    const githubLogo = document.getElementById('github-logo');
+    const linkedinLogo = document.getElementById('linkedin-logo');
+
+    copyBtn.addEventListener('click', () => {
+        const email = 'arafaychaudhry@gmail.com';
+        navigator.clipboard.writeText(email).then(() => {
+            copyBtn.textContent = 'Copied!';
+            copyBtn.classList.add('copied');
+            setTimeout(() => {
+                copyBtn.textContent = 'Copy';
+                copyBtn.classList.remove('copied');
+            }, 2000);
         });
-    }
+        gsap.to(copyBtn, { scale: 0.95, duration: 0.1, yoyo: true, repeat: 1, ease: "power2.inOut" });
+    });
+
+    githubLogo.addEventListener('click', () => {
+        window.open('https://github.com/CH-RAFAY', '_blank');
+        gsap.to(githubLogo, { scale: 0.9, duration: 0.1, yoyo: true, repeat: 1, ease: "power2.inOut" });
+    });
+
+    linkedinLogo.addEventListener('click', () => {
+        window.open('https://www.linkedin.com/in/rafay-chaudhry-54b671301', '_blank');
+        gsap.to(linkedinLogo, { scale: 0.9, duration: 0.1, yoyo: true, repeat: 1, ease: "power2.inOut" });
+    });
+
+    // GSAP Page Load Animation
+    gsap.registerPlugin(ScrollTrigger);
+    const tl = gsap.timeline();
+
+    tl.fromTo('.section-title', 
+        { opacity: 0, y: 20 },
+        { opacity: 1, y: 0, duration: 1, stagger: 0.15, ease: "power2.out" }
+    )
+    .fromTo('.section-title .underline',
+        { width: 0 },
+        { width: 'clamp(40px, 8vw, 60px)', duration: 1, stagger: 0.15, ease: "power2.out" },
+        "<"
+    )
+    .fromTo('.certificate-card', 
+        { opacity: 0, y: 25, scale: 0.98 },
+        { opacity: 1, y: 0, scale: 1, duration: 0.8, stagger: 0.08, ease: "power2.out" }, 
+        "-=0.4"
+    )
+    .fromTo('.email-field', 
+        { opacity: 0, y: 20, scale: 0.98 },
+        { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "power2.out" }, 
+        "-=0.3"
+    )
+    .fromTo('.social-logo', 
+        { opacity: 0, y: 20, scale: 0.9 },
+        { opacity: 1, y: 0, scale: 1, duration: 0.8, stagger: 0.08, ease: "back.out(1.2)" }, 
+        "-=0.3"
+    );
 });

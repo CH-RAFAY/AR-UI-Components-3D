@@ -1,34 +1,25 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Get the correct canvas element
-    const canvas = document.getElementById('synapseCanvas2');
-    if (!canvas) return;
-    
+    // --- Neural Network Background Animation Script ---
+    const canvas = document.getElementById('synapseCanvas');
     const ctx = canvas.getContext('2d');
     
-    // Initialize canvas size
+    let bg_nodes = [];
+    let currentPulse = null;
+    let nodeCount = 50;
+    const connectionRadius = 250;
+    const blinkDuration = 2000;
+    let mouse = { x: null, y: null, radius: 180 };
+
     function resizeCanvas() {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
+        nodeCount = window.innerWidth < 768 ? 30 : 50;
     }
-    resizeCanvas();
-
-    // Animation variables
-    let nodes = [];
-    let nodeCount = window.innerWidth < 768 ? 30 : 50;
-    const connectionRadius = 250;
-    const blinkDuration = 2000;
-    let currentPulse = null;
-    let mouse = { x: null, y: null, radius: 180 };
 
     class Node {
         constructor(x, y) {
-            this.x = x;
-            this.y = y;
-            this.originX = x;
-            this.originY = y;
-            this.connections = [];
-            this.isBlinking = false;
-            this.density = (Math.random() * 20) + 10;
+            this.x = x; this.y = y; this.originX = x; this.originY = y;
+            this.connections = []; this.isBlinking = false; this.density = (Math.random() * 20) + 10;
         }
 
         draw() {
@@ -101,32 +92,35 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Initialize background
-    function init() {
-        nodes = [];
+    function init_bg() {
+        bg_nodes = [];
         for (let i = 0; i < nodeCount; i++) {
             const x = Math.random() * canvas.width;
             const y = Math.random() * canvas.height;
-            nodes.push(new Node(x, y));
+            bg_nodes.push(new Node(x, y));
         }
-
-        // Create connections between nodes
-        nodes.forEach(nodeA => {
-            nodes.forEach(nodeB => {
+        bg_nodes.forEach(nodeA => {
+            bg_nodes.forEach(nodeB => {
                 if (nodeA === nodeB) return;
                 const distance = Math.sqrt(Math.pow(nodeA.x - nodeB.x, 2) + Math.pow(nodeA.y - nodeB.y, 2));
-                if (distance < connectionRadius) {
-                    nodeA.connections.push(nodeB);
-                }
+                if (distance < connectionRadius) { nodeA.connections.push(nodeB); }
             });
         });
     }
 
-    // Animation loop
-    function animate() {
+    function startNextPulseSequence() {
+        if (bg_nodes.length === 0 || currentPulse) return;
+        let startNode;
+        do { startNode = bg_nodes[Math.floor(Math.random() * bg_nodes.length)]; } 
+        while (startNode.connections.length === 0 || startNode.isBlinking);
+        const endNode = startNode.connections[Math.floor(Math.random() * startNode.connections.length)];
+        currentPulse = new Pulse(startNode, endNode);
+    }
+
+    function animate_bg() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        nodes.forEach(node => node.update());
-        nodes.forEach(nodeA => {
+        bg_nodes.forEach(node => node.update());
+        bg_nodes.forEach(nodeA => {
             nodeA.connections.forEach(nodeB => {
                 if (nodeA.x > nodeB.x) return;
                 let strokeStyle = 'rgba(14, 165, 233, 0.12)'; let lineWidth = 0.5;
@@ -145,7 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
         if (currentPulse) { currentPulse.draw(); }
-        nodes.forEach(node => node.draw());
+        bg_nodes.forEach(node => node.draw());
         if (currentPulse) {
             currentPulse.update();
             if (currentPulse.progress >= 1) {
@@ -155,35 +149,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 setTimeout(() => { destinationNode.isBlinking = false; startNextPulseSequence(); }, blinkDuration);
             }
         }
-        requestAnimationFrame(animate);
+        requestAnimationFrame(animate_bg);
     }
 
-    // Event listeners
     window.addEventListener('mousemove', e => {
-        mouse.x = e.clientX;
-        mouse.y = e.clientY;
+        const hoveredElement = document.elementFromPoint(e.clientX, e.clientY);
+        const isInteractiveElement = hoveredElement && (hoveredElement.closest('.panel-button') || hoveredElement.closest('.category-selector') || hoveredElement.closest('.project-panel'));
+        if (isInteractiveElement) { mouse.x = null; mouse.y = null; } else { mouse.x = e.clientX; mouse.y = e.clientY; }
     });
+    window.addEventListener('mouseout', () => { mouse.x = null; mouse.y = null; });
+    window.addEventListener('resize', () => { resizeCanvas(); init_bg(); });
+    
+    resizeCanvas(); init_bg(); animate_bg(); startNextPulseSequence();
 
-    window.addEventListener('mouseout', () => {
-        mouse.x = null;
-        mouse.y = null;
-    });
-
-    window.addEventListener('resize', () => {
-        resizeCanvas();
-        init();
-    });
-
-    // Start the animation
-    init();
-    animate();
-
-    // Initialize timeline functionality
-    const timelineContainer = document.querySelector('.timeline-container');
-    const categorySelector = document.querySelector('.category-selector');
-    const prevButton = document.querySelector('.side-prev');
-    const nextButton = document.querySelector('.side-next');
-
+    // --- Timeline & Interactive Elements Script ---
     gsap.registerPlugin(ScrollTrigger);
 
     function startSequentialAnimation() {
@@ -226,6 +205,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentCategoryIndex = 0;
     let activeScrollTriggers = [];
     let isAnimating = false;
+    const timelineContainer = document.querySelector(".timeline-container");
 
     function renderTimeline(categoryIndex) {
         if (isAnimating) return;
