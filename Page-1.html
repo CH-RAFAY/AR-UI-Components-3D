@@ -8,33 +8,39 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-    <link rel="stylesheet" href="Css/S1.css">
+    <link rel="stylesheet" href="Css/Style-0.css">
 </head>
 <body class="text-white">
 
-    <!-- Mobile Overlay -->
+    <!-- Enhanced Mobile Overlay with Glassy Transparent Background -->
     <div class="mobile-overlay" id="mobileOverlay">
         <div class="mobile-nav-menu">
-            <a href="#introduction" class="mobile-nav-link">Introduction</a>
-            <a href="#expertise" class="mobile-nav-link">Expertise</a>
-            <a href="#projects" class="mobile-nav-link">Projects</a>
-            <a href="#certificated" class="mobile-nav-link">Certificated</a>
+            <a href="#introduction" class="mobile-nav-link" data-section="introduction">Introduction</a>
+            <a href="#expertise" class="mobile-nav-link" data-section="expertise">Expertise</a>
+            <a href="#projects" class="mobile-nav-link" data-section="projects">Projects</a>
+            <a href="#certificates" class="mobile-nav-link" data-section="certificates">Certificates</a>
         </div>
     </div>
 
-    <!-- =========== GLASSMORPHIC NAVBAR START =========== -->
+    <!-- =========== SMART SCROLL NAVBAR WITH AUTO-MINIMIZE START =========== -->
     <nav class="glassmorphic-navbar" id="glassmorphicNavbar">
         <div class="navbar-menu" id="navbarMenu">
             <ul>
-                <li><a href="#introduction" class="nav-link">Introduction</a></li>
-                <li><a href="#expertise" class="nav-link">Expertise</a></li>
-                <li><a href="#projects" class="nav-link">Projects</a></li>
-                <li><a href="#certificated" class="nav-link">Certificated</a></li>
+                <li><a href="#introduction" class="nav-link" data-section="introduction">Introduction</a></li>
+                <li><a href="#expertise" class="nav-link" data-section="expertise">Expertise</a></li>
+                <li><a href="#projects" class="nav-link" data-section="projects">Projects</a></li>
+                <li><a href="#certificates" class="nav-link" data-section="certificates">Certificates</a></li>
             </ul>
         </div>
-        <button class="mobile-menu-toggle" id="mobileMenuToggle">☰</button>
     </nav>
-    <!-- =========== GLASSMORPHIC NAVBAR END =========== -->
+
+    <!-- Burger Menu Container with Glass Circle Background -->
+    <div id="burgerContainer">
+        <div class="burger-line"></div>
+        <div class="burger-line"></div>
+        <div class="burger-line"></div>
+    </div>
+    <!-- =========== SMART SCROLL NAVBAR WITH AUTO-MINIMIZE END =========== -->
 
     <!-- =========== HERO SECTION START =========== -->
     <section id="hero-section">
@@ -83,6 +89,6 @@
     </section>
     <!-- =========== HERO SECTION END =========== -->
     
-    <script src="JS/J1.js"></script>
+    <script src="JS/JS-0.js"></script>
 </body>
 </html>
