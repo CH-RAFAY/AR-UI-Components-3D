@@ -24,10 +24,10 @@ function isMobileDevice() {
 // ENHANCED: Multi-page navigation function
 function navigateToPage(section) {
     const pageUrls = {
-        'introduction': 'index.html',           // Current page
-        'expertise': 'expertise.html',          // Create this page
-        'projects': 'projects.html',            // Create this page
-        'certificates': 'certificates.html'    // Create this page
+        'introduction': './index.html',
+        'expertise': './Page-2.html',
+        'projects': './Page-3.html',
+        'certificates': './Page-4.html'
     };
     
     if (pageUrls[section]) {

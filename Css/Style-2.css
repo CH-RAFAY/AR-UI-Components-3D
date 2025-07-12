@@ -19,7 +19,7 @@ body {
     background-color: #000000;
 }
 
-#synapseCanvas1 {
+#synapseCanvas {
     position: absolute;
     top: 0;
     left: 0;

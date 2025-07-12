@@ -15,7 +15,7 @@ body {
 }
 
 /* Background Animation Canvas */
-#synapseCanvas3 {
+#synapseCanvas {
     position: fixed;
     top: 0;
     left: 0;

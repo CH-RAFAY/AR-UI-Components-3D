@@ -34,7 +34,7 @@ body {
     overflow-x: hidden;
 }
 
-#synapseCanvas2 {
+#synapseCanvas {
     position: fixed;
     top: 0;
     left: 0;
@@ -513,8 +513,7 @@ body {
 /* Notification Modal Styles */
 .notification-overlay {
     position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
+    top: 0; left: 0; width: 100%; height: 100%;
     background: rgba(0, 0, 0, 0.3);
     backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);

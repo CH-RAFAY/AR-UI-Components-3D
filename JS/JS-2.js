@@ -1,27 +1,23 @@
-// Background Layer Script for Expertise Section
+// Background Layer Script
 document.addEventListener('DOMContentLoaded', () => {
-    // Get the correct canvas element
-    const canvas = document.getElementById('synapseCanvas1');
+    const canvas = document.getElementById('synapseCanvas');
     if (!canvas) return;
-    
     const ctx = canvas.getContext('2d');
     const coreElement = document.getElementById('nexus-core');
+    let nodes = [];
+    let currentPulse = null;
+    let nodeCount = 50;
+    const connectionRadius = 250;
+    const blinkDuration = 2000;
     const nexusContainer = document.querySelector('.nexus-container');
-    
-    // Initialize canvas size
+    let mouse = { x: null, y: null, radius: 180 };
+
     function resizeCanvas() {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
+        nodeCount = window.innerWidth < 768 ? 30 : 50;
     }
     resizeCanvas();
-
-    // Initialize nodes and animation variables
-    let nodes = [];
-    let nodeCount = window.innerWidth < 768 ? 30 : 50;
-    const connectionRadius = 250;
-    const blinkDuration = 2000;
-    let currentPulse = null;
-    let mouse = { x: null, y: null, radius: 180 };
 
     class Node {
         constructor(x, y) { this.x = x; this.y = y; this.originX = x; this.originY = y; this.connections = []; this.isBlinking = false; this.density = (Math.random() * 20) + 10; }
@@ -44,16 +40,13 @@ document.addEventListener('DOMContentLoaded', () => {
         draw() { const currentX = this.startNode.x + (this.endNode.x - this.startNode.x) * this.progress; const currentY = this.startNode.y + (this.endNode.y - this.startNode.y) * this.progress; ctx.beginPath(); const glow = ctx.createRadialGradient(currentX, currentY, 0, currentX, currentY, 12); glow.addColorStop(0, this.color); glow.addColorStop(1, 'rgba(0,0,0,0)'); ctx.fillStyle = glow; ctx.fillRect(currentX - 15, currentY - 15, 30, 30); }
     }
 
-    // Initialize the background
     function init() {
         nodes = [];
         if (!nexusContainer) return;
-        
         const rect = nexusContainer.getBoundingClientRect();
         const centerX = rect.left + rect.width / 2;
         const centerY = rect.top + rect.height / 2;
         const exclusionRadius = rect.width * 0.35;
-
         for (let i = 0; i < nodeCount; i++) {
             let x, y, distance;
             do {
@@ -63,20 +56,19 @@ document.addEventListener('DOMContentLoaded', () => {
             } while (distance < exclusionRadius);
             nodes.push(new Node(x, y));
         }
-
-        // Create connections between nodes
-        nodes.forEach(nodeA => {
-            nodes.forEach(nodeB => {
-                if (nodeA === nodeB) return;
-                const distance = Math.sqrt(Math.pow(nodeA.x - nodeB.x, 2) + Math.pow(nodeA.y - nodeB.y, 2));
-                if (distance < connectionRadius) {
-                    nodeA.connections.push(nodeB);
-                }
-            });
-        });
+        nodes.forEach(nodeA => { nodes.forEach(nodeB => { if (nodeA === nodeB) return; const distance = Math.sqrt(Math.pow(nodeA.x - nodeB.x, 2) + Math.pow(nodeA.y - nodeB.y, 2)); if (distance < connectionRadius) { nodeA.connections.push(nodeB); } }); });
     }
 
-    // Animation loop
+    function startNextPulseSequence() {
+        if (nodes.length === 0 || currentPulse) return;
+        let startNode;
+        do {
+            startNode = nodes[Math.floor(Math.random() * nodes.length)];
+        } while (startNode.connections.length === 0 || startNode.isBlinking);
+        const endNode = startNode.connections[Math.floor(Math.random() * startNode.connections.length)];
+        currentPulse = new Pulse(startNode, endNode);
+    }
+
     function animate() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         nodes.forEach(node => node.update());
@@ -100,28 +92,10 @@ document.addEventListener('DOMContentLoaded', () => {
         requestAnimationFrame(animate);
     }
 
-    // Event listeners
-    window.addEventListener('mousemove', e => {
-        if (e.target.closest('.skill-node')) {
-            mouse.x = null;
-            mouse.y = null;
-        } else {
-            mouse.x = e.clientX;
-            mouse.y = e.clientY;
-        }
-    });
+    window.addEventListener('mousemove', e => { if (e.target.closest('.skill-node')) { mouse.x = null; mouse.y = null; } else { mouse.x = e.clientX; mouse.y = e.clientY; } });
+    window.addEventListener('mouseout', () => { mouse.x = null; mouse.y = null; });
+    window.addEventListener('resize', () => { resizeCanvas(); init(); });
 
-    window.addEventListener('mouseout', () => {
-        mouse.x = null;
-        mouse.y = null;
-    });
-
-    window.addEventListener('resize', () => {
-        resizeCanvas();
-        init();
-    });
-
-    // Start the animation
     init();
     animate();
     startNextPulseSequence();
