@@ -2,9 +2,40 @@ document.addEventListener('DOMContentLoaded', function() {
     let navTimer;
     let lastInteractionTime = Date.now();
 
-    // Show burger menu after 2 seconds of page load
+    // Initialize mobile overlay to ensure it's properly set up
+    const mobileOverlay = document.getElementById('mobileOverlay');
+    
+    // Initialize navbar and burger menu based on screen size
+    function initializeNavigation() {
+        const burgerContainer = document.getElementById('burgerContainer');
+        const navbar = document.getElementById('glassmorphicNavbar');
+        
+        if (window.innerWidth <= 768) {
+            // Mobile view
+            navbar.classList.add('hidden');
+            burgerContainer.classList.add('show');
+            burgerContainer.style.opacity = '1';
+            burgerContainer.style.pointerEvents = 'auto';
+        } else {
+            // Desktop view
+            navbar.classList.remove('hidden');
+            burgerContainer.classList.remove('show');
+            if (mobileOverlay.classList.contains('active')) {
+                mobileOverlay.classList.remove('active');
+                mobileOverlay.style.display = 'none';
+                burgerContainer.classList.remove('active');
+            }
+        }
+    }
+
+    // Initialize on page load
+    initializeNavigation();
+    
+    // Show burger menu after 2 seconds of page load (only on larger screens)
     setTimeout(() => {
-        document.getElementById('burgerContainer').classList.add('show');
+        if (window.innerWidth > 768) {
+            document.getElementById('burgerContainer').classList.add('show');
+        }
     }, 2000);
     // Initialize GSAP ScrollTrigger
     gsap.registerPlugin(ScrollTrigger);
@@ -17,12 +48,10 @@ document.addEventListener('DOMContentLoaded', function() {
             const targetSection = document.querySelector(targetId);
             
             if (targetSection) {
-                // Close mobile menu if open
-                const mobileOverlay = document.getElementById('mobileOverlay');
-                const burgerContainer = document.getElementById('burgerContainer');
-                if (mobileOverlay.classList.contains('active')) {
+                // Close mobile menu if open - handled by JS-1.js
+                if (mobileOverlay && mobileOverlay.classList.contains('active')) {
                     mobileOverlay.classList.remove('active');
-                    burgerContainer.classList.remove('active');
+                    document.getElementById('burgerContainer').classList.remove('active');
                 }
 
                 // Smooth scroll to section
@@ -82,23 +111,20 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Handle mobile menu
     const burgerContainer = document.getElementById('burgerContainer');
-    const mobileOverlay = document.getElementById('mobileOverlay');
+    // We already defined mobileOverlay at the top
     const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
 
-    burgerContainer.addEventListener('click', function() {
-        this.classList.toggle('active');
-        mobileOverlay.classList.toggle('active');
-    });
+    // Mobile nav links are handled by JS-1.js for consistency
 
-    mobileNavLinks.forEach(link => {
-        link.addEventListener('click', function() {
-            mobileOverlay.classList.remove('active');
-            burgerContainer.classList.remove('active');
-        });
-    });
+    // Mobile menu functions are managed by JS-1.js for better consistency
+
+    // Mobile overlay click handling is managed by JS-1.js for consistency
 
     // Function to handle navbar interaction
     function handleNavInteraction() {
+        // Only handle navbar interactions on larger screens
+        if (window.innerWidth <= 768) return;
+        
         lastInteractionTime = Date.now();
         const navbar = document.getElementById('glassmorphicNavbar');
         const burgerContainer = document.getElementById('burgerContainer');
@@ -141,10 +167,11 @@ document.addEventListener('DOMContentLoaded', function() {
     navbar.addEventListener('mousemove', handleNavInteraction);
     navbar.addEventListener('click', handleNavInteraction);
 
-    // Handle burger menu click
-    burgerContainer.addEventListener('click', function() {
-        this.classList.toggle('active');
-        mobileOverlay.classList.toggle('active');
-        handleNavInteraction();
+    // Burger menu click handling is now managed by JS-1.js for better mobile/desktop detection
+    // This prevents conflicts between different event listeners
+    
+    // Handle window resize
+    window.addEventListener('resize', function() {
+        initializeNavigation();
     });
 });

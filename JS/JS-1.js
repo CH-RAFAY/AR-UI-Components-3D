@@ -1,5 +1,4 @@
 // ENHANCED NAVBAR WITH SMART SCROLL & AUTO-MINIMIZE FUNCTIONALITY
-
 // Variables
 let lastScrollTop = 0;
 let isScrolling = false;
@@ -155,22 +154,19 @@ window.addEventListener('scroll', () => {
 // IMPROVED: Smart burger menu toggle functionality
 burgerContainer.addEventListener('click', (e) => {
     e.stopPropagation();
-    
-    if (navbarExpanded) {
-        rollUpNavbar();
-    } else {
-        // Check device type for different behaviors
-        if (isMobileDevice()) {
-            // Mobile: Toggle burger animation and show overlay
-            burgerContainer.classList.toggle('active');
-            
-            if (burgerContainer.classList.contains('active')) {
-                openMobileMenu();
-            } else {
-                closeMobileMenu();
-            }
+    if (isMobileDevice()) {
+        // Mobile: Toggle burger animation and show overlay
+        burgerContainer.classList.toggle('active');
+        if (burgerContainer.classList.contains('active')) {
+            openMobileMenu();
         } else {
-            // Desktop/Laptop: Expand to horizontal navbar
+            closeMobileMenu();
+        }
+    } else {
+        // Desktop/Laptop: Toggle navbar
+        if (navbarExpanded) {
+            rollUpNavbar();
+        } else {
             expandNavbar();
         }
     }

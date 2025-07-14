@@ -4,7 +4,19 @@ html {
 }
 
 body {
-    overflow-x: hidden;
+    overflow: hidden;
+    scroll-behavior: smooth;
+}
+
+#hero-section {
+    overflow-y: auto;
+    max-height: 100vh;
+}
+
+/* Ensure smooth section transitions */
+section {
+    scroll-margin-top: 0;
+    scroll-snap-align: start;
 }
 
 /* Section Transitions */
@@ -80,6 +92,13 @@ section.active {
 .mobile-overlay {
     z-index: 999;
 }
+
+/* Removed scroll-indicator and page-progress styles as per request */
+/*
+.scroll-indicator, .page-progress {
+    display: none !important;
+}
+*/
 
 /* Responsive adjustments */
 @media (max-width: 768px) {

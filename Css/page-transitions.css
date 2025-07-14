@@ -3,6 +3,16 @@ body {
     transition: opacity 0.5s ease;
 }
 
+/* Smooth section scrolling for first page */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Ensure sections scroll smoothly */
+section {
+    scroll-margin-top: 0;
+}
+
 .page-transition-overlay {
     position: fixed;
     top: 0;
@@ -93,7 +103,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: 15px;
-    z-index: 100;
+    z-index: 1200;
 }
 
 .page-progress-dot {
