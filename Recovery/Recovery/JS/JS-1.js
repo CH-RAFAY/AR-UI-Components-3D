@@ -1,4 +1,5 @@
 // ENHANCED NAVBAR WITH SMART SCROLL & AUTO-MINIMIZE FUNCTIONALITY
+
 // Variables
 let lastScrollTop = 0;
 let isScrolling = false;
@@ -23,10 +24,10 @@ function isMobileDevice() {
 // ENHANCED: Multi-page navigation function
 function navigateToPage(section) {
     const pageUrls = {
-        'introduction': './index.html',
-        'expertise': './Page-2.html',
-        'projects': './Page-3.html',
-        'certificates': './Page-4.html'
+        'introduction': 'index.html',           // Current page
+        'expertise': 'expertise.html',          // Create this page
+        'projects': 'projects.html',            // Create this page
+        'certificates': 'certificates.html'    // Create this page
     };
     
     if (pageUrls[section]) {
@@ -154,19 +155,22 @@ window.addEventListener('scroll', () => {
 // IMPROVED: Smart burger menu toggle functionality
 burgerContainer.addEventListener('click', (e) => {
     e.stopPropagation();
-    if (isMobileDevice()) {
-        // Mobile: Toggle burger animation and show overlay
-        burgerContainer.classList.toggle('active');
-        if (burgerContainer.classList.contains('active')) {
-            openMobileMenu();
-        } else {
-            closeMobileMenu();
-        }
+    
+    if (navbarExpanded) {
+        rollUpNavbar();
     } else {
-        // Desktop/Laptop: Toggle navbar
-        if (navbarExpanded) {
-            rollUpNavbar();
+        // Check device type for different behaviors
+        if (isMobileDevice()) {
+            // Mobile: Toggle burger animation and show overlay
+            burgerContainer.classList.toggle('active');
+            
+            if (burgerContainer.classList.contains('active')) {
+                openMobileMenu();
+            } else {
+                closeMobileMenu();
+            }
         } else {
+            // Desktop/Laptop: Expand to horizontal navbar
             expandNavbar();
         }
     }

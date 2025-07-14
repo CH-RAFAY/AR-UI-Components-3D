@@ -162,6 +162,14 @@ document.addEventListener('DOMContentLoaded', function() {
         lastScrollTop = scrollTop;
     });
 
+    // Add interaction listeners to navbar and its elements
+    navbar.addEventListener('mouseenter', handleNavInteraction);
+    navbar.addEventListener('mousemove', handleNavInteraction);
+    navbar.addEventListener('click', handleNavInteraction);
+
+    // Burger menu click handling is now managed by JS-1.js for better mobile/desktop detection
+    // This prevents conflicts between different event listeners
+    
     // Handle window resize
     window.addEventListener('resize', function() {
         initializeNavigation();

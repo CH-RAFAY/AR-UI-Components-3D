@@ -4,11 +4,7 @@ let lastScrollTop = 0;
 let isScrolling = false;
 let navbarExpanded = true;
 let autoMinimizeTimer = null;
-const navbar = document.getElementById('glassmorphicNavbar');
-const burgerContainer = document.getElementById('burgerContainer');
 const mobileOverlay = document.getElementById('mobileOverlay');
-const navLinks = document.querySelectorAll('.nav-link');
-const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
 
 // Check if device is desktop/big screen (for smart scroll behavior)
 function isDesktop() {
@@ -38,39 +34,12 @@ function navigateToPage(section) {
     }
 }
 
-// ENHANCED: Auto-rollup functionality
-function rollUpNavbar() {
-    navbar.style.transform = 'translateY(-100%)';
-    navbar.style.opacity = '0';
-    
-    // Show burger menu with animation
-    setTimeout(() => {
-        burgerContainer.classList.add('show');
-    }, 300);
-    
-    navbarExpanded = false;
-}
-
-function expandNavbar() {
-    // Hide burger menu
-    burgerContainer.classList.remove('show');
-    burgerContainer.classList.remove('active');
-    
-    // Show navbar with animation
-    setTimeout(() => {
-        navbar.style.transform = 'translateY(0)';
-        navbar.style.opacity = '1';
-    }, 200);
-    
-    navbarExpanded = true;
-}
-
 // NEW: Smart show/hide navbar functions for scroll behavior
 function showNavbar() {
     if (!navbarExpanded && isDesktop()) {
-        expandNavbar();
+        // expandNavbar(); // This line is removed as per the edit hint
     } else {
-        navbar.classList.remove('hidden');
+        // navbar.classList.remove('hidden'); // This line is removed as per the edit hint
     }
     
     // Reset auto-minimize timer when navbar is shown
@@ -79,7 +48,7 @@ function showNavbar() {
 
 function hideNavbar() {
     if (isDesktop()) {
-        navbar.classList.add('hidden');
+        // navbar.classList.add('hidden'); // This line is removed as per the edit hint
     }
 }
 
@@ -92,7 +61,7 @@ function resetAutoMinimizeTimer() {
     // Only set timer for desktop screens when navbar is expanded
     if (navbarExpanded && isDesktop()) {
         autoMinimizeTimer = setTimeout(() => {
-            rollUpNavbar();
+            // rollUpNavbar(); // This line is removed as per the edit hint
         }, 2000);
     }
 }
@@ -100,13 +69,13 @@ function resetAutoMinimizeTimer() {
 // ENHANCED: Initial page load behavior - Show navbar for 2 seconds then rollup
 window.addEventListener('load', () => {
     // Ensure navbar is visible initially
-    navbar.style.transform = 'translateY(0)';
-    navbar.style.opacity = '1';
+    // navbar.style.transform = 'translateY(0)'; // This line is removed as per the edit hint
+    // navbar.style.opacity = '1'; // This line is removed as per the edit hint
     
     // Auto-rollup after 2 seconds only on desktop
     if (isDesktop()) {
         setTimeout(() => {
-            rollUpNavbar();
+            // rollUpNavbar(); // This line is removed as per the edit hint
         }, 2000);
     }
 });
@@ -121,11 +90,8 @@ window.addEventListener('scroll', () => {
             const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
             
             // Add scrolled class for styling
-            if (scrollTop > 50) {
-                navbar.classList.add('scrolled');
-            } else {
-                navbar.classList.remove('scrolled');
-            }
+            // navbar.classList.add('scrolled'); // This line is removed as per the edit hint
+            // navbar.classList.remove('scrolled'); // This line is removed as per the edit hint
             
             if (scrollTop > lastScrollTop && scrollTop > 100) {
                 // Scrolling down - hide navbar
@@ -152,25 +118,25 @@ window.addEventListener('scroll', () => {
 });
 
 // IMPROVED: Smart burger menu toggle functionality
-burgerContainer.addEventListener('click', (e) => {
-    e.stopPropagation();
-    if (isMobileDevice()) {
-        // Mobile: Toggle burger animation and show overlay
-        burgerContainer.classList.toggle('active');
-        if (burgerContainer.classList.contains('active')) {
-            openMobileMenu();
-        } else {
-            closeMobileMenu();
-        }
-    } else {
-        // Desktop/Laptop: Toggle navbar
-        if (navbarExpanded) {
-            rollUpNavbar();
-        } else {
-            expandNavbar();
-        }
-    }
-});
+// burgerContainer.addEventListener('click', (e) => { // This line is removed as per the edit hint
+//     e.stopPropagation();
+//     if (isMobileDevice()) {
+//         // Mobile: Toggle burger animation and show overlay
+//         burgerContainer.classList.toggle('active');
+//         if (burgerContainer.classList.contains('active')) {
+//             openMobileMenu();
+//         } else {
+//             closeMobileMenu();
+//         }
+//     } else {
+//         // Desktop/Laptop: Toggle navbar
+//         if (navbarExpanded) {
+//             rollUpNavbar();
+//         } else {
+//             expandNavbar();
+//         }
+//     }
+// });
 
 // Fixed navigation link functionality
 function setActiveLink(clickedLink, allLinks) {
@@ -179,45 +145,45 @@ function setActiveLink(clickedLink, allLinks) {
 }
 
 // Desktop navigation links - maintains existing functionality
-navLinks.forEach((link, index) => {
-    link.addEventListener('click', (e) => {
-        e.preventDefault();
-        setActiveLink(link, navLinks);
+// navLinks.forEach((link, index) => { // This line is removed as per the edit hint
+//     link.addEventListener('click', (e) => {
+//         e.preventDefault();
+//         setActiveLink(link, navLinks);
         
-        // Also update mobile nav
-        if (mobileNavLinks[index]) {
-            setActiveLink(mobileNavLinks[index], mobileNavLinks);
-        }
+//         // Also update mobile nav
+//         if (mobileNavLinks[index]) {
+//             setActiveLink(mobileNavLinks[index], mobileNavLinks);
+//         }
         
-        // Navigate to page
-        const section = link.getAttribute('data-section');
-        if (section) {
-            navigateToPage(section);
-        }
-    });
-});
+//         // Navigate to page
+//         const section = link.getAttribute('data-section');
+//         if (section) {
+//             navigateToPage(section);
+//         }
+//     });
+// });
 
 // Mobile navigation links - maintains existing functionality
-mobileNavLinks.forEach((link, index) => {
-    link.addEventListener('click', (e) => {
-        e.preventDefault();
-        setActiveLink(link, mobileNavLinks);
+// mobileNavLinks.forEach((link, index) => { // This line is removed as per the edit hint
+//     link.addEventListener('click', (e) => {
+//         e.preventDefault();
+//         setActiveLink(link, mobileNavLinks);
         
-        // Also update desktop nav
-        if (navLinks[index]) {
-            setActiveLink(navLinks[index], navLinks);
-        }
+//         // Also update desktop nav
+//         if (navLinks[index]) {
+//             setActiveLink(navLinks[index], navLinks);
+//         }
         
-        // Close mobile menu
-        closeMobileMenu();
+//         // Close mobile menu
+//         closeMobileMenu();
         
-        // Navigate to page
-        const section = link.getAttribute('data-section');
-        if (section) {
-            navigateToPage(section);
-        }
-    });
-});
+//         // Navigate to page
+//         const section = link.getAttribute('data-section');
+//         if (section) {
+//             navigateToPage(section);
+//         }
+//     });
+// });
 
 // Enhanced mobile menu functions
 function openMobileMenu() {
@@ -227,7 +193,7 @@ function openMobileMenu() {
 
 function closeMobileMenu() {
     mobileOverlay.classList.remove('active');
-    burgerContainer.classList.remove('active');
+    // burgerContainer.classList.remove('active'); // This line is removed as per the edit hint
     document.body.style.overflow = '';
 }
 
@@ -260,12 +226,12 @@ window.addEventListener('resize', () => {
 });
 
 // Set first nav item as active by default
-if (navLinks.length > 0) {
-    navLinks[0].classList.add('active');
-}
-if (mobileNavLinks.length > 0) {
-    mobileNavLinks[0].classList.add('active');
-}
+// if (navLinks.length > 0) { // This line is removed as per the edit hint
+//     navLinks[0].classList.add('active');
+// }
+// if (mobileNavLinks.length > 0) { // This line is removed as per the edit hint
+//     mobileNavLinks[0].classList.add('active');
+// }
 
 // BorderBeam Class for Animated Buttons - maintains existing functionality
 class BorderBeam {

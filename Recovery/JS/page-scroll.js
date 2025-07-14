@@ -274,44 +274,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // --- Scroll Hint Animation for Index Page ---
-    if (currentIndex === 0) {
-        const mainLayout = document.getElementById('mainLayout');
-        const globeContainer = document.getElementById('globeContainer');
-        const globeOverlay = document.querySelector('.globe-overlay');
-        let scrollHintInterval = null;
-        let userHasScrolled = false;
-        function playScrollHint(times, durationUp = 0.5, durationDown = 0.7) {
-            if (mainLayout && globeContainer && globeOverlay && window.gsap) {
-                const targets = [mainLayout, globeContainer, globeOverlay];
-                const tl = gsap.timeline();
-                for (let i = 0; i < times; i++) {
-                    tl.to(targets, { y: -40, duration: durationUp, ease: 'power1.out' })
-                      .to(targets, { y: 0, duration: durationDown, ease: 'bounce.out' });
-                }
-            }
-        }
-        setTimeout(() => {
-            playScrollHint(2, 0.5, 0.7); // Initial: 2 times, slightly slower
-            // Set up interval for repeating hint every 5 seconds
-            scrollHintInterval = setInterval(() => {
-                if (!userHasScrolled) {
-                    playScrollHint(1, 0.35, 0.5); // Repeat: 1 time, normal speed
-                }
-            }, 5000);
-        }, 900);
-        // Listen for user scroll to stop the interval
-        function onUserScroll() {
-            if (!userHasScrolled) {
-                userHasScrolled = true;
-                if (scrollHintInterval) clearInterval(scrollHintInterval);
-            }
-        }
-        window.addEventListener('scroll', onUserScroll, { once: true });
-        // For keyboard navigation or touch
-        window.addEventListener('keydown', onUserScroll, { once: true });
-        window.addEventListener('touchstart', onUserScroll, { once: true });
-    }
 
 
 });

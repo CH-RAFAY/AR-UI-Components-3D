@@ -27,16 +27,14 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform 0.6s ease, opacity 0.6s ease;
     transform: translateY(0);
     opacity: 1;
-    pointer-events: auto;
 }
 
 .glassmorphic-navbar.hidden {
     transform: translateY(-100%);
     opacity: 0;
-    pointer-events: none;
 }
 
 .glassmorphic-navbar.scrolled {
@@ -109,11 +107,10 @@ body {
     cursor: pointer;
     z-index: 1100;
     opacity: 0;
-    transform: scale(0.8) translateY(-20px);
+    transform: scale(0.8);
     transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     user-select: none;
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-    pointer-events: none;
 }
 
 #burgerContainer:hover {
@@ -125,8 +122,7 @@ body {
 
 #burgerContainer.show {
     opacity: 1;
-    transform: scale(1) translateY(0);
-    pointer-events: auto;
+    transform: scale(1);
 }
 
 /* Burger Lines Styling */
@@ -169,11 +165,10 @@ body {
     height: 100vh;
     background: rgba(0, 0, 0, 0.3);
     backdrop-filter: blur(25px) saturate(120%);
-    -webkit-backdrop-filter: blur(25px) saturate(120%);
     z-index: 999;
     display: none;
     opacity: 0;
-    transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     align-items: center;
     justify-content: center;
 }
@@ -181,7 +176,6 @@ body {
 .mobile-overlay.active {
     display: flex;
     opacity: 1;
-    visibility: visible;
 }
 
 .mobile-nav-menu {
@@ -197,7 +191,6 @@ body {
     border: 1px solid rgba(125, 211, 252, 0.2);
     border-radius: 20px;
     padding: 3rem 2rem;
-    position: relative;
     box-shadow: 
         0 20px 60px rgba(0, 0, 0, 0.4),
         0 8px 25px rgba(0, 0, 0, 0.3),
@@ -309,17 +302,21 @@ body {
     position: relative; 
     opacity: 0; 
 }
+
 .side-box-container { 
     flex: 0 0 350px; 
     max-width: 350px; 
     z-index: 10; 
 }
+
 .left-side { 
     margin-right: 2rem; 
 }
+
 .right-side { 
     margin-left: 2rem; 
 }
+
 .center-space { 
     flex: 1; 
     min-height: 100vh; 
@@ -471,99 +468,43 @@ body {
 /* Responsive Design */
 @media (max-width: 1200px) {
     body { perspective: none; }
-    .main-layout { 
-        flex-direction: column; 
-        justify-content: center; 
-        align-items: center; 
-        padding: 2rem 1rem; 
-        gap: 2rem; 
-        min-height: 100vh; 
-        opacity: 1; 
-    }
+    .main-layout { flex-direction: column; justify-content: center; align-items: center; padding: 2rem 1rem; gap: 2rem; min-height: 100vh; opacity: 1; }
     .center-space { display: none; }
-    .tech-globe-container { 
-        position: fixed; 
-        z-index: 0; 
-        pointer-events: none; 
-        opacity: 0.2; 
-    }
+    .tech-globe-container { position: fixed; z-index: 0; pointer-events: none; opacity: 0.2; }
     .globe-overlay { display: block; }
-    .side-box-container { 
-        flex: 0 1 auto; 
-        width: 90%; 
-        max-width: 680px; 
-        margin: 0; 
-    }
-    .glass-side-box { 
-        width: 100%; 
-        max-width: none; 
-        min-height: auto; 
-        transform: none; 
-        padding: 2rem; 
-        border: 1px solid rgba(125, 211, 252, 0.2); 
-    }
-    .button-container { 
-        position: relative; 
-        order: 3; 
-        bottom: auto; 
-        left: auto; 
-        transform: none; 
-        width: 90%; 
-        max-width: 680px; 
-        margin-top: 1rem; 
-        justify-content: center; 
-        opacity: 1; 
-    }
+    .side-box-container { flex: 0 1 auto; width: 90%; max-width: 680px; margin: 0; }
+    .glass-side-box { width: 100%; max-width: none; min-height: auto; transform: none; padding: 2rem; border: 1px solid rgba(125, 211, 252, 0.2); }
+    .button-container { position: relative; order: 3; bottom: auto; left: auto; transform: none; width: 90%; max-width: 680px; margin-top: 1rem; justify-content: center; opacity: 1; }
 }
 
 @media (max-width: 768px) {
-    .main-layout { 
-        padding: 3rem 1rem; 
-        gap: 1.5rem; 
-    }
-    .glass-side-box { 
-        padding: 1.5rem; 
-    }
-    .profile-name { 
-        font-size: 2.2rem; 
-    }
-    .profile-title { 
-        font-size: 1.1rem; 
-    }
-    .profile-description, .about-description { 
-        font-size: 1rem; 
-    }
-    .button-container { 
-        flex-direction: row; 
-        gap: 1rem; 
-        margin-top: 2rem; 
-    }
-    .js-border-beam { 
-        flex: 1; 
-        text-align: center; 
-        padding-left: 1rem; 
-        padding-right: 1rem; 
-    }
+    .main-layout { padding: 3rem 1rem; gap: 1.5rem; }
+    .glass-side-box { padding: 1.5rem; }
+    .profile-name { font-size: 2.2rem; }
+    .profile-title { font-size: 1.1rem; }
+    .profile-description, .about-description { font-size: 1rem; }
+    .button-container { flex-direction: row; gap: 1rem; margin-top: 2rem; }
+    .js-border-beam { flex: 1; text-align: center; padding-left: 1rem; padding-right: 1rem; }
     
-    /* Mobile navbar styles - Hide horizontal navbar completely on mobile */
+    /* Mobile navbar styles */
     .glassmorphic-navbar {
-        display: none !important;
-        transform: translateY(-100%);
-        opacity: 0;
-        pointer-events: none;
+        padding: 10px 16px;
+        justify-content: space-between;
     }
     
-    /* Always show burger menu on mobile */
+    .navbar-menu {
+        display: none;
+    }
+    
+    .glassmorphic-navbar ul {
+        gap: 0;
+    }
+
     #burgerContainer {
         top: 15px;
         right: 15px;
         width: 50px;
         height: 50px;
-        opacity: 1 !important;
-        transform: scale(1) translateY(0) !important;
-        pointer-events: auto !important;
-        display: flex !important;
-        visibility: visible !important;
     }
 
     /* Enhanced mobile menu styling */
@@ -580,21 +521,9 @@ body {
         min-width: 180px;
         padding: 12px 25px;
     }
-
-    #burgerContainer {
-        left: 16px;
-        top: 16px;
-        right: auto;
-        margin: 0;
-    }
 }
 
 @media (max-width: 582px) {
-    .button-container { 
-        flex-direction: column; 
-    }
-    .js-border-beam { 
-        flex: none; 
-        width: 100%; 
-    }
+    .button-container { flex-direction: column; }
+    .js-border-beam { flex: none; width: 100%; }
 }
