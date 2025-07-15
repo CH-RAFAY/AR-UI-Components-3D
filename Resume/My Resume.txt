@@ -1,0 +1,42 @@
+Abdul Rafay Ather 
+Islamabad 
++92 3177937589
+chrafayather@gmail.com
+
+Developer Profiles
+PORTFOLIO  -  GITHUB   -  LINKEDIN - CERTIFICATES
+
+Education
+FAST-NUCES                   BS - Software Engineering 
+01/1970
+Islamabad 
+University Societies: GDSA -MLSA -IEEE
+
+Experience
+Machine Learning Engineer 
+FAST NUCES - Final Year Project                   09/2024 - 07/2025
+Islamabad , Pakistan
+Guitar Audio into Music Notes
+Developed a system to convert guitar audio into music notes using audio processing and ML models.
+Designed a hybrid model combining deep learning and rule-based logic for accurate transcription.
+Demonstrated expertise in real-world AI applications and music signal processing.
+Front End Engineer 
+AutoHero - Free Lancing Project                   09/2024 - 12/2024
+Hamburg , Germany
+EV Showroom Website UI
+Built a professional front-end website for a German EV showroom using modern web technologies.
+Delivered a custom-coded responsive UI tailored to client branding and product showcase.
+Showcased ability to build production-ready, client-focused front-ends for international businesses.
+Front End Engineer 
+S!NG - Free Lancing Project                   03/2024 - 07/2024
+Seattle , United States
+Audio Streaming Website UI
+Designed and developed a professional front-end for a USA audio streaming platform.
+Focused on clean UI/UX with responsive design for seamless cross-device experience.
+Demonstrated ability to deliver scalable, user-centric interfaces for global tech clients.
+Note: Due to NDA and client privacy, project names have been replaced with similar well-known brands for demonstration purposes.
+
+Expertise
+Languages: HTML5, CSS3, JavaScript, Python, C, C++, Java
+Libraries: React.js, Redux, Axios, Sass, NumPy, Pandas, Scikit-learn, TensorFlow, Keras, Librosa, Three.js
+Frameworks & Tools: Next.js, Solid.js, Bootstrap, Tailwind CSS, GitHub, Webpack, Vite, NPM, , Figma, Versal

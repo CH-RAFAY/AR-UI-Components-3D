@@ -388,12 +388,14 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Add Resume button functionality
         resumeButton.addEventListener('click', () => {
-            // You can replace this with actual resume download link
-            const resumeUrl = 'assets/resume.pdf'; // Update with your actual resume path
+            // Updated resume download link
+            const resumeUrl = 'Resume/My Resume.pdf'; // Corrected path
             const link = document.createElement('a');
             link.href = resumeUrl;
             link.download = 'Abdul_Rafay_Ather_Resume.pdf';
+            document.body.appendChild(link); // Ensure click works in all browsers
             link.click();
+            document.body.removeChild(link);
         });
     }
     
