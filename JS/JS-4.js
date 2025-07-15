@@ -176,7 +176,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     linkedinLogo.addEventListener('click', () => {
-        window.open('https://www.linkedin.com/in/rafay-chaudhry-54b671301', '_blank');
+        window.open('https://www.linkedin.com/in/rafay-chaudhry-54b671301/', '_blank');
         gsap.to(linkedinLogo, { scale: 0.9, duration: 0.1, yoyo: true, repeat: 1, ease: "power2.inOut" });
     });
 
