@@ -10,6 +10,9 @@ document.addEventListener('DOMContentLoaded', function() {
         const burgerContainer = document.getElementById('burgerContainer');
         const navbar = document.getElementById('glassmorphicNavbar');
         
+        // Only execute if these elements exist (they don't on index page)
+        if (!burgerContainer || !navbar) return;
+        
         if (window.innerWidth <= 768) {
             // Mobile view
             navbar.classList.add('hidden');
@@ -20,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // Desktop view
             navbar.classList.remove('hidden');
             burgerContainer.classList.remove('show');
-            if (mobileOverlay.classList.contains('active')) {
+            if (mobileOverlay && mobileOverlay.classList.contains('active')) {
                 mobileOverlay.classList.remove('active');
                 mobileOverlay.style.display = 'none';
                 burgerContainer.classList.remove('active');
@@ -33,8 +36,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Show burger menu after 2 seconds of page load (only on larger screens)
     setTimeout(() => {
-        if (window.innerWidth > 768) {
-            document.getElementById('burgerContainer').classList.add('show');
+        const burgerContainer = document.getElementById('burgerContainer');
+        if (window.innerWidth > 768 && burgerContainer) {
+            burgerContainer.classList.add('show');
         }
     }, 2000);
     // Initialize GSAP ScrollTrigger
@@ -51,7 +55,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Close mobile menu if open - handled by JS-1.js
                 if (mobileOverlay && mobileOverlay.classList.contains('active')) {
                     mobileOverlay.classList.remove('active');
-                    document.getElementById('burgerContainer').classList.remove('active');
+                    const burgerContainer = document.getElementById('burgerContainer');
+                    if (burgerContainer) burgerContainer.classList.remove('active');
                 }
 
                 // Smooth scroll to section
@@ -128,6 +133,9 @@ document.addEventListener('DOMContentLoaded', function() {
         lastInteractionTime = Date.now();
         const navbar = document.getElementById('glassmorphicNavbar');
         const burgerContainer = document.getElementById('burgerContainer');
+        
+        // Only execute if these elements exist
+        if (!navbar || !burgerContainer) return;
 
         navbar.classList.remove('hidden');
         burgerContainer.classList.remove('show');
@@ -152,11 +160,13 @@ document.addEventListener('DOMContentLoaded', function() {
         const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
         handleNavInteraction();
 
-        // Add scrolled class for styling
-        if (scrollTop > 50) {
-            navbar.classList.add('scrolled');
-        } else {
-            navbar.classList.remove('scrolled');
+        // Add scrolled class for styling (only if navbar exists)
+        if (navbar) {
+            if (scrollTop > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
         }
 
         lastScrollTop = scrollTop;

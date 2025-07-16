@@ -378,6 +378,7 @@
     
     /* Brand Styling */
     .menu-brand {
+        font-family: 'Orbitron', monospace;
         font-size: 2rem;
         font-weight: 700;
         color: #ffffff;
@@ -575,5 +576,79 @@
 @media (min-width: 651px) {
   .navbar-link.active::after {
     width: 100% !important;
+  }
+}
+
+/* --- FORCE TOUCH EVENTS ON MOBILE NAVBAR --- */
+@media (max-width: 650px) {
+  .hamburger-btn {
+    touch-action: manipulation !important;
+    -webkit-tap-highlight-color: transparent !important;
+    pointer-events: auto !important;
+    cursor: pointer !important;
+    user-select: none !important;
+    -webkit-user-select: none !important;
+  }
+  
+  .mobile-nav-link, .menu-link {
+    touch-action: manipulation !important;
+    -webkit-tap-highlight-color: transparent !important;
+    pointer-events: auto !important;
+    cursor: pointer !important;
+    user-select: none !important;
+    -webkit-user-select: none !important;
+  }
+  
+  .mobile-overlay {
+    touch-action: manipulation !important;
+    pointer-events: auto !important;
+  }
+  
+  .mobile-overlay.active {
+    pointer-events: auto !important;
+  }
+  
+  .menu-overlay {
+    touch-action: manipulation !important;
+    pointer-events: auto !important;
+  }
+  
+  .menu-overlay.active {
+    pointer-events: auto !important;
+  }
+}
+
+/* --- FORCE HAMBURGER BUTTON TOUCH EVENTS ON MOBILE --- */
+@media (max-width: 650px) {
+  .hamburger-btn {
+    pointer-events: auto !important;
+    touch-action: manipulation !important;
+    -webkit-tap-highlight-color: transparent !important;
+    user-select: none !important;
+    -webkit-user-select: none !important;
+    cursor: pointer !important;
+    z-index: 10010 !important;
+    position: fixed !important;
+    top: 20px !important;
+    right: 20px !important;
+    display: flex !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+  
+  /* Ensure no other elements cover the hamburger button */
+  .hamburger-btn * {
+    pointer-events: auto !important;
+  }
+  
+  /* Prevent any parent elements from blocking touch events */
+  .navbar {
+    pointer-events: auto !important;
+  }
+  
+  /* Ensure the button is above all other elements */
+  .hamburger-btn::before,
+  .hamburger-btn::after {
+    display: none !important;
   }
 }

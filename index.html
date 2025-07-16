@@ -260,5 +260,91 @@
     <script src="JS/JS-3.js"></script>
     <script src="JS/JS-4.js"></script>
     <script src="JS/page-scroll.js"></script>
+    
+    <!-- Robust touch fix for index page hamburger button -->
+    <script>
+        // Wait for all scripts to load, then fix the hamburger button
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                const hamburgerBtn = document.getElementById('hamburgerBtn');
+                const menuOverlay = document.getElementById('menuOverlay');
+                const mobileOverlay = document.getElementById('mobileOverlay');
+                
+                if (hamburgerBtn && window.innerWidth <= 650) {
+                    console.log('Fixing hamburger button for mobile touch on index page');
+                    
+                    // Store original event listeners
+                    const originalClick = hamburgerBtn.onclick;
+                    
+                    // Create a new event handler that works with touch
+                    function handleHamburgerClick(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        
+                        console.log('Hamburger button clicked/touched');
+                        
+                        // Toggle the menu
+                        const isMenuOpen = hamburgerBtn.classList.contains('active');
+                        
+                        if (isMenuOpen) {
+                            // Close menu
+                            hamburgerBtn.classList.remove('active');
+                            if (menuOverlay) menuOverlay.classList.remove('active');
+                            if (mobileOverlay) mobileOverlay.classList.remove('active');
+                            document.body.classList.remove('menu-open');
+                        } else {
+                            // Open menu
+                            hamburgerBtn.classList.add('active');
+                            if (menuOverlay) menuOverlay.classList.add('active');
+                            if (mobileOverlay) mobileOverlay.classList.add('active');
+                            document.body.classList.add('menu-open');
+                        }
+                    }
+                    
+                    // Remove existing event listeners and add our own
+                    hamburgerBtn.onclick = null;
+                    hamburgerBtn.addEventListener('click', handleHamburgerClick, true);
+                    hamburgerBtn.addEventListener('touchstart', handleHamburgerClick, true);
+                    hamburgerBtn.addEventListener('touchend', function(e) {
+                        e.preventDefault();
+                    }, true);
+                    
+                    // Ensure the button is touchable
+                    hamburgerBtn.style.touchAction = 'manipulation';
+                    hamburgerBtn.style.pointerEvents = 'auto';
+                    hamburgerBtn.style.zIndex = '10010';
+                    
+                    console.log('Hamburger button fix applied');
+                }
+                
+                // Fix active page styling for mobile navbar
+                if (window.innerWidth <= 650) {
+                    // Set active class on the correct mobile nav link for index page
+                    const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+                    const currentPath = window.location.pathname;
+                    
+                    mobileNavLinks.forEach(function(link) {
+                        link.classList.remove('active');
+                        if (link.getAttribute('href') === currentPath || 
+                            (currentPath === '/' && link.getAttribute('href') === '/index.html')) {
+                            link.classList.add('active');
+                        }
+                    });
+                    
+                    // Also set active class on menu links
+                    const menuLinks = document.querySelectorAll('.menu-link');
+                    menuLinks.forEach(function(link) {
+                        link.classList.remove('active');
+                        if (link.getAttribute('href') === currentPath || 
+                            (currentPath === '/' && link.getAttribute('href') === '/index.html')) {
+                            link.classList.add('active');
+                        }
+                    });
+                    
+                    console.log('Active page styling applied for mobile navbar');
+                }
+            }, 500);
+        });
+    </script>
 </body>
 </html>
