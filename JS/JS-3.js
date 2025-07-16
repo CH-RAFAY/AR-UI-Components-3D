@@ -403,6 +403,29 @@ document.addEventListener('DOMContentLoaded', () => {
             isDragging = false;
             snapToCategory();
         });
+
+        // Add touch support for tumbler drag on mobile
+        let touchDragging = false;
+        let touchStartX = 0;
+        selector.addEventListener('touchstart', (e) => {
+            if (selector.introAnimation) selector.introAnimation.kill();
+            if (selector.hintAnimation) selector.hintAnimation.kill();
+            gsap.to([sidePrev, sideNext], { opacity: 0, duration: 0.1 });
+            document.querySelectorAll('.category-label').forEach((l) => l.classList.remove('hint-suppressed', 'hint-visible'));
+            setTumblerAppearance(true);
+            touchDragging = true;
+            touchStartX = e.touches[0].pageX - gsap.getProperty(tumbler, 'rotationY') * 2.5;
+            gsap.killTweensOf(tumbler);
+        });
+        window.addEventListener('touchmove', (e) => {
+            if (!touchDragging) return;
+            gsap.set(tumbler, { rotationY: (e.touches[0].pageX - touchStartX) / 2.5 });
+        });
+        window.addEventListener('touchend', () => {
+            if (!touchDragging) return;
+            touchDragging = false;
+            snapToCategory();
+        });
     }
 
     function updateActiveCategory(activeIndex) {
@@ -491,7 +514,11 @@ document.addEventListener('DOMContentLoaded', () => {
             timeout = setTimeout(() => func.apply(this, args), wait);
         };
     };
-    window.addEventListener('resize', debounce(() => location.reload(), 250));
+    window.addEventListener('resize', debounce(() => {
+        if (window.innerWidth > 650) {
+            location.reload();
+        }
+    }, 250));
     
     setupTumblerSelector();
     initialRender(currentCategoryIndex);

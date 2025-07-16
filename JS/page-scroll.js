@@ -1,4 +1,12 @@
 // Page Scroll Navigation
+// Disable scroll-based navigation on mobile at the very top
+if (window.innerWidth <= 650) {
+    // Do not register any scroll/touch navigation events
+    // This disables the entire script for mobile
+    // You can optionally export nothing or just return
+    // (function(){return;})();
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     // Define the pages in order (filenames only)
     const pages = [
@@ -101,6 +109,11 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
+    // Disable scroll-based navigation on mobile
+    if (window.innerWidth <= 650) {
+        return;
+    }
+
     // Handle wheel events for smooth scrolling between pages/sections
     window.addEventListener('wheel', function(e) {
         // Update scroll values

@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
     <title>Rafay's Portfolio</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -12,18 +13,73 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&family=Orbitron:wght@400;500;700;900&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="Css/main.css">
+    <link rel="stylesheet" href="Css/navbar.css">
     <link rel="stylesheet" href="Css/Style-1.css"> 
     <link rel="stylesheet" href="Css/Style-2.css">
     <link rel="stylesheet" href="Css/Style-3.css">
     <link rel="stylesheet" href="Css/Style-4.css">
+    <link rel="stylesheet" href="Css/mobile-fix.css">
     <link rel="stylesheet" href="Css/page-transitions.css">
+    <script src="Js/navbar.js" defer></script>
 </head>
 <body class="text-white">
     <!-- Page Transition Overlay -->
     <div class="page-transition-overlay" id="pageTransitionOverlay"></div>
     
+    <!-- Responsive Navbar -->
+    <nav class="navbar" id="navbar">
+        <!-- Hamburger Menu Button (Works on all screen sizes) -->
+        <button class="hamburger-btn" id="hamburgerBtn">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <!-- Remove left-hamburger-btn for mobile -->
+        <!-- Dot Navbar for Mobile Only -->
+        <div class="dot-navbar" id="dotNavbar">
+            <a href="/index.html" class="dot-nav-dot" data-page="index.html"></a>
+            <a href="/Page-2.html" class="dot-nav-dot" data-page="Page-2.html"></a>
+            <a href="/Page-3.html" class="dot-nav-dot" data-page="Page-3.html"></a>
+            <a href="/Page-4.html" class="dot-nav-dot" data-page="Page-4.html"></a>
+        </div>
+        <!-- Desktop Horizontal Navbar -->
+        <div class="navbar-container">
+            <div class="desktop-navbar">
+                <!-- Left Navigation -->
+                <div class="navbar-menu left-menu">
+                    <a href="/index.html" class="navbar-link">Home</a>
+                    <a href="/Page-2.html" class="navbar-link">Expertise</a>
+                </div>
+                
+                <!-- Center Logo -->
+                <div class="navbar-brand">
+                    <span>Rafay's Portfolio</span>
+                </div>
+                
+                <!-- Right Navigation -->
+                <div class="navbar-menu right-menu">
+                    <a href="/Page-3.html" class="navbar-link">Projects</a>
+                    <a href="/Page-4.html" class="navbar-link">Certificates</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Menu Overlay -->
+    <div class="menu-overlay" id="menuOverlay">
+        <div class="menu-content">
+            <div class="menu-brand">Rafay's Portfolio</div>
+            <a href="/index.html" class="menu-link">Home</a>
+            <a href="/Page-2.html" class="menu-link">Expertise</a>
+            <a href="/Page-3.html" class="menu-link">Projects</a>
+            <a href="/Page-4.html" class="menu-link">Certificates</a>
+        </div>
+    </div>
+    
     <!-- Enhanced Mobile Overlay with Glassy Transparent Background -->
     <div class="mobile-overlay" id="mobileOverlay">
+        <!-- Removed the mobile-close-btn button -->
+        <div class="menu-brand">Rafay's Portfolio</div>
         <div class="mobile-nav-menu">
             <a href="/index.html" class="mobile-nav-link" data-section="introduction">Introduction</a>
             <a href="/Page-2.html" class="mobile-nav-link" data-section="expertise">Expertise</a>
