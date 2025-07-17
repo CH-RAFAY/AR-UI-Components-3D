@@ -1,0 +1,171 @@
+/* --- Base and Background Layer CSS --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #000000;
+    font-family: 'Inter', sans-serif;
+    color: #f1f5f9;
+}
+
+#synapse-section {
+    height: 100vh;
+    width: 100%;
+    position: relative;
+    background-color: #000000;
+}
+
+#synapseCanvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+}
+
+.foreground-content {
+    position: relative;
+    z-index: 1;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+/* --- Front Layer (Nexus Skills) CSS --- */
+.skills-section {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+.nexus-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90vw;
+    height: 90vw;
+    max-width: 800px;
+    max-height: 800px;
+}
+
+.nexus-core {
+    position: absolute;
+    width: 25%;
+    height: 25%;
+    background: radial-gradient(circle, rgba(14, 165, 233, 0.2), transparent 70%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: box-shadow 0.4s ease;
+    box-shadow: 0 0 30px rgba(14, 165, 233, 0.3), inset 0 0 20px rgba(14, 165, 233, 0.2);
+    z-index: 10;
+    /* Initial state for animation */
+    opacity: 0;
+    transform: scale(0.5);
+}
+
+#core-skill-name {
+    font-family: "Poppins", sans-serif;
+    font-size: clamp(1rem, 4vw, 1.8rem);
+    color: #fff;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    user-select: none;
+    position: absolute;
+    z-index: 11;
+    pointer-events: none;
+}
+
+.skill-node {
+    position: absolute;
+    width: 11.25%;
+    height: 11.25%;
+    border-radius: 50%;
+    background-color: #000000;
+    background-image: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05) 80%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    z-index: 5;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+    /* Initial state for animation */
+    opacity: 0;
+    transform: scale(0.5);
+}
+
+.skill-node img {
+    width: 61%;
+    height: 61%;
+    object-fit: contain;
+}
+
+.skill-node img[alt="JavaScript"],
+.skill-node img[alt="TypeScript"] {
+    width: 67%;
+    height: 67%;
+}
+
+#connector-svg {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    overflow: visible;
+}
+
+#connector-line {
+    stroke-width: 4px;
+    opacity: 0;
+    transition: opacity 0.3s ease, stroke-dashoffset 0.3s ease-out;
+    filter: drop-shadow(0 0 8px rgba(var(--line-glow-color), 0.9));
+}
+
+.skill-node:hover {
+    transform: scale(1.2);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.2), 0 0 25px rgba(var(--aura-color), 0.6);
+    z-index: 20;
+}
+
+/* --- MODIFIED: Sequential Animation Styles --- */
+@keyframes fadeInScale {
+    0% { 
+        opacity: 0; 
+        transform: scale(0.5); 
+    }
+    100% { 
+        opacity: 1; 
+        transform: scale(1); 
+    }
+}
+
+.fade-in-scale {
+    animation: fadeInScale 0.6s ease forwards;
+}
+
+/* --- MODIFIED: Responsive Improvements --- */
+@media (max-width: 652px) {
+    .skill-node {
+        width: 13.5%;
+        height: 13.5%;
+    }
+}
+
+/* --- Small Screen Responsiveness --- */
+@media (max-width: 499px) {
+    .skill-node {
+        width: 15%;
+        height: 15%;
+    }
+}

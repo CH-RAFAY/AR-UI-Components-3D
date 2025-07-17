@@ -1,0 +1,126 @@
+/* Page Transition Styles */
+body {
+    transition: opacity 0.5s ease;
+}
+
+/* Smooth section scrolling for first page */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Ensure sections scroll smoothly */
+section {
+    scroll-margin-top: 0;
+}
+
+.page-transition-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    z-index: 9999;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+}
+
+.page-transition-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Scroll indicator */
+.scroll-indicator {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+}
+
+.scroll-indicator:hover {
+    opacity: 1;
+}
+
+.scroll-indicator-text {
+    color: #7dd3fc;
+    font-size: 12px;
+    margin-bottom: 8px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.scroll-indicator-arrow {
+    width: 30px;
+    height: 30px;
+    border: 2px solid #7dd3fc;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: pulse 2s infinite;
+}
+
+.scroll-indicator-arrow svg {
+    width: 12px;
+    height: 12px;
+    fill: none;
+    stroke: #7dd3fc;
+    stroke-width: 3px;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.1);
+        opacity: 0.7;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Page progress indicator */
+.page-progress {
+    position: fixed;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    z-index: 1200;
+}
+
+.page-progress-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.3);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.page-progress-dot:hover {
+    background-color: rgba(125, 211, 252, 0.7);
+    transform: scale(1.2);
+}
+
+.page-progress-dot.active {
+    background-color: #7dd3fc;
+    box-shadow: 0 0 10px rgba(125, 211, 252, 0.5);
+}

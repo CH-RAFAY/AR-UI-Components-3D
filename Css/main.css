@@ -1,0 +1,108 @@
+/* Smooth Scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    overflow: hidden;
+    scroll-behavior: smooth;
+}
+
+#hero-section {
+    overflow-y: auto;
+    max-height: 100vh;
+}
+
+/* Ensure smooth section transitions */
+section {
+    scroll-margin-top: 0;
+    scroll-snap-align: start;
+}
+
+/* Section Transitions */
+section {
+    min-height: 100vh;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+    transition: opacity 0.5s ease;
+}
+
+/* Ensure sections don't overlap during transitions */
+#hero-section {
+    z-index: 40;
+    background: radial-gradient(ellipse at center, #0a0a0a 0%, #000000 100%);
+}
+
+#synapse-section {
+    z-index: 30;
+    background: #000000;
+}
+
+#timeline-section {
+    z-index: 20;
+    background: radial-gradient(ellipse at center, #0a0a0a 0%, #000000 100%);
+}
+
+#certificates-section {
+    z-index: 10;
+    background: radial-gradient(ellipse at center, #0a0a0a 0%, #000000 100%);
+}
+
+/* Canvas Positioning */
+#synapseCanvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+/* Ensure content is above canvas */
+.section-content {
+    position: relative;
+    z-index: 2;
+}
+
+/* Active Section Styles */
+section.active {
+    opacity: 1;
+}
+
+/* Navigation Link Transitions */
+.nav-link, .mobile-nav-link {
+    transition: color 0.3s ease, background-color 0.3s ease, transform 0.3s ease;
+}
+
+/* Smooth transition for mobile menu */
+.mobile-overlay {
+    transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+
+/* Ensure proper stacking of navigation elements */
+.glassmorphic-navbar {
+    z-index: 1000;
+}
+
+#burgerContainer {
+    z-index: 1100;
+}
+
+.mobile-overlay {
+    z-index: 999;
+}
+
+/* Removed scroll-indicator and page-progress styles as per request */
+/*
+.scroll-indicator, .page-progress {
+    display: none !important;
+}
+*/
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    section {
+        padding-top: 60px; /* Account for fixed navbar */
+    }
+}
