@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Rafay's Portfolio</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&family=Inter:wght@400;500&family=Orbitron:wght@400;500;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="Css/navbar.css">
+    <link rel="stylesheet" href="Css/Style-3.css">
+    <link rel="stylesheet" href="Css/page-transitions.css">
+    <script src="JS/navbar.js" defer></script>
+</head>
+<body>
+    <!-- Professional Responsive Navbar -->
+    <nav class="navbar" id="navbar">
+        <!-- Hamburger Menu Button -->
+        <button class="hamburger-btn" id="hamburgerBtn">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        
+        <!-- Desktop Horizontal Navbar -->
+        <div class="navbar-container">
+            <div class="desktop-navbar">
+                <!-- Left Navigation -->
+                <div class="navbar-menu left-menu">
+                    <a href="/index.html" class="navbar-link">Home</a>
+                    <a href="/Page-2.html" class="navbar-link">Expertise</a>
+                </div>
+                
+                <!-- Center Logo -->
+                <div class="navbar-brand">
+                    <span>Rafay's Portfolio</span>
+                </div>
+                
+                <!-- Right Navigation -->
+                <div class="navbar-menu right-menu">
+                    <a href="/Page-3.html" class="navbar-link">Projects</a>
+                    <a href="/Page-4.html" class="navbar-link">Certificates</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Menu Overlay -->
+    <div class="menu-overlay" id="menuOverlay">
+        <div class="menu-content">
+            <div class="menu-brand">Rafay's Portfolio</div>
+            <a href="/index.html" class="menu-link">Home</a>
+            <a href="/Page-2.html" class="menu-link">Expertise</a>
+            <a href="/Page-3.html" class="menu-link">Projects</a>
+            <a href="/Page-4.html" class="menu-link">Certificates</a>
+        </div>
+    </div>
+    <!-- Page Transition Overlay -->
+    <div class="page-transition-overlay" id="pageTransitionOverlay"></div>
+    
+    <!-- Neural Network Background Canvas -->
+    <canvas id="synapseCanvas"></canvas>
+
+    <!-- Notification Modals -->
+    <div id="under-development-notification" class="notification-overlay">
+        <div class="notification-modal">
+            <div class="notification-close"></div>
+            <h3>Project is Under Development!</h3>
+            <p>The live demo and codebase will be available soon. Thank you for your patience.</p>
+        </div>
+    </div>
+    
+    <div id="private-notification" class="notification-overlay">
+        <div class="notification-modal">
+            <div class="notification-close"></div>
+            <h3>Access Restricted</h3>
+            <p>This is a strictly private and confidential project. The codebase is not publicly available.</p>
+        </div>
+    </div>
+
+    <!-- Main Timeline Section -->
+    <section class="timeline-section">
+        <header class="timeline-header">
+            <h2 data-text="Project Chronology">Project Chronology</h2>
+            <p>An interactive journey through my key projects, showcasing the evolution of my skills and problem-solving abilities over time.</p>
+
+            <div class="category-selector">
+                <div class="tumbler">
+                    <div class="tumbler-side side-prev">PREV</div>
+                    <div class="tumbler-side side-next">NEXT</div>
+                </div>
+            </div>
+        </header>
+
+        <div class="timeline-container">
+            <svg class="timeline-svg">
+                <line class="timeline-path" x1="2" y1="0" x2="2" y2="100%" />
+            </svg>
+        </div>
+    </section>
+
+    <!-- External Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="JS/JS-3.js"></script>
+    <script src="JS/page-scroll.js"></script>
+</body>
+</html>
