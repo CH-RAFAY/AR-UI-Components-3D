@@ -93,7 +93,7 @@ body {
 }
 
 .timeline-header h2 { font-size: 3.5rem; }
-.panel-title { font-size: 1.8rem; margin-bottom: 15px; color: #b0b8c4; }
+.panel-title { font-size: 1.35rem; margin-bottom: 8px; color: #b0b8c4; }
 
 .timeline-header h2:hover::after { opacity: 0; }
 
@@ -347,8 +347,8 @@ body {
 
 /* Project Panel Styling */
 .project-panel {
-    padding: 20px;
-    max-width: 400px;
+    padding: 14px;
+    max-width: 320px;
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.03) 50%, rgba(255, 255, 255, 0.06) 100%);
     border: 1px solid rgba(125, 211, 252, 0.2);
     backdrop-filter: blur(25px) saturate(180%);
@@ -411,7 +411,7 @@ body {
 .panel-content {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 10px;
     position: relative;
     z-index: 3;
 }
@@ -419,12 +419,12 @@ body {
 .panel-main {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 15px;
+    gap: 10px;
     align-items: center;
 }
 
 .panel-text { display: flex; flex-direction: column; }
-.panel-description { font-size: 0.9rem; line-height: 1.5; color: var(--text-medium); margin-bottom: 15px; }
+.panel-description { font-size: 0.76rem; line-height: 1.4; color: var(--text-medium); margin-bottom: 10px; }
 
 .panel-tags { display: flex; flex-wrap: wrap; gap: 8px; }
 .panel-tags span {

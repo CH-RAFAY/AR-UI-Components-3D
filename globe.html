@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orbital Sphere - AR UI</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="Css/navbar.css">
+    <link rel="stylesheet" href="Css/arui.css">
+
+</head>
+<body style="margin:0; background:#000; min-height:100vh;">
+    <a href="index.html#components" class="demo-back-link">← Back to AR UI</a>
+    <!-- Navbar removed -->
+
+    <div class="tech-globe-container" id="globeContainer" style="position:fixed;top:0;left:0;width:100%;height:100%;cursor:grab;"></div>
+    <div class="globe-hint" id="globeHint">Click to pause · Drag to rotate</div>
+    <footer class="developer-credit">Developed by <span>Abdul Rafay Ather</span> · Software Engineer</footer>
+
+    <script>
+        const container = document.getElementById('globeContainer');
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+        renderer.setSize(container.clientWidth, container.clientHeight);
+        renderer.setClearColor(0x000000, 1);
+        container.appendChild(renderer.domElement);
+
+        const globeGroup = new THREE.Group();
+        scene.add(globeGroup);
+
+        const geometry = new THREE.SphereGeometry(180, 32, 32);
+        const edges = new THREE.EdgesGeometry(geometry);
+        const fiberMaterial = new THREE.LineBasicMaterial({ color: 0x7dd3fc, transparent: true, opacity: 0.4 });
+        const wireframe = new THREE.LineSegments(edges, fiberMaterial);
+        globeGroup.add(wireframe);
+
+        const glowEdges = new THREE.EdgesGeometry(new THREE.SphereGeometry(182, 32, 32));
+        const glowMaterial = new THREE.LineBasicMaterial({ color: 0x0ea5e9, transparent: true, opacity: 0.15 });
+        const glowWireframe = new THREE.LineSegments(glowEdges, glowMaterial);
+        globeGroup.add(glowWireframe);
+
+        const blueColors = [0x7dd3fc, 0x0ea5e9, 0x0284c7, 0x0369a1];
+        const vertices = geometry.attributes.position.array;
+        const infoLightGeometry = new THREE.SphereGeometry(2.5, 8, 8);
+        const infoLights = [];
+        for (let i = 0; i < vertices.length; i += 3) {
+            const colorIndex = Math.floor(Math.random() * blueColors.length);
+            const infoLightMaterial = new THREE.MeshBasicMaterial({ color: blueColors[colorIndex], transparent: true, opacity: 0.8 });
+            const infoLight = new THREE.Mesh(infoLightGeometry, infoLightMaterial);
+            infoLight.position.set(vertices[i], vertices[i + 1], vertices[i + 2]);
+            const glowSphere = new THREE.Mesh(new THREE.SphereGeometry(4, 8, 8), new THREE.MeshBasicMaterial({ color: blueColors[colorIndex], transparent: true, opacity: 0.3 }));
+            glowSphere.position.copy(infoLight.position);
+            globeGroup.add(infoLight);
+            globeGroup.add(glowSphere);
+            infoLights.push({ light: infoLight, glow: glowSphere, pulseSpeed: Math.random() * 0.02 + 0.01 });
+        }
+        const innerGlow = new THREE.Mesh(new THREE.SphereGeometry(178, 32, 32), new THREE.MeshBasicMaterial({ color: 0x0ea5e9, transparent: true, opacity: 0.08 }));
+        globeGroup.add(innerGlow);
+
+        camera.position.z = 400;
+
+        let autoRotate = true;
+        let isDragging = false;
+        let prevMouseX = 0, prevMouseY = 0;
+
+        container.addEventListener('click', (e) => {
+            if (!isDragging) {
+                autoRotate = !autoRotate;
+                document.getElementById('globeHint').textContent = autoRotate ? 'Click to pause · Drag to rotate' : 'Click to resume · Drag to rotate';
+            }
+        });
+
+        container.addEventListener('mousedown', (e) => {
+            if (e.button === 0) {
+                isDragging = true;
+                prevMouseX = e.clientX;
+                prevMouseY = e.clientY;
+                container.style.cursor = 'grabbing';
+            }
+        });
+        container.addEventListener('mousemove', (e) => {
+            if (isDragging) {
+                const dx = e.clientX - prevMouseX;
+                const dy = e.clientY - prevMouseY;
+                globeGroup.rotation.y += dx * 0.005;
+                globeGroup.rotation.x += dy * 0.005;
+                prevMouseX = e.clientX;
+                prevMouseY = e.clientY;
+            }
+        });
+        container.addEventListener('mouseup', () => {
+            isDragging = false;
+            container.style.cursor = 'grab';
+        });
+        container.addEventListener('mouseleave', () => {
+            isDragging = false;
+            container.style.cursor = 'grab';
+        });
+
+        let touchStartX = 0, touchStartY = 0;
+        container.addEventListener('touchstart', (e) => {
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+        });
+        container.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            const dx = e.touches[0].clientX - touchStartX;
+            const dy = e.touches[0].clientY - touchStartY;
+            globeGroup.rotation.y += dx * 0.005;
+            globeGroup.rotation.x += dy * 0.005;
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+        }, { passive: false });
+
+        function animate() {
+            requestAnimationFrame(animate);
+            if (autoRotate && !isDragging) {
+                globeGroup.rotation.y += 0.0015;
+                globeGroup.rotation.x += 0.0006;
+            }
+            infoLights.forEach((obj, i) => {
+                const pulse = Math.sin(Date.now() * obj.pulseSpeed + i) * 0.3 + 0.7;
+                obj.light.material.opacity = 0.8 * pulse;
+                obj.glow.material.opacity = 0.3 * pulse;
+            });
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        window.addEventListener('resize', () => {
+            camera.aspect = container.clientWidth / container.clientHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(container.clientWidth, container.clientHeight);
+        });
+
+        setTimeout(() => document.getElementById('globeHint').classList.add('fade'), 3000);
+    </script>
+    <style>
+        .globe-hint { position: fixed; bottom: 50px; left: 50%; transform: translateX(-50%); color: rgba(148,163,184,0.8); font-size: 0.85rem; z-index: 50; transition: opacity 0.5s; }
+        .globe-hint.fade { opacity: 0.3; }
+    </style>
+</body>
+</html>

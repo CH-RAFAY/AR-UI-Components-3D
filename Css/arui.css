@@ -1,0 +1,290 @@
+/* AR UI - Web Animation Showcase Styles */
+
+body.arui-index {
+    overflow-y: auto !important;
+    background: #000 !important;
+}
+
+:root {
+    --arui-text-primary: #f1f5f9;
+    --arui-text-secondary: #cbd5e1;
+    --arui-text-muted: #94a3b8;
+    --arui-text-dim: #64748b;
+    --arui-accent: #7dd3fc;
+    --arui-accent-dim: #0ea5e9;
+    --arui-glass-border: rgba(125, 211, 252, 0.2);
+    --arui-bg-dark: #000000;
+}
+
+/* Developer Credit - on every page */
+.developer-credit {
+    position: fixed;
+    bottom: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.75rem;
+    color: var(--arui-text-dim);
+    letter-spacing: 0.5px;
+    z-index: 100;
+    white-space: nowrap;
+}
+
+.developer-credit span {
+    color: var(--arui-text-muted);
+}
+
+/* Component Gallery Cards */
+.arui-components-section .section-title {
+    font-family: 'Poppins', sans-serif;
+    font-size: clamp(1.6rem, 4vw, 2.2rem);
+    font-weight: 700;
+    color: var(--arui-text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.arui-components-section .section-desc {
+    font-size: 0.95rem;
+    color: var(--arui-text-muted);
+    margin-bottom: 2rem;
+}
+
+.component-gallery {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(260px, 1fr));
+    gap: 1.25rem 1.5rem;
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+    justify-items: center;
+    align-items: start;
+}
+
+.component-card {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    background: rgba(15, 23, 42, 0.92);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,0.04);
+    border-radius: 14px;
+    padding: 1.2rem 1.25rem;
+    transition: all 0.28s ease;
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+    max-width: 360px;
+    min-height: 120px;
+}
+
+.component-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(125, 211, 252, 0.08), transparent);
+    transition: left 0.6s ease;
+}
+
+.component-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(125, 211, 252, 0.35);
+    box-shadow: 
+        0 25px 50px rgba(0, 0, 0, 0.5),
+        0 0 30px rgba(14, 165, 233, 0.15);
+}
+
+.component-card:hover::before {
+    left: 100%;
+}
+
+.component-card h3 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.02rem;
+    font-weight: 600;
+    color: var(--arui-text-primary);
+    margin-bottom: 0.35rem;
+}
+
+.component-card p {
+    font-size: 0.82rem;
+    color: var(--arui-text-muted);
+    line-height: 1.45;
+}
+
+.component-card .card-arrow {
+    margin-top: 1rem;
+    color: var(--arui-accent);
+    font-size: 0.85rem;
+    opacity: 0.8;
+    transition: transform 0.3s ease;
+}
+
+.component-card:hover .card-arrow {
+    transform: translateX(4px);
+}
+
+/* Welcome Section - no globe */
+.arui-welcome {
+    /* Reduced hero height so hero + gallery fit in 100vh on 1920x1080 */
+    min-height: 36vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 2.5rem 2rem 1rem;
+    position: relative;
+}
+
+.arui-welcome h1 {
+    font-family: 'Poppins', sans-serif;
+    /* slightly smaller max for desktop so the hero consumes less vertical space */
+    font-size: clamp(1.9rem, 4.2vw, 3rem);
+    font-weight: 700;
+    color: var(--arui-text-primary);
+    margin-bottom: 0.4rem;
+    letter-spacing: -0.02em;
+}
+
+.arui-welcome .welcome-title {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(0.9rem, 1.6vw, 1.05rem);
+    font-weight: 600;
+    color: var(--arui-text-muted);
+    margin-bottom: 0.6rem;
+}
+
+.arui-welcome .welcome-message {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(0.9rem, 1.2vw, 1rem);
+    color: var(--arui-text-secondary);
+    max-width: 640px;
+    line-height: 1.5;
+    margin-bottom: 0.8rem;
+}
+
+/* Components Section */
+.arui-components-section {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    flex-direction: column;
+    /* occupy remaining viewport space beneath hero so combined fits 100vh */
+    min-height: 58vh;
+    padding: 1.25rem 1.5rem 2.25rem;
+}
+
+
+.arui-components-section .section-desc {
+    font-size: 1rem;
+    color: var(--arui-text-muted);
+    max-width: 560px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+/* About Section */
+.arui-about-section {
+    padding: 4rem 2rem 6rem;
+    max-width: 720px;
+    margin: 0 auto;
+}
+
+.arui-about-section .about-content {
+    background: linear-gradient(135deg, 
+        rgba(255, 255, 255, 0.04) 0%,
+        rgba(255, 255, 255, 0.02) 50%,
+        rgba(255, 255, 255, 0.04) 100%
+    );
+    backdrop-filter: blur(25px);
+    border: 1px solid var(--arui-glass-border);
+    border-radius: 16px;
+    padding: 2.5rem;
+}
+
+.arui-about-section h2 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--arui-text-primary);
+    margin-bottom: 1rem;
+}
+
+.arui-about-section p {
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    color: var(--arui-text-secondary);
+    line-height: 1.75;
+}
+
+/* Full-page demo back link */
+.demo-back-link {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1100;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--arui-text-secondary);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-family: 'Inter', sans-serif;
+    padding: 0.5rem 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.demo-back-link:hover {
+    color: var(--arui-accent);
+    border-color: var(--arui-glass-border);
+}
+
+/* Desktop-only: force layout to fit within a single 1920x1080 viewport without scrolling */
+@media (min-width:1200px) and (min-height:900px) {
+    html, body {
+        height: 100%;
+        overflow: hidden; /* prevent page scrolling */
+    }
+
+    .arui-welcome {
+        height: 36vh !important;
+        min-height: 36vh !important;
+        padding: 1.6rem 2rem 0.6rem !important;
+        justify-content: center;
+    }
+
+    .arui-welcome h1 { font-size: 2.6rem; }
+    .arui-welcome .welcome-title { font-size: 1rem; }
+    .arui-welcome .welcome-message { font-size: 0.95rem; margin-bottom: 0.6rem; }
+
+    .arui-components-section {
+        height: 64vh !important;
+        min-height: 64vh !important;
+        padding: 0.75rem 1.5rem 1.25rem !important;
+        overflow: hidden; /* ensure content stays inside */
+    }
+
+    .component-gallery {
+        grid-template-columns: repeat(3, minmax(240px, 1fr));
+        gap: 1rem 1.25rem;
+        align-content: center;
+        align-items: center;
+    }
+
+    .component-card {
+        padding: 0.9rem 1rem;
+        min-height: 96px;
+        max-height: 140px;
+    }
+
+    .component-card h3 { font-size: 0.98rem; }
+    .component-card p { font-size: 0.78rem; }
+
+    /* hide developer credit to save vertical space on hero/gallery layout */
+    .developer-credit { display: none !important; }
+}

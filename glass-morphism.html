@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luminous Prisms - AR UI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="Css/navbar.css">
+    <link rel="stylesheet" href="Css/arui.css">
+
+    <style>
+        body { background: #000; min-height: 100vh; margin: 0; }
+        .glass-section { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem; }
+        .glass-section h2 { font-family: 'Poppins', sans-serif; font-size: clamp(1.5rem, 4vw, 2.2rem); color: #f1f5f9; text-align: center; margin-bottom: 0.5rem; }
+        .glass-section .subtitle { color: #94a3b8; text-align: center; margin-bottom: 3rem; }
+        .glass-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; max-width: 1100px; margin: 0 auto; width: 100%; }
+        .glass-prism {
+            background: linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.015) 50%, rgba(255,255,255,0.04) 100%);
+            backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(125, 211, 252, 0.2);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5), 0 8px 20px rgba(0,0,0,0.3),
+                inset 0 1px 0 rgba(255,255,255,0.25), inset 0 -1px 0 rgba(255,255,255,0.1);
+            border-radius: 16px; padding: 2rem; position: relative; overflow: hidden;
+            transition: all 0.4s ease; transform: translateZ(15px) rotateX(1deg);
+        }
+        .glass-prism::before {
+            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(125,211,252,0.08), transparent);
+            transition: left 0.8s ease;
+        }
+        .glass-prism:hover {
+            transform: translateZ(25px) rotateX(3deg) scale(1.02);
+            border-color: rgba(125,211,252,0.35);
+            box-shadow: 0 30px 80px rgba(0,0,0,0.6), 0 12px 30px rgba(0,0,0,0.4),
+                0 0 15px rgba(125,211,252,0.15), inset 0 1px 0 rgba(255,255,255,0.3);
+        }
+        .glass-prism:hover::before { left: 100%; }
+        .glass-prism h3 { font-family: 'Poppins', sans-serif; font-size: 1.2rem; color: #f1f5f9; margin-bottom: 0.5rem; }
+        .glass-prism p { font-size: 0.9rem; color: #94a3b8; line-height: 1.6; }
+    </style>
+</head>
+<body>
+    <a href="index.html#components" class="demo-back-link">← Back to AR UI</a>
+    <!-- Navbar removed -->
+
+    <section class="glass-section">
+        <!-- Heading intentionally removed; restoring inner card content -->
+        <div class="glass-grid">
+            <div class="glass-prism">
+                <h3>Card One</h3>
+                <p>Hover to see the light sweep across the surface and subtle 3D lift effect.</p>
+            </div>
+            <div class="glass-prism">
+                <h3>Card Two</h3>
+                <p>Backdrop blur and translucent borders create depth against the dark background.</p>
+            </div>
+            <div class="glass-prism">
+                <h3>Card Three</h3>
+                <p>The luminous border glow intensifies on hover for a premium feel.</p>
+            </div>
+        </div>
+    </section>
+
+    <div class="component-hint" id="glassHint">Hover to reveal light</div>
+
+    <footer class="developer-credit">Developed by <span>Abdul Rafay Ather</span> · Software Engineer</footer>
+
+    <style>
+        .component-hint { position: fixed; bottom: 50px; left:50%; transform: translateX(-50%); color: rgba(148,163,184,0.9); font-size: 0.95rem; z-index:50; transition: opacity 0.5s; }
+        .component-hint.fade { opacity: 0.35; }
+    </style>
+    <script>
+        setTimeout(()=> document.getElementById('glassHint')?.classList.add('fade'), 3000);
+    </script>
+
+</body>
+</html>

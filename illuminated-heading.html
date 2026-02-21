@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Illuminated Heading - AR UI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="Css/Style-3.css">
+    <link rel="stylesheet" href="Css/arui.css">
+
+    <style>
+        body { background:#000; margin:0; min-height:100vh; display:flex; align-items:center; justify-content:center; }
+        .illuminated-wrap { text-align:center; padding:4rem 2rem; }
+        .timeline-header h2 { font-size: clamp(3.5rem, 8vw, 6.5rem); }
+        .guidance { color: #cbd5e1; margin-top:1rem; font-size:1rem }
+    </style>
+</head>
+<body>
+    <a href="index.html#components" class="demo-back-link">← Back to AR UI</a>
+    <!-- Navbar removed -->
+    <main class="illuminated-wrap">
+        <header class="timeline-header">
+            <h2 data-text="Hover on AR UI">Hover on AR UI</h2>
+            <p class="guidance">Hover the heading to reveal the luminous animation.</p>
+        </header>
+    </main>
+
+    <footer class="developer-credit">Developed by <span>Abdul Rafay Ather</span> · Software Engineer</footer>
+
+    <script>
+        // replicate the heading glow behaviour from the timeline script
+        (function(){
+            const heading = document.querySelector('.timeline-header h2');
+            if(!heading) return;
+            // animate-in class for entrance
+            setTimeout(()=> heading.classList.add('animate-in'), 120);
+            // mousemove for glow position
+            document.body.addEventListener('mousemove', function(e){
+                const rect = heading.getBoundingClientRect();
+                heading.style.setProperty('--x', `${e.clientX - rect.left}px`);
+                heading.style.setProperty('--y', `${e.clientY - rect.top}px`);
+            });
+        })();
+    </script>
+</body>
+</html>
