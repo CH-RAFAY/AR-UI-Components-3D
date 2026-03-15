@@ -4,7 +4,7 @@ A collection of reusable **glassmorphic UI components with integrated 3D visual 
 
 The project focuses on building **lightweight, customizable components** that combine **glassmorphism design principles with subtle 3D interactions**, enabling developers to easily integrate them into different web applications.
 
----
+
 
 ## Overview
 
@@ -18,7 +18,7 @@ The components are built with a focus on:
 - Modern UI design principles
 - Responsive layout compatibility
 
----
+
 
 ## Features
 
@@ -30,7 +30,6 @@ The components are built with a focus on:
 - Responsive design support
 - Smooth hover and transition effects
 
----
 
 ## Design Principles
 
@@ -50,7 +49,7 @@ The components follow several UI/UX design principles.
 - Smooth transitions
 - Visual depth enhancement
 
----
+
 
 ## Technologies Used
 
@@ -60,7 +59,7 @@ The components follow several UI/UX design principles.
 - Modern CSS effects (blur, transparency, gradients)
 - Lightweight animation techniques
 
----
+
 
 ## Project Structure
 
@@ -77,7 +76,7 @@ glassmorphic-3d-ui
 └── assets  
     └── images  
 
----
+
 
 ## Components Included
 
@@ -92,7 +91,7 @@ Features:
 - Layered depth styling
 - Responsive layout
 
----
+
 
 ### 3D Interactive Button
 
@@ -105,7 +104,7 @@ Features:
 - Lightweight animation
 - Clean visual feedback
 
----
+
 
 ### Glass Panel
 
@@ -117,7 +116,7 @@ Features:
 - Flexible layout support
 - Easily customizable size and spacing
 
----
+
 
 ## How to Use
 
@@ -135,7 +134,7 @@ index.html
 
 You can copy individual components and integrate them into any website.
 
----
+
 
 ## Customization
 
@@ -152,7 +151,7 @@ You can modify:
 
 Most visual settings can be adjusted directly in the CSS file.
 
----
+
 
 ## Performance Considerations
 
@@ -165,7 +164,7 @@ Optimizations include:
 - Lightweight component structure
 - Reusable styles
 
----
+
 
 ## Potential Use Cases
 
@@ -177,7 +176,7 @@ These components can be used in:
 - Product pages
 - Modern UI experiments
 
----
+
 
 ## Future Improvements
 
@@ -189,7 +188,7 @@ Possible extensions for the project:
 - Dark/light theme switching
 - Component library packaging
 
----
+
 
 ## Author
 
@@ -200,7 +199,7 @@ Software Engineer with interest in **Machine Learning, AI systems, and modern we
 GitHub:  
 https://github.com/CH-RAFAY
 
----
+
 
 ## License
 
